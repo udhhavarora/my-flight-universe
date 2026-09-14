@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Flight Universe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <nav class="top-nav">
+            <div class="nav-left">
+                <h1 class="nav-logo">MY FLIGHT UNIVERSE</h1>
+            </div>
+            <div class="nav-right">
+                <span class="date-range" id="dateRange">Loading...</span>
+                <span class="export-label">FLIGHTY EXPORT</span>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <h1 class="hero-title">My Flight <span class="universe-glow">Universe</span></h1>
+                <p class="hero-subtitle">A visual journal of the skies you've crossed.</p>
+
+                <div class="globe-container" id="globeContainer">
+                    <div id="globe"></div>
+                </div>
+            </section>
+
+            <!-- Year Filter -->
+            <section class="filter-section">
+                <div class="year-filter" id="yearFilter">
+                    <button class="year-btn active" data-year="all">ALL</button>
+                </div>
+            </section>
+
+            <!-- Flight Telemetry -->
+            <section class="telemetry-section">
+                <h2 class="section-title">FLIGHT TELEMETRY</h2>
+                <div class="kpi-grid" id="kpiGrid">
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="totalFlights">-</div>
+                        <div class="kpi-label">Total Flights</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="totalDistance">-</div>
+                        <div class="kpi-label">Total Distance</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="timeInAir">-</div>
+                        <div class="kpi-label">Time in Air</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="airportsVisited">-</div>
+                        <div class="kpi-label">Airports Visited</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="countries">-</div>
+                        <div class="kpi-label">Countries</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="airlines">-</div>
+                        <div class="kpi-label">Airlines</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="aircraftTypes">-</div>
+                        <div class="kpi-label">Aircraft Types</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="avgAircraftAge">-</div>
+                        <div class="kpi-label">Avg Aircraft Age</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Aviation Story -->
+            <section class="story-section">
+                <h2 class="section-title">YOUR AVIATION STORY</h2>
+                <div class="story-grid" id="storyGrid"></div>
+            </section>
+
+            <!-- Journey Timeline -->
+            <section class="timeline-section">
+                <h2 class="section-title">JOURNEY TIMELINE</h2>
+                <div class="timeline-container" id="timelineContainer"></div>
+            </section>
+
+            <!-- Airline Universe -->
+            <section class="airline-section">
+                <h2 class="section-title">AIRLINE UNIVERSE</h2>
+                <div class="airline-grid" id="airlineGrid"></div>
+            </section>
+
+            <!-- Geographical Stats -->
+            <section class="geo-section">
+                <h2 class="section-title">GEOGRAPHICAL STATS</h2>
+                <div class="geo-summary" id="geoSummary"></div>
+                <div class="country-grid" id="countryGrid"></div>
+            </section>
+
+            <!-- Airport Intelligence -->
+            <section class="airport-section">
+                <h2 class="section-title">AIRPORT INTELLIGENCE</h2>
+                <div class="airport-grid" id="airportGrid"></div>
+            </section>
+
+            <!-- Route Explorer -->
+            <section class="route-section">
+                <h2 class="section-title">ROUTE EXPLORER</h2>
+                <div class="route-grid" id="routeGrid"></div>
+            </section>
+
+            <!-- Flight History -->
+            <section class="history-section">
+                <h2 class="section-title">FLIGHT HISTORY</h2>
+                <div class="history-controls">
+                    <input type="text" id="searchInput" placeholder="Search flights..." class="search-input">
+                    <select id="airlineFilter" class="filter-select">
+                        <option value="">All Airlines</option>
+                    </select>
+                    <select id="airportFilter" class="filter-select">
+                        <option value="">All Airports</option>
+                    </select>
+                    <select id="cabinFilter" class="filter-select">
+                        <option value="">All Cabins</option>
+                    </select>
+                </div>
+                <div class="table-container">
+                    <table class="flight-table" id="flightTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Airline</th>
+                                <th>Flight</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Aircraft</th>
+                                <th>Duration</th>
+                                <th>Distance</th>
+                                <th>Cabin</th>
+                                <th>Status</th>
+                                <th>Replay</th>
+                            </tr>
+                        </thead>
+                        <tbody id="flightTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <!-- Flight Replay Modal -->
+        <div id="replayModal" class="replay-modal">
+            <div class="replay-content">
+                <button class="replay-close" id="replayClose">×</button>
+                <div class="replay-layout">
+                    <div class="replay-globe-section">
+                        <canvas id="replayCanvas"></canvas>
+                        <div id="replayGlobe" style="display:none;"></div>
+                    </div>
+                    <div class="replay-info-section">
+                        <h3 class="replay-title">FLIGHT REPLAY</h3>
+                        <div class="replay-details" id="replayDetails"></div>
+                        <div class="replay-controls">
+                            <button id="replayPlay" class="replay-btn">▶ Play</button>
+                            <button id="replayPause" class="replay-btn" style="display:none;">⏸ Pause</button>
+                            <button id="replayRestart" class="replay-btn">↻ Restart</button>
+                            <div class="replay-speed">
+                                <label>Speed:</label>
+                                <button class="speed-btn" data-speed="0.5">0.5x</button>
+                                <button class="speed-btn active" data-speed="1">1x</button>
+                                <button class="speed-btn" data-speed="2">2x</button>
+                                <button class="speed-btn" data-speed="4">4x</button>
+                            </div>
+                            <div class="replay-scrubber">
+                                <input type="range" id="replayScrubber" min="0" max="100" value="0" class="scrubber">
+                                <div class="scrubber-label">
+                                    <span id="replayProgress">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flight Agent -->
+        <div class="flight-agent" id="flightAgent">
+            <div class="agent-header" id="agentHeader">
+                <span>✈ Flight Agent</span>
+                <button class="agent-toggle" id="agentToggle">−</button>
+            </div>
+            <div class="agent-body" id="agentBody">
+                <div class="agent-messages" id="agentMessages">
+                    <div class="agent-message agent-welcome">
+                        Ask me anything about your flight history!
+                    </div>
+                </div>
+                <div class="agent-input-container">
+                    <input type="text" id="agentInput" placeholder="Ask about your flights..." class="agent-input">
+                    <button id="agentSend" class="agent-send">→</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CSV Upload -->
+        <div class="upload-section">
+            <input type="file" id="csvUpload" accept=".csv" style="display: none;">
+            <button id="uploadBtn" class="upload-btn">📁 Load Flighty CSV</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/globe.gl"></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+    <script src="app.js"></script>
+</body>
+</html>

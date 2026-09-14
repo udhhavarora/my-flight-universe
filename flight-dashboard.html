@@ -1,0 +1,3076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Flight Universe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg-dark: #0a0e12;
+    --bg-card: rgba(15, 23, 33, 0.8);
+    --bg-card-hover: rgba(20, 30, 42, 0.9);
+    --accent-cyan: #00d4ff;
+    --accent-blue: #4a90e2;
+    --accent-purple: #7b68ee;
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --text-muted: rgba(255, 255, 255, 0.5);
+    --border-color: rgba(0, 212, 255, 0.2);
+    --glow-color: rgba(0, 212, 255, 0.3);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #0a0e12 0%, #151b24 50%, #0f1419 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Navigation */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 3rem;
+    background: rgba(10, 14, 18, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--text-primary);
+}
+
+.nav-right {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.date-range {
+    color: var(--accent-cyan);
+}
+
+.export-label {
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+/* Main Content */
+.main-content {
+    padding: 2rem 3rem;
+    max-width: 1800px;
+    margin: 0 auto;
+}
+
+/* Hero Section */
+.hero-section {
+    text-align: center;
+    padding: 3rem 0 2rem;
+}
+
+.hero-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.universe-glow {
+    color: var(--accent-cyan);
+    text-shadow: 0 0 30px var(--glow-color);
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-bottom: 3rem;
+}
+
+.globe-container {
+    width: 100%;
+    height: 600px;
+    margin: 2rem auto;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    pointer-events: auto;
+    transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+    transform-origin: center;
+}
+
+#globe, #replayGlobe {
+    width: 100%;
+    height: 100%;
+}
+
+#globe canvas {
+    display: block;
+}
+
+/* Filter Section */
+.filter-section {
+    margin: 3rem 0;
+}
+
+.year-filter {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.year-btn {
+    padding: 0.75rem 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.year-btn:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--accent-cyan);
+    color: var(--text-primary);
+    transform: translateY(-2px);
+}
+
+.year-btn.active {
+    background: rgba(0, 212, 255, 0.15);
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan);
+    box-shadow: 0 0 20px var(--glow-color);
+}
+
+/* Section Titles */
+.section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+/* KPI Grid */
+.telemetry-section, .story-section, .timeline-section,
+.airline-section, .geo-section, .airport-section,
+.route-section, .history-section {
+    margin: 4rem 0;
+}
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.kpi-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.kpi-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-cyan);
+    box-shadow: 0 8px 24px var(--glow-color);
+}
+
+.kpi-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    margin-bottom: 0.5rem;
+}
+
+.kpi-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Story Grid */
+.story-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.story-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+}
+
+.story-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-cyan);
+    box-shadow: 0 8px 24px var(--glow-color);
+}
+
+.story-card-title {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 1rem;
+}
+
+.story-card-main {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    margin-bottom: 0.5rem;
+}
+
+.story-card-sub {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+}
+
+.story-card-detail {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+/* Timeline */
+.timeline-container {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding: 1rem 0;
+}
+
+.timeline-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    min-width: 200px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.timeline-item:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-cyan);
+}
+
+.timeline-item.active {
+    border-color: var(--accent-cyan);
+    background: rgba(0, 212, 255, 0.1);
+}
+
+.timeline-year {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    margin-bottom: 0.5rem;
+}
+
+.timeline-stat {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0.25rem 0;
+}
+
+/* Airline Grid */
+.airline-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.airline-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.airline-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-cyan);
+    box-shadow: 0 8px 24px var(--glow-color);
+}
+
+.airline-image {
+    width: 100%;
+    height: 240px;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(74, 144, 226, 0.08));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+    opacity: 0.4;
+    position: relative;
+}
+
+.airline-wing-logo {
+    max-width: 80%;
+    max-height: 80%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5));
+    transition: filter 0.3s ease;
+}
+
+.airline-wing-logo:hover {
+    filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.8));
+}
+
+.airline-flag-fallback {
+    font-size: 3.5rem;
+    opacity: 0.4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.airline-card {
+    cursor: pointer;
+    user-select: none;
+}
+
+.airline-card.filtered {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+.airline-card.filtered .airline-image {
+    opacity: 1;
+}
+
+.airline-content {
+    padding: 1.5rem;
+}
+
+.airline-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.airline-code {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+}
+
+.airline-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
+
+.airline-flights {
+    color: var(--accent-cyan);
+    font-weight: 600;
+}
+
+.airline-percentage {
+    color: var(--text-secondary);
+}
+
+.airline-progress {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.airline-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+    border-radius: 2px;
+}
+
+/* Geographical Stats */
+.geo-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.country-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.country-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    transition: all 0.3s ease;
+}
+
+.country-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-cyan);
+}
+
+.country-flag {
+    font-size: 3.8rem;
+    line-height: 1;
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 212, 255, 0.06);
+    border-radius: 12px;
+    border: 1px solid rgba(0, 212, 255, 0.12);
+}
+
+.country-info {
+    flex: 1;
+}
+
+.country-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.country-stat {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* Airport Grid */
+.airport-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.airport-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.airport-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-cyan);
+}
+
+.airport-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 1rem;
+}
+
+.airport-code {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+}
+
+.airport-name {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+}
+
+.airport-location {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.airport-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.airport-stat {
+    font-size: 0.875rem;
+}
+
+.airport-stat-label {
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+}
+
+.airport-stat-value {
+    color: var(--accent-cyan);
+    font-weight: 600;
+}
+
+/* Route Grid */
+.route-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+.route-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.route-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-cyan);
+}
+
+.route-path {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.route-airport {
+    text-align: center;
+}
+
+.route-airport-code {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+}
+
+.route-airport-city {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.route-arrow {
+    font-size: 1.5rem;
+    color: var(--text-muted);
+}
+
+.route-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
+
+.route-detail-label {
+    color: var(--text-muted);
+}
+
+.route-detail-value {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.route-replay-btn {
+    width: 100%;
+    padding: 0.875rem;
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+    border: none;
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.route-replay-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px var(--glow-color);
+}
+
+/* Flight History */
+.history-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.search-input, .filter-select {
+    padding: 0.75rem 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+}
+
+.search-input {
+    flex: 1;
+    min-width: 250px;
+}
+
+.filter-select {
+    min-width: 150px;
+}
+
+.search-input:focus, .filter-select:focus {
+    outline: none;
+    border-color: var(--accent-cyan);
+}
+
+.table-container {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.flight-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-card);
+}
+
+.flight-table th {
+    padding: 1rem;
+    text-align: left;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.flight-table td {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.flight-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+.flight-table tbody tr:hover {
+    background: var(--bg-card-hover);
+}
+
+.replay-btn-small {
+    padding: 0.5rem 1rem;
+    background: var(--accent-cyan);
+    border: none;
+    border-radius: 6px;
+    color: var(--bg-dark);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.replay-btn-small:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px var(--glow-color);
+}
+
+/* Replay Modal */
+.replay-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 1000;
+    overflow: auto;
+}
+
+.replay-modal.active {
+    display: block;
+}
+
+.replay-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 2rem;
+}
+
+.replay-close {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    width: 48px;
+    height: 48px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    color: var(--text-primary);
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+
+.replay-close:hover {
+    border-color: var(--accent-cyan);
+    transform: scale(1.1);
+}
+
+.replay-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    height: calc(100vh - 4rem);
+}
+
+.replay-globe-section {
+    border-radius: 12px;
+    overflow: hidden;
+    height: 100%;
+    min-height: 500px;
+}
+
+#replayGlobe {
+    width: 100%;
+    height: 100%;
+}
+
+#replayCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 12px;
+}
+
+.replay-info-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.replay-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--accent-cyan);
+}
+
+.replay-details {
+    margin-bottom: 2rem;
+}
+
+.replay-detail {
+    margin-bottom: 1rem;
+}
+
+.replay-detail-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.25rem;
+}
+
+.replay-detail-value {
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.replay-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.replay-btn {
+    padding: 0.875rem;
+    background: var(--accent-cyan);
+    border: none;
+    border-radius: 8px;
+    color: var(--bg-dark);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.replay-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--glow-color);
+}
+
+.replay-speed {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.replay-speed label {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.speed-btn {
+    padding: 0.5rem 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.speed-btn:hover {
+    border-color: var(--accent-cyan);
+}
+
+.speed-btn.active {
+    background: var(--accent-cyan);
+    color: var(--bg-dark);
+    border-color: var(--accent-cyan);
+}
+
+.replay-scrubber {
+    margin-top: 1rem;
+}
+
+.scrubber {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.scrubber::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background: var(--accent-cyan);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.scrubber-label {
+    text-align: center;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+/* Flight Agent */
+.flight-agent {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 400px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    z-index: 500;
+}
+
+.agent-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.agent-toggle {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.agent-body {
+    max-height: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.agent-body.collapsed {
+    display: none;
+}
+
+.agent-messages {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    max-height: 300px;
+}
+
+.agent-message {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+}
+
+.agent-welcome {
+    background: rgba(0, 212, 255, 0.1);
+    color: var(--text-secondary);
+}
+
+.agent-user {
+    background: rgba(74, 144, 226, 0.2);
+    color: var(--text-primary);
+    margin-left: 2rem;
+}
+
+.agent-response {
+    background: rgba(0, 212, 255, 0.15);
+    color: var(--text-primary);
+    margin-right: 2rem;
+}
+
+.agent-input-container {
+    display: flex;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.agent-input {
+    flex: 1;
+    padding: 0.75rem;
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+}
+
+.agent-input:focus {
+    outline: none;
+    border-color: var(--accent-cyan);
+}
+
+.agent-send {
+    padding: 0.75rem 1.25rem;
+    background: var(--accent-cyan);
+    border: none;
+    border-radius: 8px;
+    color: var(--bg-dark);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.agent-send:hover {
+    transform: scale(1.05);
+}
+
+/* Upload Section */
+.upload-section {
+    position: fixed;
+    top: 6rem;
+    right: 3rem;
+    z-index: 200;
+    display: none;
+}
+
+.upload-btn {
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+    border: none;
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px var(--glow-color);
+}
+
+.upload-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px var(--glow-color);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .replay-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .replay-globe-section {
+        height: 50vh;
+    }
+}
+
+@media (max-width: 768px) {
+    .top-nav {
+        padding: 1rem 1.5rem;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .main-content {
+        padding: 1rem 1.5rem;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .globe-container {
+        height: 400px;
+    }
+
+    .kpi-grid, .story-grid, .airline-grid, .country-grid, .airport-grid, .route-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .flight-agent {
+        width: calc(100vw - 2rem);
+        right: 1rem;
+        left: 1rem;
+    }
+
+    .upload-section {
+        right: 1.5rem;
+    }
+
+    .table-container {
+        overflow-x: scroll;
+    }
+}
+
+</style>
+</head>
+<body>
+
+    <div id="app">
+        <nav class="top-nav">
+            <div class="nav-left">
+                <h1 class="nav-logo">MY FLIGHT UNIVERSE</h1>
+            </div>
+            <div class="nav-right">
+                <span class="date-range" id="dateRange">Loading...</span>
+                <span class="export-label">FLIGHTY EXPORT</span>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <h1 class="hero-title">My Flight <span class="universe-glow">Universe</span></h1>
+                <p class="hero-subtitle">A visual journal of the skies you've crossed.</p>
+
+                <div class="globe-container" id="globeContainer">
+                    <div id="globe"></div>
+                </div>
+            </section>
+
+            <!-- Year Filter -->
+            <section class="filter-section">
+                <div class="year-filter" id="yearFilter">
+                    <button class="year-btn active" data-year="all">ALL</button>
+                </div>
+            </section>
+
+            <!-- Flight Telemetry -->
+            <section class="telemetry-section">
+                <h2 class="section-title">FLIGHT TELEMETRY</h2>
+                <div class="kpi-grid" id="kpiGrid">
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="totalFlights">-</div>
+                        <div class="kpi-label">Total Flights</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="totalDistance">-</div>
+                        <div class="kpi-label">Total Distance</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="timeInAir">-</div>
+                        <div class="kpi-label">Time in Air</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="airportsVisited">-</div>
+                        <div class="kpi-label">Airports Visited</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="countries">-</div>
+                        <div class="kpi-label">Countries</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="airlines">-</div>
+                        <div class="kpi-label">Airlines</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="aircraftTypes">-</div>
+                        <div class="kpi-label">Aircraft Types</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="avgAircraftAge">-</div>
+                        <div class="kpi-label">Avg Aircraft Age</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Aviation Story -->
+            <section class="story-section">
+                <h2 class="section-title">YOUR AVIATION STORY</h2>
+                <div class="story-grid" id="storyGrid"></div>
+            </section>
+
+            <!-- Journey Timeline -->
+            <section class="timeline-section">
+                <h2 class="section-title">JOURNEY TIMELINE</h2>
+                <div class="timeline-container" id="timelineContainer"></div>
+            </section>
+
+            <!-- Airline Universe -->
+            <section class="airline-section">
+                <h2 class="section-title">AIRLINE UNIVERSE</h2>
+                <div class="airline-grid" id="airlineGrid"></div>
+            </section>
+
+            <!-- Geographical Stats -->
+            <section class="geo-section">
+                <h2 class="section-title">GEOGRAPHICAL STATS</h2>
+                <div class="geo-summary" id="geoSummary"></div>
+                <div class="country-grid" id="countryGrid"></div>
+            </section>
+
+            <!-- Airport Intelligence -->
+            <section class="airport-section">
+                <h2 class="section-title">AIRPORT INTELLIGENCE</h2>
+                <div class="airport-grid" id="airportGrid"></div>
+            </section>
+
+            <!-- Route Explorer -->
+            <section class="route-section">
+                <h2 class="section-title">ROUTE EXPLORER</h2>
+                <div class="route-grid" id="routeGrid"></div>
+            </section>
+
+            <!-- Flight History -->
+            <section class="history-section">
+                <h2 class="section-title">FLIGHT HISTORY</h2>
+                <div class="history-controls">
+                    <input type="text" id="searchInput" placeholder="Search flights..." class="search-input">
+                    <select id="airlineFilter" class="filter-select">
+                        <option value="">All Airlines</option>
+                    </select>
+                    <select id="airportFilter" class="filter-select">
+                        <option value="">All Airports</option>
+                    </select>
+                    <select id="cabinFilter" class="filter-select">
+                        <option value="">All Cabins</option>
+                    </select>
+                </div>
+                <div class="table-container">
+                    <table class="flight-table" id="flightTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Airline</th>
+                                <th>Flight</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Aircraft</th>
+                                <th>Duration</th>
+                                <th>Distance</th>
+                                <th>Cabin</th>
+                                <th>Status</th>
+                                <th>Replay</th>
+                            </tr>
+                        </thead>
+                        <tbody id="flightTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <!-- Flight Replay Modal -->
+        <div id="replayModal" class="replay-modal">
+            <div class="replay-content">
+                <button class="replay-close" id="replayClose">×</button>
+                <div class="replay-layout">
+                    <div class="replay-globe-section">
+                        <canvas id="replayCanvas"></canvas>
+                        <div id="replayGlobe" style="display:none;"></div>
+                    </div>
+                    <div class="replay-info-section">
+                        <h3 class="replay-title">FLIGHT REPLAY</h3>
+                        <div class="replay-details" id="replayDetails"></div>
+                        <div class="replay-controls">
+                            <button id="replayPlay" class="replay-btn">▶ Play</button>
+                            <button id="replayPause" class="replay-btn" style="display:none;">⏸ Pause</button>
+                            <button id="replayRestart" class="replay-btn">↻ Restart</button>
+                            <div class="replay-speed">
+                                <label>Speed:</label>
+                                <button class="speed-btn" data-speed="0.5">0.5x</button>
+                                <button class="speed-btn active" data-speed="1">1x</button>
+                                <button class="speed-btn" data-speed="2">2x</button>
+                                <button class="speed-btn" data-speed="4">4x</button>
+                            </div>
+                            <div class="replay-scrubber">
+                                <input type="range" id="replayScrubber" min="0" max="100" value="0" class="scrubber">
+                                <div class="scrubber-label">
+                                    <span id="replayProgress">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flight Agent -->
+        <div class="flight-agent" id="flightAgent">
+            <div class="agent-header" id="agentHeader">
+                <span>✈ Flight Agent</span>
+                <button class="agent-toggle" id="agentToggle">−</button>
+            </div>
+            <div class="agent-body" id="agentBody">
+                <div class="agent-messages" id="agentMessages">
+                    <div class="agent-message agent-welcome">
+                        Ask me anything about your flight history!
+                    </div>
+                </div>
+                <div class="agent-input-container">
+                    <input type="text" id="agentInput" placeholder="Ask about your flights..." class="agent-input">
+                    <button id="agentSend" class="agent-send">→</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CSV Upload -->
+        <div class="upload-section">
+            <input type="file" id="csvUpload" accept=".csv" style="display: none;">
+            <button id="uploadBtn" class="upload-btn">📁 Load Flighty CSV</button>
+        </div>
+    </div>
+
+    
+    
+
+<script src="https://cdn.jsdelivr.net/npm/globe.gl"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+<script>
+// Simplified world map coastlines for 2D canvas rendering (lng, lat pairs)
+const WORLD_COASTLINES = [
+    // North America outline
+    [[-130,55],[-125,50],[-124,48],[-124,44],[-120,38],[-117,33],[-115,30],[-110,26],[-105,22],[-100,19],[-97,16],[-92,15],[-88,16],[-84,15],[-82,10],[-78,8],[-77,9],[-75,11],[-73,11],[-70,12],[-68,12],[-65,14],[-62,11],[-60,10],[-58,8],[-56,7],[-55,5],[-52,4],[-50,2],[-48,0],[-46,-2]],
+    // South America outline
+    [[-80,10],[-78,8],[-75,6],[-72,4],[-70,3],[-68,2],[-65,0],[-62,-2],[-60,-5],[-55,-8],[-50,-10],[-45,-15],[-40,-20],[-35,-25],[-30,-30],[-25,-35],[-20,-40],[-15,-45],[-10,-50],[-5,-55],[0,-55],[5,-50],[10,-45],[15,-40],[20,-35],[25,-30],[30,-25],[35,-20],[40,-15],[45,-10],[50,-5],[55,0],[60,5],[65,10],[70,15],[75,20],[80,25],[85,30],[90,35],[95,40],[100,45],[105,50],[110,55],[115,60],[120,65],[125,70],[130,75],[135,80],[140,85],[145,90],[150,95],[155,100],[160,105],[165,110],[170,115],[175,120],[180,125]],
+    // Europe outline
+    [[-10,36],[-8,38],[-6,40],[-4,42],[-2,44],[0,46],[2,48],[4,50],[6,52],[8,54],[10,56],[12,58],[14,60],[16,62],[18,64],[20,66],[22,68],[24,70],[26,72],[28,74]],
+    // Africa outline
+    [[-18,15],[-16,12],[-14,10],[-12,8],[-10,6],[-8,4],[-6,2],[-4,0],[-2,-2],[0,-4],[2,-6],[4,-8],[6,-10],[8,-12],[10,-14],[12,-16],[14,-18],[16,-20],[18,-22],[20,-24],[22,-26],[24,-28],[26,-30],[28,-32],[30,-34]],
+    // Asia outline
+    [[28,42],[30,40],[32,38],[34,36],[36,34],[38,32],[40,30],[42,28],[44,26],[46,24],[48,22],[50,20],[52,18],[54,16],[56,14],[58,12],[60,10],[62,8],[64,6],[66,4],[68,2],[70,0],[72,-2],[74,-4]],
+    // Australia outline
+    [[115,-35],[120,-34],[125,-33],[130,-32],[135,-31],[140,-30],[145,-29],[150,-28],[153,-27],[153,-29],[151,-33],[149,-37],[147,-39],[145,-38],[140,-37],[135,-35],[130,-33],[125,-32],[120,-33],[115,-34]],
+];
+
+const EMBEDDED_FLIGHTS = [{"date":"2017-06-09","airline":"JAI","flight":"2416","from":"JAI","to":"DEL","aircraft":"ATR 72","cabin":"","takeoff":"2017-06-09T16:35","landing":"2017-06-09T17:45"},{"date":"2017-06-09","airline":"AIC","flight":"16","from":"DEL","to":"ATQ","aircraft":"Airbus A319","cabin":"","takeoff":"2017-06-09T19:06","landing":"2017-06-09T20:12"},{"date":"2017-07-13","airline":"JAI","flight":"2662","from":"ATQ","to":"DEL","aircraft":"Boeing 737-800","cabin":"","takeoff":"2017-07-13T10:38","landing":"2017-07-13T12:20"},{"date":"2017-07-13","airline":"JAI","flight":"832","from":"DEL","to":"MAA","aircraft":"Boeing 737-800","cabin":"","takeoff":"2017-07-13T16:03","landing":"2017-07-13T18:43"},{"date":"2017-09-04","airline":"JAI","flight":"2537","from":"BLR","to":"MAA","aircraft":"ATR 72","cabin":"","takeoff":"2017-09-04T08:58","landing":"2017-09-04T10:05"},{"date":"2017-09-14","airline":"AIC","flight":"43","from":"MAA","to":"DEL","aircraft":"Boeing 777-200 LR","cabin":"","takeoff":"2017-09-14T21:28","landing":"2017-09-15T00:21"},{"date":"2017-09-15","airline":"AIC","flight":"453","from":"DEL","to":"ATQ","aircraft":"Airbus A321","cabin":"","takeoff":"2017-09-15T04:51","landing":"2017-09-15T06:02"},{"date":"2017-09-19","airline":"IGO","flight":"637","from":"ATQ","to":"DEL","aircraft":"Airbus A320","cabin":"","takeoff":"","landing":"2017-09-19T17:37"},{"date":"2017-09-19","airline":"IGO","flight":"162","from":"DEL","to":"MAA","aircraft":"Airbus A320","cabin":"","takeoff":"2017-09-19T20:20","landing":""},{"date":"2017-10-17","airline":"SEJ","flight":"3301","from":"MAA","to":"BLR","aircraft":"DHC-8 Dash 8","cabin":"","takeoff":"2017-10-17T05:51","landing":"2017-10-17T06:38"},{"date":"2017-10-17","airline":"IGO","flight":"477","from":"BLR","to":"ATQ","aircraft":"Airbus A320","cabin":"","takeoff":"2017-10-17T10:00","landing":""},{"date":"2017-10-22","airline":"JAI","flight":"739","from":"ATQ","to":"DEL","aircraft":"Boeing 737-800","cabin":"","takeoff":"2017-10-22T19:02","landing":"2017-10-22T20:11"},{"date":"2017-10-22","airline":"JAI","flight":"739","from":"DEL","to":"MAA","aircraft":"Boeing 737-800","cabin":"","takeoff":"2017-10-22T21:02","landing":"2017-10-22T23:43"},{"date":"2017-12-23","airline":"AIC","flight":"440","from":"MAA","to":"DEL","aircraft":"Airbus A321","cabin":"","takeoff":"2017-12-23T06:47","landing":"2017-12-23T09:33"},{"date":"2017-12-23","airline":"VTI","flight":"797","from":"DEL","to":"ATQ","aircraft":"Airbus A320","cabin":"","takeoff":"2017-12-23T13:44","landing":"2017-12-23T15:05"},{"date":"2018-01-06","airline":"IGO","flight":"478","from":"ATQ","to":"BLR","aircraft":"Airbus A320","cabin":"","takeoff":"2018-01-06T16:12","landing":"2018-01-06T19:24"},{"date":"2018-01-06","airline":"JAI","flight":"2736","from":"BLR","to":"MAA","aircraft":"ATR 72","cabin":"","takeoff":"2018-01-06T22:45","landing":"2018-01-07T00:00"},{"date":"2018-01-10","airline":"AIC","flight":"462","from":"ATQ","to":"DEL","aircraft":"Boeing 787-8","cabin":"","takeoff":"2018-01-10T14:57","landing":"2018-01-10T16:03"},{"date":"2018-01-10","airline":"IGO","flight":"613","from":"DEL","to":"MAA","aircraft":"Airbus A320","cabin":"","takeoff":"2018-01-10T18:08","landing":"2018-01-10T20:58"},{"date":"2018-03-02","airline":"IGO","flight":"704","from":"MAA","to":"DEL","aircraft":"Airbus A320neo","cabin":"","takeoff":"2018-03-02T22:51","landing":"2018-03-03T01:40"},{"date":"2018-03-03","airline":"IGO","flight":"524","from":"DEL","to":"ATQ","aircraft":"Airbus A320","cabin":"","takeoff":"2018-03-03T05:14","landing":"2018-03-03T06:10"},{"date":"2018-03-10","airline":"SEJ","flight":"328","from":"ATQ","to":"DEL","aircraft":"Boeing 737-800","cabin":"","takeoff":"2018-03-10T18:33","landing":"2018-03-10T19:45"},{"date":"2018-03-10","airline":"SEJ","flight":"328","from":"DEL","to":"MAA","aircraft":"Boeing 737-800","cabin":"","takeoff":"2018-03-10T20:30","landing":"2018-03-10T23:15"},{"date":"2018-05-20","airline":"AIC","flight":"440","from":"MAA","to":"DEL","aircraft":"Airbus A321","cabin":"","takeoff":"2018-05-20T06:10","landing":"2018-05-20T08:55"},{"date":"2018-05-20","airline":"JAI","flight":"824","from":"DEL","to":"ATQ","aircraft":"Boeing 737-800","cabin":"","takeoff":"2018-05-20T12:32","landing":"2018-05-20T13:40"},{"date":"2018-06-13","airline":"VTI","flight":"798","from":"ATQ","to":"DEL","aircraft":"Airbus A320","cabin":"","takeoff":"","landing":"2018-06-13T16:35"},{"date":"2018-06-16","airline":"AIC","flight":"114","from":"DEL","to":"ATQ","aircraft":"Boeing 787-8","cabin":"","takeoff":"2018-06-16T12:05","landing":"2018-06-16T13:18"},{"date":"2018-06-25","airline":"AIC","flight":"462","from":"ATQ","to":"DEL","aircraft":"Boeing 787-8","cabin":"","takeoff":"2018-06-25T14:30","landing":"2018-06-25T15:40"},{"date":"2018-06-25","airline":"AIC","flight":"42","from":"DEL","to":"MAA","aircraft":"Airbus A320neo","cabin":"","takeoff":"2018-06-25T17:22","landing":"2018-06-25T20:28"},{"date":"2018-08-17","airline":"JAI","flight":"828","from":"MAA","to":"DEL","aircraft":"Boeing 737-800","cabin":"","takeoff":"2018-08-17T01:53","landing":"2018-08-17T04:33"},{"date":"2018-08-17","airline":"JAI","flight":"364","from":"DEL","to":"ATQ","aircraft":"Boeing 737-800","cabin":"","takeoff":"2018-08-17T08:19","landing":"2018-08-17T09:22"},{"date":"2018-08-20","airline":"JAI","flight":"795","from":"ATQ","to":"DEL","aircraft":"Boeing 737-800","cabin":"","takeoff":"2018-08-20T10:15","landing":"2018-08-20T11:40"},{"date":"2018-08-20","airline":"JAI","flight":"798","from":"DEL","to":"MAA","aircraft":"Boeing 737-900ER","cabin":"","takeoff":"2018-08-20T13:55","landing":"2018-08-20T16:35"},{"date":"2018-11-25","airline":"IAD","flight":"2386","from":"MAA","to":"BLR","aircraft":"Airbus A320","cabin":"","takeoff":"2018-11-25T09:17","landing":"2018-11-25T10:27"},{"date":"2018-11-25","airline":"IAD","flight":"1628","from":"BLR","to":"ATQ","aircraft":"Airbus A320","cabin":"","takeoff":"2018-11-25T16:03","landing":"2018-11-25T19:13"},{"date":"2018-12-02","airline":"AIC","flight":"115","from":"ATQ","to":"DEL","aircraft":"Airbus A321","cabin":"","takeoff":"","landing":"2018-12-02T20:04"},{"date":"2018-12-03","airline":"QTR","flight":"579","from":"DEL","to":"DOH","aircraft":"Airbus A350-900","cabin":"","takeoff":"2018-12-03T03:43","landing":"2018-12-03T05:35"},{"date":"2018-12-03","airline":"QTR","flight":"713","from":"DOH","to":"IAH","aircraft":"Boeing 777-200 LR","cabin":"","takeoff":"2018-12-03T08:07","landing":""},{"date":"2018-12-05","airline":"SWA","flight":"361","from":"HOU","to":"MSY","aircraft":"Boeing 737-700","cabin":"","takeoff":"2018-12-05T10:34","landing":"2018-12-05T11:31"},{"date":"2018-12-18","airline":"SWA","flight":"751","from":"MSY","to":"HOU","aircraft":"Boeing 737-700","cabin":"","takeoff":"2018-12-18T16:49","landing":"2018-12-18T17:57"},{"date":"2018-12-26","airline":"QTR","flight":"714","from":"IAH","to":"DOH","aircraft":"Boeing 777-200 LR","cabin":"","takeoff":"2018-12-26T18:11","landing":"2018-12-27T18:00"},{"date":"2018-12-27","airline":"QTR","flight":"578","from":"DOH","to":"DEL","aircraft":"Airbus A350-900","cabin":"","takeoff":"2018-12-27T19:53","landing":"2018-12-28T01:45"},{"date":"2018-12-28","airline":"AIC","flight":"453","from":"DEL","to":"ATQ","aircraft":"Airbus A320","cabin":"","takeoff":"2018-12-28T05:00","landing":""},{"date":"2019-01-08","airline":"IGO","flight":"107","from":"ATQ","to":"HYD","aircraft":"Airbus A320","cabin":"","takeoff":"2019-01-08T12:10","landing":"2019-01-08T14:52"},{"date":"2019-01-08","airline":"IGO","flight":"381","from":"HYD","to":"MAA","aircraft":"Airbus A320","cabin":"","takeoff":"2019-01-08T16:39","landing":"2019-01-08T17:50"},{"date":"2019-02-04","airline":"AIC","flight":"43","from":"MAA","to":"DEL","aircraft":"Airbus A320neo","cabin":"","takeoff":"","landing":"2019-02-04T23:47"},{"date":"2019-02-08","airline":"AIC","flight":"118","from":"ATQ","to":"DEL","aircraft":"Boeing 787-8","cabin":"","takeoff":"","landing":"2019-02-08T11:13"},{"date":"2019-02-08","airline":"AIC","flight":"42","from":"DEL","to":"MAA","aircraft":"Airbus A320neo","cabin":"","takeoff":"2019-02-08T17:20","landing":""},{"date":"2019-03-05","airline":"IGO","flight":"2907","from":"MAA","to":"DEL","aircraft":"Airbus A320","cabin":"","takeoff":"2019-03-05T17:25","landing":"2019-03-05T20:45"},{"date":"2019-03-05","airline":"IGO","flight":"2894","from":"DEL","to":"ATQ","aircraft":"Airbus A320neo","cabin":"","takeoff":"2019-03-05T21:21","landing":"2019-03-05T22:39"},{"date":"2019-03-10","airline":"IGO","flight":"107","from":"ATQ","to":"HYD","aircraft":"Airbus A320","cabin":"","takeoff":"2019-03-10T14:20","landing":"2019-03-10T16:56"},{"date":"2019-03-10","airline":"IGO","flight":"381","from":"HYD","to":"MAA","aircraft":"Airbus A320neo","cabin":"","takeoff":"2019-03-10T16:23","landing":""},{"date":"2019-05-28","airline":"IGO","flight":"2622","from":"MAA","to":"DEL","aircraft":"Airbus A320","cabin":"","takeoff":"2019-05-28T00:25","landing":"2019-05-28T02:50"},{"date":"2019-05-28","airline":"IGO","flight":"2524","from":"DEL","to":"ATQ","aircraft":"Airbus A320neo","cabin":"","takeoff":"2019-05-28T05:04","landing":"2019-05-28T06:14"},{"date":"2019-06-02","airline":"VTI","flight":"707","from":"ATQ","to":"DEL","aircraft":"Airbus A320neo","cabin":"","takeoff":"2019-06-02T15:34","landing":"2019-06-02T16:36"},{"date":"2019-06-02","airline":"AIC","flight":"540","from":"DEL","to":"MAA","aircraft":"Airbus A321","cabin":"","takeoff":"2019-06-02T20:40","landing":""},{"date":"2019-08-10","airline":"SEJ","flight":"678","from":"MAA","to":"BOM","aircraft":"Boeing 737-900ER","cabin":"","takeoff":"","landing":"2019-08-10T07:35"},{"date":"2019-08-10","airline":"SEJ","flight":"6371","from":"BOM","to":"ATQ","aircraft":"Boeing 737-800","cabin":"","takeoff":"","landing":""},{"date":"2019-08-18","airline":"IGO","flight":"2694","from":"ATQ","to":"DEL","aircraft":"Airbus A320","cabin":"","takeoff":"","landing":""},{"date":"2019-08-18","airline":"IGO","flight":"2124","from":"DEL","to":"MAA","aircraft":"Airbus A320","cabin":"","takeoff":"2019-08-18T18:05","landing":""},{"date":"2019-09-26","airline":"VTI","flight":"822","from":"MAA","to":"BOM","aircraft":"Boeing 737-800","cabin":"","takeoff":"2019-09-26T09:03","landing":"2019-09-26T10:48"},{"date":"2019-09-26","airline":"VTI","flight":"635","from":"BOM","to":"ATQ","aircraft":"Airbus A320","cabin":"","takeoff":"2019-09-26T13:25","landing":"2019-09-26T15:54"},{"date":"2019-10-07","airline":"IGO","flight":"448","from":"ATQ","to":"BOM","aircraft":"Airbus A320","cabin":"","takeoff":"","landing":"2019-10-07T16:18"},{"date":"2019-10-07","airline":"IGO","flight":"675","from":"BOM","to":"MAA","aircraft":"Airbus A320","cabin":"","takeoff":"","landing":""},{"date":"2019-11-27","airline":"IGO","flight":"5005","from":"MAA","to":"DEL","aircraft":"Airbus A320neo","cabin":"","takeoff":"","landing":"2019-11-28T00:11"},{"date":"2019-11-28","airline":"IGO","flight":"5016","from":"DEL","to":"ATQ","aircraft":"Airbus A320","cabin":"","takeoff":"","landing":""},{"date":"2020-01-02","airline":"IGO","flight":"478","from":"ATQ","to":"BLR","aircraft":"Airbus A320","cabin":"","takeoff":"2020-01-02T16:29","landing":"2020-01-02T19:23"},{"date":"2020-01-02","airline":"SEJ","flight":"3318","from":"BLR","to":"MAA","aircraft":"DHC-8-400 Dash 8Q","cabin":"","takeoff":"2020-01-02T22:04","landing":"2020-01-02T22:59"},{"date":"2020-02-06","airline":"IGO","flight":"311","from":"MAA","to":"PNQ","aircraft":"Airbus A320","cabin":"","takeoff":"2020-02-06T12:06","landing":"2020-02-06T13:41"},{"date":"2020-02-09","airline":"IGO","flight":"302","from":"PNQ","to":"MAA","aircraft":"Airbus A320","cabin":"","takeoff":"2020-02-09T14:18","landing":"2020-02-09T16:00"},{"date":"2020-02-13","airline":"IGO","flight":"2588","from":"MAA","to":"DEL","aircraft":"Airbus A320neo","cabin":"","takeoff":"2020-02-13T15:01","landing":"2020-02-13T17:51"},{"date":"2020-02-13","airline":"IGO","flight":"5024","from":"DEL","to":"ATQ","aircraft":"Airbus A320neo","cabin":"","takeoff":"2020-02-13T21:06","landing":"2020-02-13T22:12"},{"date":"2020-02-18","airline":"IGO","flight":"5026","from":"ATQ","to":"DEL","aircraft":"Airbus A320neo","cabin":"","takeoff":"","landing":""},{"date":"2020-02-19","airline":"IGO","flight":"5006","from":"DEL","to":"MAA","aircraft":"Airbus A320","cabin":"","takeoff":"","landing":""},{"date":"2020-03-16","airline":"SEJ","flight":"6289","from":"MAA","to":"BOM","aircraft":"Boeing 737-800","cabin":"","takeoff":"2020-03-16T06:29","landing":"2020-03-16T08:20"},{"date":"2020-03-16","airline":"SEJ","flight":"6371","from":"BOM","to":"ATQ","aircraft":"Boeing 737-800","cabin":"","takeoff":"2020-03-16T12:20","landing":"2020-03-16T14:57"},{"date":"2020-12-11","airline":"IGO","flight":"6845","from":"ATQ","to":"BLR","aircraft":"Airbus A320","cabin":"","takeoff":"2020-12-11T11:06","landing":"2020-12-11T14:21"},{"date":"2020-12-11","airline":"IGO","flight":"6189","from":"BLR","to":"MAA","aircraft":"Airbus A320","cabin":"","takeoff":"2020-12-11T16:35","landing":"2020-12-11T17:31"},{"date":"2020-12-12","airline":"IGO","flight":"2752","from":"MAA","to":"DEL","aircraft":"Airbus A320","cabin":"","takeoff":"2020-12-12T17:02","landing":"2020-12-12T19:44"},{"date":"2020-12-13","airline":"VTI","flight":"691","from":"DEL","to":"ATQ","aircraft":"Airbus A320","cabin":"","takeoff":"2020-12-13T13:55","landing":"2020-12-13T15:18"},{"date":"2021-07-25","airline":"GOW","flight":"203","from":"DEL","to":"IXL","aircraft":"Airbus A320","cabin":"","takeoff":"2021-07-25T06:14","landing":"2021-07-25T07:30"},{"date":"2021-07-30","airline":"GOW","flight":"226","from":"IXL","to":"DEL","aircraft":"Airbus A320","cabin":"","takeoff":"2021-07-30T10:19","landing":"2021-07-30T11:34"},{"date":"2021-08-01","airline":"SEJ","flight":"3788","from":"DEL","to":"ATQ","aircraft":"","cabin":"","takeoff":"2021-08-01T19:25","landing":"2021-08-01T20:45"},{"date":"2021-10-14","airline":"VTI","flight":"692","from":"ATQ","to":"DEL","aircraft":"Airbus A320neo","cabin":"","takeoff":"2021-10-14T15:24","landing":"2021-10-14T16:37"},{"date":"2021-10-17","airline":"AIC","flight":"479","from":"DEL","to":"ATQ","aircraft":"Airbus A321","cabin":"","takeoff":"2021-10-17T21:33","landing":"2021-10-17T22:44"},{"date":"2022-02-14","airline":"VTI","flight":"694","from":"ATQ","to":"DEL","aircraft":"Airbus A320","cabin":"","takeoff":"2022-02-14T10:04","landing":"2022-02-14T11:10"},{"date":"2022-02-14","airline":"AIC","flight":"467","from":"DEL","to":"VGA","aircraft":"Airbus A321","cabin":"","takeoff":"2022-02-14T17:48","landing":"2022-02-14T20:15"},{"date":"2022-02-16","airline":"AIC","flight":"468","from":"VGA","to":"DEL","aircraft":"Airbus A321","cabin":"","takeoff":"2022-02-16T21:09","landing":"2022-02-16T23:19"},{"date":"2022-02-17","airline":"VTI","flight":"691","from":"DEL","to":"ATQ","aircraft":"Airbus A321","cabin":"","takeoff":"2022-02-17T13:47","landing":"2022-02-17T14:49"},{"date":"2022-03-12","airline":"IGO","flight":"5208","from":"ATQ","to":"BOM","aircraft":"Airbus A321","cabin":"","takeoff":"2022-03-12T14:12","landing":"2022-03-12T16:40:23"},{"date":"2022-03-12","airline":"IGO","flight":"5208","from":"BOM","to":"HYD","aircraft":"Airbus A321","cabin":"","takeoff":"2022-03-12T17:35","landing":"2022-03-12T19:01"},{"date":"2022-03-20","airline":"IGO","flight":"2248","from":"HYD","to":"DEL","aircraft":"Airbus A320","cabin":"","takeoff":"2022-03-20T13:54","landing":"2022-03-20T15:59"},{"date":"2022-03-20","airline":"IGO","flight":"2032","from":"DEL","to":"ATQ","aircraft":"Airbus A320","cabin":"","takeoff":"2022-03-20T17:20","landing":"2022-03-20T18:27"},{"date":"2022-04-27","airline":"VTI","flight":"692","from":"ATQ","to":"DEL","aircraft":"Airbus A321neo","cabin":"","takeoff":"2022-04-27T15:45","landing":"2022-04-27T17:02"},{"date":"2022-04-27","airline":"VTI","flight":"879","from":"DEL","to":"HYD","aircraft":"Airbus A321neo","cabin":"","takeoff":"2022-04-27T17:44","landing":"2022-04-27T19:58"},{"date":"2022-05-14","airline":"AIC","flight":"541","from":"HYD","to":"DEL","aircraft":"Airbus A321","cabin":"","takeoff":"2022-05-14T15:59","landing":"2022-05-14T18:15"},{"date":"2022-05-14","airline":"AIC","flight":"479","from":"DEL","to":"ATQ","aircraft":"Airbus A321","cabin":"","takeoff":"2022-05-14T21:04","landing":"2022-05-14T22:16"},{"date":"2022-05-22","airline":"VTI","flight":"692","from":"ATQ","to":"DEL","aircraft":"Airbus A320neo","cabin":"","takeoff":"2022-05-22T15:43","landing":"2022-05-22T17:09"},{"date":"2022-05-22","airline":"VTI","flight":"879","from":"DEL","to":"HYD","aircraft":"Airbus A320neo","cabin":"","takeoff":"2022-05-22T17:50","landing":"2022-05-22T20:01"},{"date":"2022-07-09","airline":"VTI","flight":"830","from":"HYD","to":"DEL","aircraft":"Airbus A320neo","cabin":"","takeoff":"2022-07-09T10:21","landing":"2022-07-09T12:42"},{"date":"2022-07-09","airline":"VTI","flight":"691","from":"DEL","to":"ATQ","aircraft":"Airbus A320neo","cabin":"","takeoff":"2022-07-09T13:42","landing":"2022-07-09T14:55"},{"date":"2022-07-31","airline":"VTI","flight":"694","from":"ATQ","to":"DEL","aircraft":"Airbus A320neo","cabin":"","takeoff":"2022-07-31T09:45","landing":"2022-07-31T10:58"},{"date":"2022-07-31","airline":"VTI","flight":"899","from":"DEL","to":"HYD","aircraft":"Airbus A320neo","cabin":"","takeoff":"2022-07-31T14:53","landing":"2022-07-31T17:23"},{"date":"2022-10-21","airline":"VTI","flight":"659","from":"HYD","to":"IXC","aircraft":"Airbus A320neo","cabin":"","takeoff":"2022-10-21T11:23","landing":"2022-10-21T13:55"},{"date":"2022-11-13","airline":"IGO","flight":"6262","from":"ATQ","to":"DEL","aircraft":"Airbus A321neo","cabin":"","takeoff":"2022-11-13T12:36","landing":"2022-11-13T13:37"},{"date":"2022-11-13","airline":"IGO","flight":"2212","from":"DEL","to":"HYD","aircraft":"Airbus A320neo","cabin":"","takeoff":"2022-11-13T16:59","landing":"2022-11-13T19:15"},{"date":"2022-12-01","airline":"VTI","flight":"870","from":"HYD","to":"DEL","aircraft":"Airbus A320","cabin":"","takeoff":"2022-12-01T20:30","landing":"2022-12-01T22:44"},{"date":"2022-12-02","airline":"IGO","flight":"6245","from":"DEL","to":"IXC","aircraft":"Airbus A321neo","cabin":"","takeoff":"2022-12-02T05:03","landing":"2022-12-02T05:49"},{"date":"2022-12-03","airline":"VTI","flight":"638","from":"IXC","to":"DEL","aircraft":"Airbus A320neo","cabin":"","takeoff":"2022-12-03T18:58","landing":"2022-12-03T19:58"},{"date":"2022-12-04","airline":"VTI","flight":"829","from":"DEL","to":"HYD","aircraft":"Airbus A320neo","cabin":"","takeoff":"2022-12-04T07:19","landing":"2022-12-04T09:36"},{"date":"2022-12-17","airline":"BAW","flight":"276","from":"HYD","to":"LHR","aircraft":"Boeing 787-8","cabin":"","takeoff":"2022-12-17T08:13","landing":"2022-12-17T13:43"},{"date":"2022-12-17","airline":"BAW","flight":"183","from":"LHR","to":"JFK","aircraft":"Boeing 777-200 ER","cabin":"","takeoff":"2022-12-17T21:46","landing":"2022-12-18T00:49"},{"date":"2022-12-18","airline":"BAW","flight":"4597","from":"JFK","to":"AUS","aircraft":"Boeing 737-800","cabin":"","takeoff":"2022-12-18T08:26","landing":"2022-12-18T11:32"},{"date":"2023-01-02","airline":"AAL","flight":"1149","from":"AUS","to":"DFW","aircraft":"Airbus A319","cabin":"","takeoff":"2023-01-02T20:18","landing":"2023-01-02T21:39"},{"date":"2023-01-02","airline":"AAL","flight":"78","from":"DFW","to":"LHR","aircraft":"Boeing 777-300 ER","cabin":"","takeoff":"2023-01-02T22:51","landing":"2023-01-03T13:30"},{"date":"2023-01-03","airline":"AIC","flight":"128","from":"LHR","to":"BOM","aircraft":"Boeing 787-8","cabin":"","takeoff":"2023-01-03T17:29:24","landing":""},{"date":"2023-01-04","airline":"AIC","flight":"617","from":"BOM","to":"HYD","aircraft":"Airbus A319","cabin":"","takeoff":"2023-01-04T11:00","landing":"2023-01-04T13:21:37"},{"date":"2023-01-30","airline":"AKJ","flight":"1415","from":"BLR","to":"HYD","aircraft":"Boeing 737 MAX 8","cabin":"","takeoff":"","landing":"2023-01-30T11:19"},{"date":"2023-03-04","airline":"VTI","flight":"830","from":"HYD","to":"DEL","aircraft":"Airbus A321neo","cabin":"","takeoff":"2023-03-04T10:12","landing":"2023-03-04T12:19"},{"date":"2023-03-04","airline":"VTI","flight":"691","from":"DEL","to":"ATQ","aircraft":"Airbus A320neo","cabin":"","takeoff":"2023-03-04T14:00","landing":"2023-03-04T15:11"},{"date":"2023-03-12","airline":"VTI","flight":"692","from":"ATQ","to":"DEL","aircraft":"Airbus A320neo","cabin":"","takeoff":"2023-03-12T15:35","landing":"2023-03-12T16:50"},{"date":"2023-03-12","airline":"VTI","flight":"879","from":"DEL","to":"HYD","aircraft":"Airbus A320neo","cabin":"","takeoff":"2023-03-12T17:38","landing":"2023-03-12T19:58"},{"date":"2023-04-21","airline":"AIC","flight":"840","from":"HYD","to":"DEL","aircraft":"Boeing 777-300 ER","cabin":"","takeoff":"2023-04-21T21:00","landing":""},{"date":"2023-04-22","airline":"AIC","flight":"453","from":"DEL","to":"ATQ","aircraft":"Airbus A321","cabin":"","takeoff":"","landing":""},{"date":"2023-04-24","airline":"VTI","flight":"692","from":"ATQ","to":"DEL","aircraft":"Airbus A321neo","cabin":"","takeoff":"2023-04-24T16:05","landing":"2023-04-24T17:16"},{"date":"2023-04-24","airline":"VTI","flight":"879","from":"DEL","to":"HYD","aircraft":"Airbus A320neo","cabin":"","takeoff":"2023-04-24T18:34","landing":"2023-04-24T20:54"},{"date":"2023-04-28","airline":"IGO","flight":"949","from":"HYD","to":"BLR","aircraft":"Airbus A320neo","cabin":"","takeoff":"2023-04-29T00:07","landing":"2023-04-29T01:13"},{"date":"2023-04-29","airline":"IGO","flight":"1055","from":"BLR","to":"BKK","aircraft":"Airbus A320neo","cabin":"","takeoff":"2023-04-29T05:25","landing":"2023-04-29T10:35"},{"date":"2023-05-05","airline":"BKP","flight":"253","from":"USM","to":"HKT","aircraft":"ATR 42 / ATR 72","cabin":"","takeoff":"","landing":""},{"date":"2023-05-07","airline":"IGO","flight":"1072","from":"HKT","to":"BOM","aircraft":"Airbus A321neo","cabin":"","takeoff":"2023-05-07T11:00","landing":"2023-05-07T14:09"},{"date":"2023-05-07","airline":"IGO","flight":"6571","from":"BOM","to":"HYD","aircraft":"Airbus A320","cabin":"","takeoff":"2023-05-07T17:55","landing":"2023-05-07T19:26"},{"date":"2023-07-04","airline":"VTI","flight":"890","from":"HYD","to":"DEL","aircraft":"Airbus A320neo","cabin":"","takeoff":"2023-07-04T18:39","landing":"2023-07-04T21:36"},{"date":"2023-07-09","airline":"VTI","flight":"707","from":"IXC","to":"DEL","aircraft":"Airbus A321neo","cabin":"","takeoff":"2023-07-09T15:30","landing":"2023-07-09T16:35"},{"date":"2023-07-09","airline":"VTI","flight":"879","from":"DEL","to":"HYD","aircraft":"Airbus A320neo","cabin":"","takeoff":"2023-07-09T17:49","landing":"2023-07-09T20:06"},{"date":"2023-08-12","airline":"VTI","flight":"830","from":"HYD","to":"DEL","aircraft":"Airbus A321neo","cabin":"","takeoff":"2023-08-12T10:23","landing":"2023-08-12T12:45"},{"date":"2023-08-12","airline":"IGO","flight":"2235","from":"DEL","to":"ATQ","aircraft":"Airbus A320neo","cabin":"","takeoff":"2023-08-12T19:30","landing":"2023-08-12T20:33"},{"date":"2023-09-02","airline":"VTI","flight":"694","from":"ATQ","to":"DEL","aircraft":"Airbus A320neo","cabin":"","takeoff":"2023-09-02T10:09","landing":"2023-09-02T11:18"},{"date":"2023-09-02","airline":"VTI","flight":"899","from":"DEL","to":"HYD","aircraft":"Airbus A320neo","cabin":"","takeoff":"2023-09-02T14:55:02","landing":""},{"date":"2023-09-23","airline":"VTI","flight":"860","from":"HYD","to":"DEL","aircraft":"Airbus A320neo","cabin":"","takeoff":"2023-09-23T06:52","landing":"2023-09-23T09:20"},{"date":"2023-09-23","airline":"AIC","flight":"491","from":"DEL","to":"ATQ","aircraft":"Airbus A320","cabin":"","takeoff":"2023-09-23T11:13:06","landing":""},{"date":"2023-10-02","airline":"AIC","flight":"492","from":"ATQ","to":"DEL","aircraft":"Airbus A320","cabin":"","takeoff":"2023-10-02T12:40:06","landing":""},{"date":"2023-10-02","airline":"VTI","flight":"879","from":"DEL","to":"HYD","aircraft":"Airbus A320neo","cabin":"","takeoff":"2023-10-02T17:39","landing":"2023-10-02T19:58"},{"date":"2023-11-09","airline":"AIC","flight":"559","from":"HYD","to":"DEL","aircraft":"Airbus A320neo","cabin":"","takeoff":"2023-11-09T06:30","landing":""},{"date":"2023-11-09","airline":"AIC","flight":"491","from":"DEL","to":"ATQ","aircraft":"Airbus A320","cabin":"","takeoff":"2023-11-09T11:32","landing":""},{"date":"2023-11-20","airline":"VTI","flight":"692","from":"ATQ","to":"DEL","aircraft":"Airbus A320neo","cabin":"","takeoff":"2023-11-20T15:29","landing":"2023-11-20T16:49"},{"date":"2023-11-20","airline":"VTI","flight":"879","from":"DEL","to":"HYD","aircraft":"Airbus A320neo","cabin":"","takeoff":"2023-11-20T17:39","landing":"2023-11-20T19:56"},{"date":"2023-12-21","airline":"AXB","flight":"954","from":"HYD","to":"ATQ","aircraft":"Boeing 737 MAX 8","cabin":"","takeoff":"2023-12-21T07:24","landing":""},{"date":"2024-01-07","airline":"AXB","flight":"953","from":"ATQ","to":"HYD","aircraft":"Boeing 737 MAX 8","cabin":"","takeoff":"2024-01-07T10:58","landing":"2024-01-07T13:34"},{"date":"2024-01-26","airline":"IGO","flight":"5146","from":"HYD","to":"BOM","aircraft":"Airbus A321neo","cabin":"","takeoff":"2024-01-26T07:45","landing":"2024-01-26T09:14"},{"date":"2024-01-28","airline":"AKJ","flight":"1642","from":"BOM","to":"HYD","aircraft":"Boeing 737 MAX 8","cabin":"","takeoff":"2024-01-28T17:48","landing":"2024-01-28T19:14"},{"date":"2024-03-24","airline":"VTI","flight":"874","from":"HYD","to":"BOM","aircraft":"Airbus A320neo","cabin":"","takeoff":"2024-03-24T08:17","landing":"2024-03-24T09:59"},{"date":"2024-03-27","airline":"VTI","flight":"843","from":"BOM","to":"GOI","aircraft":"Airbus A320neo","cabin":"","takeoff":"2024-03-27T21:11","landing":"2024-03-27T22:31"},{"date":"2024-03-31","airline":"IGO","flight":"6973","from":"GOX","to":"HYD","aircraft":"Airbus A320neo","cabin":"","takeoff":"2024-03-31T14:38","landing":"2024-03-31T15:46"},{"date":"2024-04-06","airline":"AXB","flight":"954","from":"HYD","to":"ATQ","aircraft":"Boeing 737 MAX 8","cabin":"","takeoff":"2024-04-06T07:42","landing":""},{"date":"2024-04-07","airline":"AIC","flight":"485","from":"DEL","to":"IXZ","aircraft":"Airbus A320neo","cabin":"","takeoff":"2024-04-07T05:46","landing":""},{"date":"2024-04-07","airline":"AIC","flight":"492","from":"ATQ","to":"DEL","aircraft":"Boeing 787-8","cabin":"","takeoff":"2024-04-07T13:05","landing":"2024-04-07T14:14"},{"date":"2024-04-08","airline":"AIC","flight":"485","from":"DEL","to":"VTZ","aircraft":"Airbus A320neo","cabin":"","takeoff":"2024-04-08T05:23","landing":""},{"date":"2024-04-08","airline":"AIC","flight":"485","from":"VTZ","to":"IXZ","aircraft":"Airbus A320neo","cabin":"","takeoff":"2024-04-08T08:07","landing":""},{"date":"2024-04-13","airline":"VTI","flight":"778","from":"IXZ","to":"CCU","aircraft":"Airbus A320neo","cabin":"","takeoff":"2024-04-13T12:13","landing":"2024-04-13T14:28"},{"date":"2024-04-13","airline":"VTI","flight":"778","from":"CCU","to":"DEL","aircraft":"Airbus A320neo","cabin":"","takeoff":"2024-04-13T15:14","landing":"2024-04-13T18:28"},{"date":"2024-04-13","airline":"AIC","flight":"479","from":"DEL","to":"ATQ","aircraft":"Airbus A321","cabin":"","takeoff":"2024-04-13T21:52","landing":""},{"date":"2024-04-21","airline":"AXB","flight":"953","from":"ATQ","to":"HYD","aircraft":"Boeing 737 MAX 8","cabin":"","takeoff":"2024-04-21T10:40","landing":""},{"date":"2024-06-14","airline":"AXB","flight":"954","from":"HYD","to":"ATQ","aircraft":"Boeing 737 MAX 8","cabin":"","takeoff":"2024-06-14T07:08","landing":"2024-06-14T09:54"},{"date":"2024-06-23","airline":"AXB","flight":"1955","from":"ATQ","to":"HYD","aircraft":"Boeing 737 MAX 8","cabin":"","takeoff":"2024-06-23T16:46","landing":"2024-06-23T19:44"},{"date":"2024-08-31","airline":"AXB","flight":"1953","from":"HYD","to":"ATQ","aircraft":"Boeing 737 MAX 8","cabin":"","takeoff":"2024-08-31T12:44","landing":"2024-08-31T15:22"},{"date":"2024-09-21","airline":"AIC","flight":"492","from":"ATQ","to":"DEL","aircraft":"Airbus A320neo","cabin":"ECONOMY","takeoff":"2024-09-21T13:23","landing":"2024-09-21T14:43"},{"date":"2024-09-25","airline":"VTI","flight":"697","from":"DEL","to":"ATQ","aircraft":"Airbus A320neo","cabin":"ECONOMY","takeoff":"2024-09-25T08:24","landing":"2024-09-25T09:34"},{"date":"2024-11-16","airline":"AIC","flight":"454","from":"ATQ","to":"DEL","aircraft":"Airbus A321","cabin":"ECONOMY","takeoff":"2024-11-16T10:29","landing":"2024-11-16T12:14"},{"date":"2024-11-18","airline":"AIC","flight":"461","from":"DEL","to":"ATQ","aircraft":"Airbus A321","cabin":"","takeoff":"2024-11-18T14:55","landing":"2024-11-18T16:15"},{"date":"2024-11-23","airline":"AIC","flight":"2698","from":"ATQ","to":"DEL","aircraft":"Airbus A320neo","cabin":"PREMIUM_ECONOMY","takeoff":"2024-11-23T20:20","landing":"2024-11-23T21:32"},{"date":"2024-11-24","airline":"AXB","flight":"1116","from":"DEL","to":"IXR","aircraft":"Airbus A320","cabin":"ECONOMY","takeoff":"2024-11-24T08:16","landing":""},{"date":"2024-11-26","airline":"AIC","flight":"2754","from":"IXR","to":"DEL","aircraft":"Airbus A320neo","cabin":"ECONOMY","takeoff":"2024-11-26T15:40","landing":"2024-11-26T17:45"},{"date":"2024-11-26","airline":"AIC","flight":"479","from":"DEL","to":"ATQ","aircraft":"Airbus A321","cabin":"ECONOMY","takeoff":"2024-11-27T00:03","landing":"2024-11-27T01:14"},{"date":"2024-12-25","airline":"IGO","flight":"6164","from":"ATQ","to":"SXR","aircraft":"Airbus A320neo","cabin":"ECONOMY","takeoff":"2024-12-25T09:14","landing":"2024-12-25T10:01"},{"date":"2024-12-29","airline":"IGO","flight":"478","from":"SXR","to":"ATQ","aircraft":"Airbus A320neo","cabin":"","takeoff":"2024-12-29T14:39","landing":"2024-12-29T15:35"},{"date":"2025-01-12","airline":"IGO","flight":"478","from":"ATQ","to":"BLR","aircraft":"Airbus A320neo","cabin":"ECONOMY","takeoff":"2025-01-12T16:13","landing":"2025-01-12T19:07"},{"date":"2025-01-14","airline":"IGO","flight":"650","from":"BLR","to":"ATQ","aircraft":"Airbus A320neo","cabin":"ECONOMY","takeoff":"2025-01-14T16:38","landing":"2025-01-14T19:40"},{"date":"2025-03-08","airline":"AIC","flight":"498","from":"ATQ","to":"DEL","aircraft":"Airbus A321","cabin":"ECONOMY","takeoff":"2025-03-08T15:16","landing":"2025-03-08T16:30"},{"date":"2025-03-09","airline":"AIC","flight":"544","from":"DEL","to":"HYD","aircraft":"Airbus A350-900","cabin":"BUSINESS","takeoff":"2025-03-09T16:20","landing":"2025-03-09T18:24"},{"date":"2025-03-14","airline":"AIC","flight":"2874","from":"HYD","to":"BOM","aircraft":"Airbus A320neo","cabin":"PREMIUM_ECONOMY","takeoff":"2025-03-14T09:27","landing":""},{"date":"2025-03-15","airline":"AXB","flight":"1215","from":"BOM","to":"GOI","aircraft":"Airbus A320","cabin":"","takeoff":"2025-03-15T12:11","landing":""},{"date":"2025-03-18","airline":"IGO","flight":"2029","from":"GOI","to":"DEL","aircraft":"Airbus A321neo","cabin":"","takeoff":"","landing":"2025-03-18T21:46"},{"date":"2025-03-20","airline":"AIC","flight":"495","from":"DEL","to":"ATQ","aircraft":"Airbus A321neo","cabin":"ECONOMY","takeoff":"2025-03-20T08:28","landing":""},{"date":"2025-04-10","airline":"TGW","flight":"513","from":"ATQ","to":"SIN","aircraft":"Boeing 787-8","cabin":"","takeoff":"2025-04-10T20:18","landing":""},{"date":"2025-04-11","airline":"TGW","flight":"280","from":"SIN","to":"DPS","aircraft":"Boeing 787-8","cabin":"","takeoff":"2025-04-11T07:23","landing":""},{"date":"2025-04-16","airline":"TGW","flight":"281","from":"DPS","to":"SIN","aircraft":"Boeing 787-9","cabin":"","takeoff":"2025-04-16T11:37","landing":""},{"date":"2025-04-16","airline":"TGW","flight":"512","from":"SIN","to":"ATQ","aircraft":"Boeing 787-8","cabin":"","takeoff":"2025-04-16T15:24","landing":""},{"date":"2025-07-13","airline":"AIC","flight":"496","from":"ATQ","to":"DEL","aircraft":"Airbus A320neo","cabin":"","takeoff":"2025-07-13T08:22","landing":"2025-07-13T09:39"},{"date":"2025-07-14","airline":"KLM","flight":"872","from":"DEL","to":"AMS","aircraft":"Boeing 787-10","cabin":"","takeoff":"2025-07-14T03:46","landing":"2025-07-14T09:21"},{"date":"2025-07-14","airline":"KLM","flight":"667","from":"AMS","to":"AUS","aircraft":"Boeing 787-9","cabin":"","takeoff":"2025-07-14T12:55","landing":"2025-07-14T16:20"},{"date":"2025-07-18","airline":"AAL","flight":"2294","from":"AUS","to":"MIA","aircraft":"Boeing 737 MAX 8","cabin":"","takeoff":"2025-07-18T06:53","landing":"2025-07-18T10:52"},{"date":"2025-07-18","airline":"AAL","flight":"2899","from":"MIA","to":"TPA","aircraft":"Boeing 737-800","cabin":"","takeoff":"2025-07-18T11:58","landing":"2025-07-18T13:03"},{"date":"2025-07-20","airline":"AAL","flight":"2510","from":"TPA","to":"MIA","aircraft":"Boeing 737-800","cabin":"","takeoff":"2025-07-20T20:39","landing":"2025-07-20T21:34"},{"date":"2025-07-20","airline":"AAL","flight":"1427","from":"MIA","to":"AUS","aircraft":"Airbus A319","cabin":"","takeoff":"2025-07-20T23:20","landing":"2025-07-21T02:01"},{"date":"2025-07-26","airline":"KLM","flight":"668","from":"AUS","to":"AMS","aircraft":"Boeing 787-10","cabin":"","takeoff":"2025-07-26T18:11","landing":"2025-07-27T10:09"},{"date":"2025-07-27","airline":"KLM","flight":"871","from":"AMS","to":"DEL","aircraft":"Boeing 787-10","cabin":"","takeoff":"2025-07-27T16:38","landing":"2025-07-28T03:51"},{"date":"2025-07-28","airline":"AIC","flight":"495","from":"DEL","to":"ATQ","aircraft":"Airbus A321","cabin":"","takeoff":"2025-07-28T07:44","landing":"2025-07-28T08:58"},{"date":"2025-08-22","airline":"AIC","flight":"454","from":"ATQ","to":"DEL","aircraft":"Airbus A320neo","cabin":"PREMIUM_ECONOMY","takeoff":"2025-08-22T06:28","landing":"2025-08-22T07:47"},{"date":"2025-08-23","airline":"AIC","flight":"491","from":"DEL","to":"ATQ","aircraft":"Airbus A320neo","cabin":"PREMIUM_ECONOMY","takeoff":"2025-08-23T09:27","landing":"2025-08-23T10:39"},{"date":"2026-01-17","airline":"AIC","flight":"422","from":"ATQ","to":"DEL","aircraft":"Boeing 787-8","cabin":"ECONOMY","takeoff":"2026-01-17T15:10","landing":"2026-01-17T16:25"},{"date":"2026-01-31","airline":"AIC","flight":"479","from":"DEL","to":"ATQ","aircraft":"Airbus A321","cabin":"BUSINESS","takeoff":"2026-01-31T20:22","landing":"2026-01-31T21:12"},{"date":"2026-04-19","airline":"AIC","flight":"1826","from":"ATQ","to":"DEL","aircraft":"Airbus A320neo","cabin":"ECONOMY","takeoff":"2026-04-19T12:21","landing":"2026-04-19T13:35"},{"date":"2026-04-25","airline":"AIC","flight":"1826","from":"ATQ","to":"DEL","aircraft":"Airbus A320neo","cabin":"ECONOMY","takeoff":"2026-04-25T12:21","landing":"2026-04-25T13:30"},{"date":"2026-04-26","airline":"UAE","flight":"513","from":"DEL","to":"DXB","aircraft":"Boeing 777-300 ER","cabin":"ECONOMY","takeoff":"2026-04-26T04:18","landing":"2026-04-26T05:59"},{"date":"2026-04-26","airline":"UAE","flight":"29","from":"DXB","to":"LHR","aircraft":"Airbus A380-800","cabin":"ECONOMY","takeoff":"2026-04-26T09:00","landing":"2026-04-26T14:56"},{"date":"2026-05-01","airline":"RYR","flight":"347","from":"STN","to":"MAD","aircraft":"Boeing 737 MAX 8","cabin":"","takeoff":"2026-05-01T08:40","landing":"2026-05-01T13:42"},{"date":"2026-05-02","airline":"RYR","flight":"2066","from":"MAD","to":"IBZ","aircraft":"Boeing 737-800","cabin":"ECONOMY","takeoff":"2026-05-02T18:15","landing":"2026-05-02T19:54"},{"date":"2026-05-04","airline":"RYR","flight":"8554","from":"IBZ","to":"STN","aircraft":"Boeing 737 MAX 8","cabin":"","takeoff":"2026-05-04T10:08","landing":"2026-05-04T11:26"},{"date":"2026-05-13","airline":"ETD","flight":"68","from":"LHR","to":"AUH","aircraft":"Airbus A350-1000","cabin":"ECONOMY","takeoff":"2026-05-13T23:06","landing":"2026-05-14T09:01"},{"date":"2026-05-14","airline":"ETD","flight":"216","from":"AUH","to":"DEL","aircraft":"Boeing 787-9","cabin":"ECONOMY","takeoff":"2026-05-14T14:18","landing":"2026-05-14T19:02"},{"date":"2026-05-15","airline":"AIC","flight":"479","from":"DEL","to":"ATQ","aircraft":"Airbus A321","cabin":"","takeoff":"2026-05-15T21:12","landing":"2026-05-15T22:32"},{"date":"2026-06-22","airline":"AIC","flight":"1884","from":"ATQ","to":"DEL","aircraft":"Airbus A320neo","cabin":"ECONOMY","takeoff":"2026-06-22T07:02","landing":"2026-06-22T08:18"},{"date":"2026-06-23","airline":"IGO","flight":"3","from":"DEL","to":"LHR","aircraft":"Boeing 787-9","cabin":"ECONOMY","takeoff":"2026-06-23T10:40","landing":"2026-06-23T17:14"},{"date":"2026-07-07","airline":"AIC","flight":"162","from":"LHR","to":"DEL","aircraft":"Airbus A350-900","cabin":"ECONOMY","takeoff":"2026-07-07T09:52","landing":"2026-07-08T00:42"},{"date":"2026-07-08","airline":"AIC","flight":"1703","from":"DEL","to":"ATQ","aircraft":"Airbus A320neo","cabin":"","takeoff":"2026-07-08T05:05","landing":"2026-07-08T06:14"},{"date":"2026-08-02","airline":"IGO","flight":"5414","from":"ATQ","to":"DEL","aircraft":"Airbus A321neo","cabin":"PREMIUM_ECONOMY","takeoff":"2026-08-02T08:04","landing":"2026-08-02T09:11"},{"date":"2026-08-04","airline":"AAL","flight":"293","from":"DEL","to":"JFK","aircraft":"Boeing 787-9","cabin":"ECONOMY","takeoff":"2026-08-04T23:44","landing":"2026-08-05T05:33"},{"date":"2026-08-05","airline":"AAL","flight":"810","from":"JFK","to":"AUS","aircraft":"Boeing 737 MAX 8","cabin":"ECONOMY","takeoff":"2026-08-05T08:18","landing":"2026-08-05T11:47"},{"date":"2026-08-18","airline":"SWA","flight":"993","from":"AUS","to":"MCI","aircraft":"Boeing 737-700","cabin":"","takeoff":"2026-08-18T15:27","landing":"2026-08-18T17:41"},{"date":"2026-08-22","airline":"FFT","flight":"3375","from":"MCI","to":"DEN","aircraft":"Airbus A320neo","cabin":"","takeoff":"2026-08-22T13:29","landing":"2026-08-22T14:13"},{"date":"2026-08-22","airline":"FFT","flight":"1816","from":"DEN","to":"AUS","aircraft":"Airbus A320neo","cabin":"","takeoff":"2026-08-22T18:17","landing":"2026-08-22T21:27"},{"date":"2026-09-05","airline":"AAL","flight":"763","from":"AUS","to":"JFK","aircraft":"Boeing 737 MAX 8","cabin":"ECONOMY","takeoff":"2026-09-05T12:17","landing":"2026-09-05T17:15"},{"date":"2026-09-05","airline":"AAL","flight":"292","from":"JFK","to":"DEL","aircraft":"Boeing 787-9","cabin":"ECONOMY","takeoff":"2026-09-05T20:56","landing":"2026-09-06T20:04"},{"date":"2026-09-11","airline":"AIC","flight":"479","from":"DEL","to":"ATQ","aircraft":"Airbus A320neo","cabin":"PREMIUM_ECONOMY","takeoff":"2026-09-11T21:23","landing":"2026-09-11T22:37"}];
+// Airport and airline data - Comprehensive global coverage
+const AIRPORT_DATA = {
+    // India
+    'ATQ': { lat: 31.7160, lng: 74.8141, city: 'Amritsar', country: 'India', countryCode: 'IN' },
+    'DEL': { lat: 28.5665, lng: 77.1031, city: 'New Delhi', country: 'India', countryCode: 'IN' },
+    'BOM': { lat: 19.0880, lng: 72.8686, city: 'Mumbai', country: 'India', countryCode: 'IN' },
+    'BLR': { lat: 13.1939, lng: 77.7064, city: 'Bangalore', country: 'India', countryCode: 'IN' },
+    'HYD': { lat: 17.3850, lng: 78.4867, city: 'Hyderabad', country: 'India', countryCode: 'IN' },
+    'COK': { lat: 10.1924, lng: 76.2696, city: 'Kochi', country: 'India', countryCode: 'IN' },
+    'MAA': { lat: 12.9940, lng: 80.1689, city: 'Chennai', country: 'India', countryCode: 'IN' },
+    'PNQ': { lat: 18.5921, lng: 73.9197, city: 'Pune', country: 'India', countryCode: 'IN' },
+    'CCU': { lat: 22.6541, lng: 88.4480, city: 'Kolkata', country: 'India', countryCode: 'IN' },
+    'VGA': { lat: 25.3245, lng: 82.9789, city: 'Varanasi', country: 'India', countryCode: 'IN' },
+    'GOI': { lat: 15.3800, lng: 73.8347, city: 'Goa', country: 'India', countryCode: 'IN' },
+    'JAI': { lat: 25.8202, lng: 75.8024, city: 'Jaipur', country: 'India', countryCode: 'IN' },
+    'IXC': { lat: 30.6735, lng: 76.7903, city: 'Chandigarh', country: 'India', countryCode: 'IN' },
+    'IXL': { lat: 34.1526, lng: 77.5771, city: 'Leh', country: 'India', countryCode: 'IN' },
+    'IXR': { lat: 23.3171, lng: 85.3200, city: 'Ranchi', country: 'India', countryCode: 'IN' },
+    'IXZ': { lat: 24.8267, lng: 92.9758, city: 'Silchar', country: 'India', countryCode: 'IN' },
+    'SXR': { lat: 33.9871, lng: 74.7742, city: 'Srinagar', country: 'India', countryCode: 'IN' },
+    'VTZ': { lat: 17.6869, lng: 83.2185, city: 'Visakhapatnam', country: 'India', countryCode: 'IN' },
+    'USM': { lat: 26.8124, lng: 75.8028, city: 'Udaipur', country: 'India', countryCode: 'IN' },
+    'GOX': { lat: 15.2708, lng: 73.8297, city: 'South Goa', country: 'India', countryCode: 'IN' },
+
+    // Southeast Asia
+    'DPS': { lat: -8.7533, lng: 115.1667, city: 'Bali', country: 'Indonesia', countryCode: 'ID' },
+    'SIN': { lat: 1.3521, lng: 103.8198, city: 'Singapore', country: 'Singapore', countryCode: 'SG' },
+    'KUL': { lat: 2.7258, lng: 101.7103, city: 'Kuala Lumpur', country: 'Malaysia', countryCode: 'MY' },
+    'BKK': { lat: 13.9101, lng: 100.8674, city: 'Bangkok', country: 'Thailand', countryCode: 'TH' },
+    'HKT': { lat: 8.1136, lng: 98.3092, city: 'Phuket', country: 'Thailand', countryCode: 'TH' },
+
+    // East Asia
+    'PEK': { lat: 40.0801, lng: 116.5846, city: 'Beijing', country: 'China', countryCode: 'CN' },
+    'SHA': { lat: 31.1408, lng: 121.8050, city: 'Shanghai', country: 'China', countryCode: 'CN' },
+
+    // Middle East
+    'DXB': { lat: 25.2528, lng: 55.3644, city: 'Dubai', country: 'UAE', countryCode: 'AE' },
+    'AUH': { lat: 24.4539, lng: 54.3773, city: 'Abu Dhabi', country: 'UAE', countryCode: 'AE' },
+    'DOH': { lat: 25.2731, lng: 51.6139, city: 'Doha', country: 'Qatar', countryCode: 'QA' },
+
+    // USA
+    'LAX': { lat: 33.9425, lng: -118.4081, city: 'Los Angeles', country: 'USA', countryCode: 'US' },
+    'SFO': { lat: 37.6213, lng: -122.3790, city: 'San Francisco', country: 'USA', countryCode: 'US' },
+    'JFK': { lat: 40.6413, lng: -73.7781, city: 'New York', country: 'USA', countryCode: 'US' },
+    'ORD': { lat: 41.9742, lng: -87.9073, city: 'Chicago', country: 'USA', countryCode: 'US' },
+    'DFW': { lat: 32.8975, lng: -97.0382, city: 'Dallas', country: 'USA', countryCode: 'US' },
+    'DEN': { lat: 39.8561, lng: -104.6737, city: 'Denver', country: 'USA', countryCode: 'US' },
+    'AUS': { lat: 30.2872, lng: -97.7431, city: 'Austin', country: 'USA', countryCode: 'US' },
+    'MCI': { lat: 39.2976, lng: -94.7139, city: 'Kansas City', country: 'USA', countryCode: 'US' },
+    'IAH': { lat: 29.9902, lng: -95.3368, city: 'Houston', country: 'USA', countryCode: 'US' },
+    'HOU': { lat: 29.6454, lng: -95.2788, city: 'Houston Hobby', country: 'USA', countryCode: 'US' },
+    'MIA': { lat: 25.7959, lng: -80.2870, city: 'Miami', country: 'USA', countryCode: 'US' },
+    'TPA': { lat: 27.9747, lng: -82.5331, city: 'Tampa', country: 'USA', countryCode: 'US' },
+    'MSY': { lat: 29.9844, lng: -90.2580, city: 'New Orleans', country: 'USA', countryCode: 'US' },
+
+    // Europe
+    'LHR': { lat: 51.4700, lng: -0.4543, city: 'London', country: 'UK', countryCode: 'GB' },
+    'STN': { lat: 51.8860, lng: 0.2353, city: 'London Stansted', country: 'UK', countryCode: 'GB' },
+    'CDG': { lat: 49.0127, lng: 2.5495, city: 'Paris', country: 'France', countryCode: 'FR' },
+    'FRA': { lat: 50.0379, lng: 8.5622, city: 'Frankfurt', country: 'Germany', countryCode: 'DE' },
+    'AMS': { lat: 52.3086, lng: 4.7639, city: 'Amsterdam', country: 'Netherlands', countryCode: 'NL' },
+    'MAD': { lat: 40.4730, lng: -3.6282, city: 'Madrid', country: 'Spain', countryCode: 'ES' },
+    'IBZ': { lat: 38.8728, lng: 1.3092, city: 'Ibiza', country: 'Spain', countryCode: 'ES' },
+
+};
+
+const AIRLINE_DATA = {
+    'AAL': { name: 'American Airlines', country: 'USA' },
+    'AIC': { name: 'Air India', country: 'India' },
+    'AKJ': { name: 'AirAsia', country: 'Malaysia' },
+    'AXB': { name: 'Air Arabia', country: 'UAE' },
+    'BAW': { name: 'British Airways', country: 'UK' },
+    'BKP': { name: 'Bangkok Airways', country: 'Thailand' },
+    'ETD': { name: 'Etihad Airways', country: 'UAE' },
+    'FFT': { name: 'Frontier Airlines', country: 'USA' },
+    'GOW': { name: 'GoAir', country: 'India' },
+    'IAD': { name: 'Iran Air', country: 'Iran' },
+    'IGO': { name: 'IndiGo', country: 'India' },
+    'JAI': { name: 'Jet Airways', country: 'India' },
+    'KLM': { name: 'KLM Royal Dutch Airlines', country: 'Netherlands' },
+    'QTR': { name: 'Qatar Airways', country: 'Qatar' },
+    'RYR': { name: 'Ryanair', country: 'Ireland' },
+    'SEJ': { name: 'SpiceJet', country: 'India' },
+    'SWA': { name: 'Southwest Airlines', country: 'USA' },
+    'TGW': { name: 'Tigerair', country: 'Singapore' },
+    'UAE': { name: 'Emirates', country: 'UAE' },
+    'VTI': { name: 'Vistara', country: 'India' },
+};
+
+// Application state
+let appState = {
+    allFlights: [],
+    filteredFlights: [],
+    selectedYear: 'all',
+    globe: null,
+    selectedFlight: null,
+    replayActive: false,
+    agentCollapsed: false,
+};
+
+// Utility functions
+function haversineDistance(lat1, lng1, lat2, lng2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return Math.round(R * c);
+}
+
+function getRouteDistanceKm(route) {
+    if (!route || route === '-') return '-';
+    const [from, to] = route.split('-');
+    const fromAirport = AIRPORT_DATA[from];
+    const toAirport = AIRPORT_DATA[to];
+    if (!fromAirport || !toAirport) return '-';
+    return `${haversineDistance(fromAirport.lat, fromAirport.lng, toAirport.lat, toAirport.lng)} km`;
+}
+
+function getCountryFlag(countryCode) {
+    if (!countryCode) return '🌍';
+    const codePoints = countryCode
+        .toUpperCase()
+        .split('')
+        .map(char => 127397 + char.charCodeAt());
+    return String.fromCodePoint(...codePoints);
+}
+
+function getAirlineName(code) {
+    return AIRLINE_DATA[code] || { name: code, country: 'Unknown' };
+}
+
+// CSV Parsing - Handle Flighty format
+function parseCSV(csvContent) {
+    const lines = csvContent.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim());
+    const flights = [];
+
+    for (let i = 1; i < lines.length; i++) {
+        const line = lines[i];
+        if (!line.trim()) continue;
+
+        const values = [];
+        let current = '';
+        let inQuotes = false;
+
+        for (let j = 0; j < line.length; j++) {
+            const char = line[j];
+            if (char === '"') {
+                inQuotes = !inQuotes;
+            } else if (char === ',' && !inQuotes) {
+                values.push(current.trim());
+                current = '';
+            } else {
+                current += char;
+            }
+        }
+        values.push(current.trim());
+
+        const flight = {};
+        headers.forEach((header, index) => {
+            flight[header] = values[index] || '';
+        });
+
+        if (flight.Date && flight.Flight) {
+            flights.push(flight);
+        }
+    }
+
+    return flights;
+}
+
+function normalizeFlights(flights) {
+    return flights.map(f => {
+        const date = new Date(f['Date']);
+        const year = date.getFullYear();
+        const month = date.toLocaleString('default', { month: 'long' });
+
+        const from = f['From'] || '';
+        const to = f['To'] || '';
+
+        let distance = 0;
+        if (from && to && AIRPORT_DATA[from] && AIRPORT_DATA[to]) {
+            const fromAirport = AIRPORT_DATA[from];
+            const toAirport = AIRPORT_DATA[to];
+            distance = haversineDistance(
+                fromAirport.lat, fromAirport.lng,
+                toAirport.lat, toAirport.lng
+            );
+        }
+
+        let durationMinutes = 0;
+        const actualDep = f['Take off (Actual)'] || f['Gate Departure (Actual)'];
+        const actualArr = f['Landing (Actual)'] || f['Gate Arrival (Actual)'];
+
+        if (actualDep && actualArr) {
+            const depTime = new Date(actualDep);
+            const arrTime = new Date(actualArr);
+            durationMinutes = Math.round((arrTime - depTime) / 60000);
+        }
+
+        const hours = Math.floor(durationMinutes / 60);
+        const minutes = durationMinutes % 60;
+        const duration = durationMinutes > 0 ? `${hours}h ${minutes}m` : '';
+
+        return {
+            ...f,
+            date,
+            year,
+            month,
+            from,
+            to,
+            distance,
+            duration,
+            durationMinutes,
+            airline: f['Airline'] || '',
+            flight: f['Flight'] || '',
+            aircraft: f['Aircraft Type Name'] || f['Aircraft Type'] || '',
+            cabin: f['Cabin Class'] || '',
+            status: f['Canceled'] === 'true' ? 'Canceled' : 'Completed',
+        };
+    });
+}
+
+function filterFlightsByYear(flights, year) {
+    if (year === 'all') return flights;
+    return flights.filter(f => f.year === parseInt(year));
+}
+
+// KPI Calculations
+function calculateKPIs(flights) {
+    const totalFlights = flights.length;
+    const totalDistance = flights.reduce((sum, f) => sum + (f.distance || 0), 0);
+    const timeInAir = flights.reduce((sum, f) => sum + f.durationMinutes, 0);
+    const hours = Math.floor(timeInAir / 60);
+    const minutes = timeInAir % 60;
+
+    const airports = new Set();
+    const countries = new Set();
+    const airlines = new Set();
+    const aircraftTypes = new Set();
+
+    flights.forEach(f => {
+        if (f.from && AIRPORT_DATA[f.from]) {
+            airports.add(f.from);
+            countries.add(AIRPORT_DATA[f.from].countryCode);
+        }
+        if (f.to && AIRPORT_DATA[f.to]) {
+            airports.add(f.to);
+            countries.add(AIRPORT_DATA[f.to].countryCode);
+        }
+        if (f.airline) airlines.add(f.airline);
+        if (f.aircraft) aircraftTypes.add(f.aircraft);
+    });
+
+    return {
+        totalFlights,
+        totalDistance,
+        timeInAir: `${hours}h ${minutes}m`,
+        airportsVisited: airports.size,
+        countries: countries.size,
+        airlines: airlines.size,
+        aircraftTypes: aircraftTypes.size,
+    };
+}
+
+// Aviation Story
+function calculateAviationStory(flights) {
+    const airportCounts = {};
+    const routeCounts = {};
+    const airlineCounts = {};
+    let longestFlight = null;
+    let maxDistance = 0;
+    const monthCounts = {};
+
+    flights.forEach(f => {
+        if (f.from) airportCounts[f.from] = (airportCounts[f.from] || 0) + 1;
+        if (f.to) airportCounts[f.to] = (airportCounts[f.to] || 0) + 1;
+
+        const route = `${f.from}-${f.to}`;
+        routeCounts[route] = (routeCounts[route] || 0) + 1;
+
+        if (f.airline) airlineCounts[f.airline] = (airlineCounts[f.airline] || 0) + 1;
+
+        if (f.distance > maxDistance) {
+            maxDistance = f.distance;
+            longestFlight = f;
+        }
+
+        const monthKey = `${f.year}-${f.month}`;
+        monthCounts[monthKey] = (monthCounts[monthKey] || 0) + 1;
+    });
+
+    const mostVisitedAirport = Object.keys(airportCounts).length > 0 ?
+        Object.keys(airportCounts).reduce((a, b) => airportCounts[a] > airportCounts[b] ? a : b) : '-';
+
+    const mostFlownRoute = Object.keys(routeCounts).length > 0 ?
+        Object.keys(routeCounts).reduce((a, b) => routeCounts[a] > routeCounts[b] ? a : b) : '-';
+
+    const mostFlownAirline = Object.keys(airlineCounts).length > 0 ?
+        Object.keys(airlineCounts).reduce((a, b) => airlineCounts[a] > airlineCounts[b] ? a : b) : '-';
+
+    const busiestMonth = Object.keys(monthCounts).length > 0 ?
+        Object.keys(monthCounts).reduce((a, b) => monthCounts[a] > monthCounts[b] ? a : b) : '-';
+
+    const internationalFlights = flights.filter(f => {
+        const fromCountry = AIRPORT_DATA[f.from]?.countryCode;
+        const toCountry = AIRPORT_DATA[f.to]?.countryCode;
+        return fromCountry && toCountry && fromCountry !== toCountry;
+    }).length;
+
+    const domesticFlights = flights.length - internationalFlights;
+
+    return {
+        mostVisitedAirport,
+        mostVisitedAirportCount: airportCounts[mostVisitedAirport] || 0,
+        mostFlownAirline,
+        mostFlownAirlineCount: airlineCounts[mostFlownAirline] || 0,
+        mostFlownRoute,
+        mostFlownRouteCount: routeCounts[mostFlownRoute] || 0,
+        longestFlight,
+        busiestMonth,
+        busiestMonthCount: monthCounts[busiestMonth] || 0,
+        internationalFlights,
+        domesticFlights,
+    };
+}
+
+// Rendering functions
+function renderKPIs(flights) {
+    const kpis = calculateKPIs(flights);
+    const aircraftStats = getAircraftStats(flights);
+
+    document.getElementById('totalFlights').textContent = kpis.totalFlights;
+    document.getElementById('totalDistance').textContent = `${kpis.totalDistance.toLocaleString()} km`;
+    document.getElementById('timeInAir').textContent = kpis.timeInAir;
+    document.getElementById('airportsVisited').textContent = kpis.airportsVisited;
+    document.getElementById('countries').textContent = kpis.countries;
+    document.getElementById('airlines').textContent = kpis.airlines;
+    document.getElementById('aircraftTypes').textContent = kpis.aircraftTypes;
+    document.getElementById('avgAircraftAge').textContent = `${aircraftStats.averageAge} yrs`;
+}
+
+function renderAviationStory(flights) {
+    const story = calculateAviationStory(flights);
+    const container = document.getElementById('storyGrid');
+    container.innerHTML = '';
+
+    const fromAirport = AIRPORT_DATA[story.mostVisitedAirport];
+    const airline = getAirlineName(story.mostFlownAirline);
+
+    const cards = [
+        {
+            title: 'MOST VISITED AIRPORT',
+            main: story.mostVisitedAirport,
+            sub: fromAirport?.city || 'Unknown',
+            detail: `${story.mostVisitedAirportCount} visits`
+        },
+        {
+            title: 'MOST FLOWN AIRLINE',
+            main: airline.name,
+            sub: story.mostFlownAirline,
+            detail: `${story.mostFlownAirlineCount} flights`
+        },
+        {
+            title: 'MOST FLOWN ROUTE',
+            main: story.mostFlownRoute,
+            sub: `${story.mostFlownRouteCount} flights`,
+            detail: getRouteDistanceKm(story.mostFlownRoute)
+        },
+        {
+            title: 'LONGEST FLIGHT',
+            main: `${story.longestFlight?.from || '-'} → ${story.longestFlight?.to || '-'}`,
+            sub: `${story.longestFlight?.distance || 0} km`,
+            detail: story.longestFlight?.duration || '-'
+        },
+        {
+            title: 'BUSIEST MONTH',
+            main: story.busiestMonth,
+            sub: `${story.busiestMonthCount} flights`,
+            detail: ''
+        },
+        {
+            title: 'INTERNATIONAL VS DOMESTIC',
+            main: `${story.internationalFlights}`,
+            sub: `International flights`,
+            detail: `${story.domesticFlights} domestic`
+        },
+    ];
+
+    cards.forEach(card => {
+        const el = document.createElement('div');
+        el.className = 'story-card';
+        el.innerHTML = `
+            <div class="story-card-title">${card.title}</div>
+            <div class="story-card-main">${card.main}</div>
+            <div class="story-card-sub">${card.sub}</div>
+            <div class="story-card-detail">${card.detail}</div>
+        `;
+        container.appendChild(el);
+    });
+}
+
+function renderTimeline(flights) {
+    const yearStats = {};
+
+    flights.forEach(f => {
+        const year = f.year;
+        if (!yearStats[year]) {
+            yearStats[year] = {
+                year,
+                flights: 0,
+                distance: 0,
+                countries: new Set(),
+            };
+        }
+        yearStats[year].flights++;
+        yearStats[year].distance += f.distance || 0;
+        if (f.from) {
+            const country = AIRPORT_DATA[f.from]?.countryCode;
+            if (country) yearStats[year].countries.add(country);
+        }
+    });
+
+    const container = document.getElementById('timelineContainer');
+    container.innerHTML = '';
+
+    Object.keys(yearStats).sort((a, b) => parseInt(a) - parseInt(b)).forEach(year => {
+        const stats = yearStats[year];
+        const el = document.createElement('div');
+        el.className = 'timeline-item';
+        if (appState.selectedYear === year.toString()) el.classList.add('active');
+
+        el.innerHTML = `
+            <div class="timeline-year">${year}</div>
+            <div class="timeline-stat">${stats.flights} flights</div>
+            <div class="timeline-stat">${stats.distance.toLocaleString()} km</div>
+            <div class="timeline-stat">${stats.countries.size} countries</div>
+        `;
+
+        el.addEventListener('click', () => {
+            setSelectedYear(year.toString());
+        });
+
+        container.appendChild(el);
+    });
+}
+
+function renderAirlineUniverse(flights) {
+    const airlineCounts = {};
+    let totalFlights = 0;
+
+    flights.forEach(f => {
+        if (f.airline) {
+            airlineCounts[f.airline] = (airlineCounts[f.airline] || 0) + 1;
+            totalFlights++;
+        }
+    });
+
+    const sorted = Object.entries(airlineCounts)
+        .sort((a, b) => b[1] - a[1]);
+
+    const container = document.getElementById('airlineGrid');
+    container.innerHTML = '';
+
+    // Airline wing logo mapping (using Kiwi.com CDN which has reliable airline logos)
+    const airlineLogos = {
+        'AAL': 'https://images.kiwi.com/airlines/64/AAL.png',
+        'AIC': 'https://images.kiwi.com/airlines/64/AIC.png',
+        'AKJ': 'https://images.kiwi.com/airlines/64/AKJ.png',
+        'AXB': 'https://images.kiwi.com/airlines/64/AXB.png',
+        'BAW': 'https://images.kiwi.com/airlines/64/BAW.png',
+        'BKP': 'https://images.kiwi.com/airlines/64/BKP.png',
+        'ETD': 'https://images.kiwi.com/airlines/64/ETD.png',
+        'FFT': 'https://images.kiwi.com/airlines/64/FFT.png',
+        'GOW': 'https://images.kiwi.com/airlines/64/GOW.png',
+        'IAD': 'https://images.kiwi.com/airlines/64/IAD.png',
+        'IGO': 'https://images.kiwi.com/airlines/64/IGO.png',
+        'JAI': 'https://images.kiwi.com/airlines/64/JAI.png',
+        'KLM': 'https://images.kiwi.com/airlines/64/KLM.png',
+        'QTR': 'https://images.kiwi.com/airlines/64/QTR.png',
+        'RYR': 'https://images.kiwi.com/airlines/64/RYR.png',
+        'SEJ': 'https://images.kiwi.com/airlines/64/SEJ.png',
+        'SWA': 'https://images.kiwi.com/airlines/64/SWA.png',
+        'TGW': 'https://images.kiwi.com/airlines/64/TGW.png',
+        'UAE': 'https://images.kiwi.com/airlines/64/UAE.png',
+        'VTI': 'https://images.kiwi.com/airlines/64/VTI.png',
+    };
+
+    // Country code mapping
+    const countryCodeMap = {
+        'USA': 'US', 'UK': 'GB', 'Netherlands': 'NL', 'Ireland': 'IE',
+        'India': 'IN', 'UAE': 'AE', 'Qatar': 'QA', 'Singapore': 'SG',
+        'Malaysia': 'MY', 'Thailand': 'TH', 'France': 'FR', 'Germany': 'DE',
+        'Spain': 'ES', 'Iran': 'IR'
+    };
+
+    sorted.forEach(([code, count]) => {
+        const airline = getAirlineName(code);
+        const percentage = ((count / totalFlights) * 100).toFixed(1);
+        const countryCode = countryCodeMap[airline.country] || 'UN';
+        const flag = getCountryFlag(countryCode);
+
+        const el = document.createElement('div');
+        el.className = 'airline-card';
+        el.dataset.airline = code;
+
+        const logoUrl = airlineLogos[code];
+        const logoHtml = logoUrl
+            ? `<img src="${logoUrl}" alt="${airline.name} logo" class="airline-wing-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="airline-flag-fallback">${flag}</div>`
+            : `<div class="airline-flag-fallback">${flag}</div>`;
+
+        el.innerHTML = `
+            <div class="airline-image" style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(74, 144, 226, 0.08)); display: flex; align-items: center; justify-content: center;">
+                ${logoHtml}
+            </div>
+            <div class="airline-content">
+                <div class="airline-name">${airline.name}</div>
+                <div class="airline-code">${code} • ${airline.country}</div>
+                <div class="airline-stats">
+                    <span class="airline-flights">${count} flights</span>
+                    <span class="airline-percentage">${percentage}%</span>
+                </div>
+                <div class="airline-progress">
+                    <div class="airline-progress-bar" style="width: ${percentage}%"></div>
+                </div>
+            </div>
+        `;
+
+        // Click handler for airline filter
+        let clickCount = 0;
+        let clickTimer = null;
+        el.addEventListener('click', (e) => {
+            if (e.target.tagName === 'IMG') return;
+            clickCount++;
+            if (clickCount === 1) {
+                clickTimer = setTimeout(() => {
+                    // Single click - filter by this airline
+                    if (historyAirline === code) {
+                        historyAirline = '';
+                    } else {
+                        historyAirline = code;
+                    }
+                    document.getElementById('airlineFilter').value = historyAirline;
+                    applyHistoryFilters();
+                    clickCount = 0;
+                }, 250);
+            } else if (clickCount === 2) {
+                // Double click - reset filter
+                clearTimeout(clickTimer);
+                historyAirline = '';
+                document.getElementById('airlineFilter').value = '';
+                applyHistoryFilters();
+                clickCount = 0;
+            }
+        });
+
+        container.appendChild(el);
+    });
+}
+
+function renderGeographicalStats(flights) {
+    const countryCounts = {};
+    const airportCounts = {};
+    const countriesSet = new Set();
+
+    flights.forEach(f => {
+        if (f.from && AIRPORT_DATA[f.from]) {
+            const airport = AIRPORT_DATA[f.from];
+            airportCounts[f.from] = (airportCounts[f.from] || 0) + 1;
+            countryCounts[airport.countryCode] = (countryCounts[airport.countryCode] || 0) + 1;
+            countriesSet.add(airport.countryCode);
+        }
+        if (f.to && AIRPORT_DATA[f.to]) {
+            const airport = AIRPORT_DATA[f.to];
+            airportCounts[f.to] = (airportCounts[f.to] || 0) + 1;
+            countryCounts[airport.countryCode] = (countryCounts[airport.countryCode] || 0) + 1;
+            countriesSet.add(airport.countryCode);
+        }
+    });
+
+    const internationalFlights = flights.filter(f => {
+        const fromCountry = AIRPORT_DATA[f.from]?.countryCode;
+        const toCountry = AIRPORT_DATA[f.to]?.countryCode;
+        return fromCountry && toCountry && fromCountry !== toCountry;
+    }).length;
+
+    const domesticFlights = flights.length - internationalFlights;
+
+    const geoSummary = document.getElementById('geoSummary');
+    geoSummary.innerHTML = `
+        <div class="kpi-card">
+            <div class="kpi-value">${countriesSet.size}</div>
+            <div class="kpi-label">Countries Visited</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-value">${new Set(Object.keys(airportCounts)).size}</div>
+            <div class="kpi-label">Airports Visited</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-value">${internationalFlights}</div>
+            <div class="kpi-label">International Flights</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-value">${domesticFlights}</div>
+            <div class="kpi-label">Domestic Flights</div>
+        </div>
+    `;
+
+    const countryGrid = document.getElementById('countryGrid');
+    countryGrid.innerHTML = '';
+
+    const COUNTRY_MAP = {
+        'IN': 'India', 'ID': 'Indonesia', 'SG': 'Singapore', 'MY': 'Malaysia',
+        'TH': 'Thailand', 'VN': 'Vietnam', 'HK': 'Hong Kong', 'CN': 'China',
+        'JP': 'Japan', 'KR': 'South Korea', 'US': 'USA', 'GB': 'UK',
+        'FR': 'France', 'DE': 'Germany', 'NL': 'Netherlands', 'CH': 'Switzerland',
+        'AE': 'UAE', 'QA': 'Qatar', 'IE': 'Ireland', 'ES': 'Spain',
+    };
+
+    Object.entries(countryCounts).sort((a, b) => b[1] - a[1]).forEach(([countryCode, count]) => {
+        const countryName = COUNTRY_MAP[countryCode] || countryCode;
+        const airportCount = Object.keys(airportCounts).filter(code =>
+            AIRPORT_DATA[code]?.countryCode === countryCode
+        ).length;
+
+        const el = document.createElement('div');
+        el.className = 'country-card';
+        el.innerHTML = `
+            <div class="country-flag">${getCountryFlag(countryCode)}</div>
+            <div class="country-info">
+                <div class="country-name">${countryName}</div>
+                <div class="country-stat">${count} flights • ${airportCount} airports</div>
+            </div>
+        `;
+
+        countryGrid.appendChild(el);
+    });
+}
+
+function renderAirportIntelligence(flights) {
+    const airportStats = {};
+
+    flights.forEach(f => {
+        ['from', 'to'].forEach(key => {
+            const code = f[key];
+            if (code && AIRPORT_DATA[code]) {
+                if (!airportStats[code]) {
+                    airportStats[code] = {
+                        code,
+                        ...AIRPORT_DATA[code],
+                        flights: 0,
+                        arrivals: 0,
+                        departures: 0,
+                        firstVisit: null,
+                        lastVisit: null,
+                    };
+                }
+                airportStats[code].flights++;
+                if (key === 'from') airportStats[code].departures++;
+                if (key === 'to') airportStats[code].arrivals++;
+
+                if (!airportStats[code].firstVisit || f.date < airportStats[code].firstVisit) {
+                    airportStats[code].firstVisit = f.date;
+                }
+                if (!airportStats[code].lastVisit || f.date > airportStats[code].lastVisit) {
+                    airportStats[code].lastVisit = f.date;
+                }
+            }
+        });
+    });
+
+    const container = document.getElementById('airportGrid');
+    container.innerHTML = '';
+
+    Object.values(airportStats)
+        .sort((a, b) => b.flights - a.flights)
+        .slice(0, 12)
+        .forEach(airport => {
+            const el = document.createElement('div');
+            el.className = 'airport-card';
+            el.innerHTML = `
+                <div class="airport-header">
+                    <div class="airport-code">${airport.code}</div>
+                    <div>
+                        <div class="airport-name">${airport.city}</div>
+                        <div class="airport-location">${airport.country} ${getCountryFlag(airport.countryCode)}</div>
+                    </div>
+                </div>
+                <div class="airport-stats">
+                    <div class="airport-stat">
+                        <div class="airport-stat-label">Total</div>
+                        <div class="airport-stat-value">${airport.flights}</div>
+                    </div>
+                    <div class="airport-stat">
+                        <div class="airport-stat-label">Arrivals</div>
+                        <div class="airport-stat-value">${airport.arrivals}</div>
+                    </div>
+                    <div class="airport-stat">
+                        <div class="airport-stat-label">Departures</div>
+                        <div class="airport-stat-value">${airport.departures}</div>
+                    </div>
+                    <div class="airport-stat">
+                        <div class="airport-stat-label">Last Visit</div>
+                        <div class="airport-stat-value">${airport.lastVisit?.toLocaleDateString() || '-'}</div>
+                    </div>
+                </div>
+            `;
+
+            container.appendChild(el);
+        });
+}
+
+function renderRouteExplorer(flights) {
+    const routeStats = {};
+
+    flights.forEach(f => {
+        const route = `${f.from}-${f.to}`;
+        if (!routeStats[route]) {
+            routeStats[route] = {
+                from: f.from,
+                to: f.to,
+                airline: f.airline,
+                flights: [],
+            };
+        }
+        routeStats[route].flights.push(f);
+    });
+
+    const container = document.getElementById('routeGrid');
+    container.innerHTML = '';
+
+    Object.values(routeStats)
+        .sort((a, b) => b.flights.length - a.flights.length)
+        .slice(0, 12)
+        .forEach(route => {
+            const fromAirport = AIRPORT_DATA[route.from];
+            const toAirport = AIRPORT_DATA[route.to];
+            const distance = fromAirport && toAirport ?
+                haversineDistance(fromAirport.lat, fromAirport.lng, toAirport.lat, toAirport.lng) : 0;
+
+            const el = document.createElement('div');
+            el.className = 'route-card';
+            el.innerHTML = `
+                <div class="route-path">
+                    <div class="route-airport">
+                        <div class="route-airport-code">${route.from}</div>
+                        <div class="route-airport-city">${fromAirport?.city || 'Unknown'}</div>
+                    </div>
+                    <div class="route-arrow">→</div>
+                    <div class="route-airport">
+                        <div class="route-airport-code">${route.to}</div>
+                        <div class="route-airport-city">${toAirport?.city || 'Unknown'}</div>
+                    </div>
+                </div>
+                <div class="route-details">
+                    <div>
+                        <div class="route-detail-label">Distance</div>
+                        <div class="route-detail-value">${distance} km</div>
+                    </div>
+                    <div>
+                        <div class="route-detail-label">Flights</div>
+                        <div class="route-detail-value">${route.flights.length}</div>
+                    </div>
+                    <div>
+                        <div class="route-detail-label">Airline</div>
+                        <div class="route-detail-value">${getAirlineName(route.airline).name}</div>
+                    </div>
+                    <div>
+                        <div class="route-detail-label">Flight #</div>
+                        <div class="route-detail-value">${route.flights[0]?.flight || '-'}</div>
+                    </div>
+                </div>
+                <button class="route-replay-btn" onclick="openReplay('${route.from}', '${route.to}')">✈ WATCH REPLAY</button>
+            `;
+
+            container.appendChild(el);
+        });
+}
+
+// Search & filter over the current year-filtered flights
+let historyQuery = '';
+let historyAirline = '';
+let historyAirport = '';
+let historyCabin = '';
+
+function applyHistoryFilters() {
+    // list of flights the current filters produce, in the order they appear
+    const candidateFlights = appState.filteredFlights;
+    const rawIndex = [];
+    const matched = [];
+
+    candidateFlights.forEach((f, i) => {
+        const text = [
+            f.date ? f.date.toLocaleDateString() : '',
+            getAirlineName(f.airline).name,
+            f.airline,
+            f.flight,
+            f.from,
+            f.to,
+            f.aircraft,
+            f.cabin,
+            f.status,
+        ].join(' ').toLowerCase();
+
+        const qMatch = !historyQuery || text.includes(historyQuery.toLowerCase());
+        const aMatch = !historyAirline || f.airline === historyAirline;
+        const apMatch = !historyAirport || f.from === historyAirport || f.to === historyAirport;
+        const cMatch = !historyCabin || f.cabin === historyCabin;
+
+        if (qMatch && aMatch && apMatch && cMatch) {
+            matched.push(f);
+            rawIndex.push(i);
+        }
+    });
+
+    const tableBody = document.getElementById('flightTableBody');
+    tableBody.innerHTML = '';
+
+    matched.slice(0, 50).forEach((flight, pos) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${flight.date?.toLocaleDateString() || '-'}</td>
+            <td>${getAirlineName(flight.airline).name}</td>
+            <td>${flight.flight}</td>
+            <td>${flight.from}</td>
+            <td>${flight.to}</td>
+            <td>${flight.aircraft}</td>
+            <td>${flight.duration}</td>
+            <td>${flight.distance} km</td>
+            <td>${flight.cabin}</td>
+            <td>${flight.status}</td>
+            <td><button class="replay-btn-small" onclick="openReplay('${flight.from}', '${flight.to}', ${rawIndex[pos]})">✈</button></td>
+        `;
+        tableBody.appendChild(row);
+    });
+
+    // Update airline card visual state
+    updateAirlineCardFilters();
+}
+
+function updateAirlineCardFilters() {
+    document.querySelectorAll('.airline-card').forEach(card => {
+        const code = card.dataset.airline;
+        if (historyAirline && historyAirline === code) {
+            card.classList.add('filtered');
+        } else {
+            card.classList.remove('filtered');
+        }
+    });
+}
+
+function populateHistoryFilterOptions() {
+    const airlines = new Set();
+    const airports = new Set();
+    const cabins = new Set();
+
+    appState.allFlights.forEach(f => {
+        if (f.airline) airlines.add(f.airline);
+        if (f.from) airports.add(f.from);
+        if (f.to) airports.add(f.to);
+        if (f.cabin && f.cabin !== '') cabins.add(f.cabin);
+    });
+
+    const airlineSel = document.getElementById('airlineFilter');
+    airlineSel.innerHTML = '<option value="">All Airlines</option>';
+    Array.from(airlines).sort().forEach(code => {
+        const opt = document.createElement('option');
+        opt.value = code;
+        opt.textContent = `${code} — ${getAirlineName(code).name}`;
+        airlineSel.appendChild(opt);
+    });
+
+    const airportSel = document.getElementById('airportFilter');
+    airportSel.innerHTML = '<option value="">All Airports</option>';
+    Array.from(airports).sort().forEach(code => {
+        const opt = document.createElement('option');
+        opt.value = code;
+        opt.textContent = AIRPORT_DATA[code] ? `${code} — ${AIRPORT_DATA[code].city}` : code;
+        airportSel.appendChild(opt);
+    });
+
+    const cabinSel = document.getElementById('cabinFilter');
+    cabinSel.innerHTML = '<option value="">All Cabins</option>';
+    Array.from(cabins).sort().forEach(cabin => {
+        const opt = document.createElement('option');
+        opt.value = cabin;
+        opt.textContent = cabin;
+        cabinSel.appendChild(opt);
+    });
+
+    // restore previously selected values (avoid wiping selection on re-render)
+    if (historyAirline) airlineSel.value = historyAirline;
+    if (historyAirport) airportSel.value = historyAirport;
+    if (historyCabin) cabinSel.value = historyCabin;
+}
+
+function updateDateRange() {
+    const flights = appState.filteredFlights;
+    if (flights.length === 0) {
+        document.getElementById('dateRange').textContent = 'No data';
+        return;
+    }
+
+    const dates = flights.map(f => f.date).sort((a, b) => a - b);
+    const minDate = dates[0]?.toLocaleDateString() || '';
+    const maxDate = dates[dates.length - 1]?.toLocaleDateString() || '';
+
+    document.getElementById('dateRange').textContent = `${minDate} - ${maxDate}`;
+}
+
+// Year filtering
+function setSelectedYear(year) {
+    appState.selectedYear = year;
+    appState.filteredFlights = filterFlightsByYear(appState.allFlights, year);
+
+    updateDateRange();
+    renderKPIs(appState.filteredFlights);
+    renderAviationStory(appState.filteredFlights);
+    renderTimeline(appState.allFlights);
+    renderAirlineUniverse(appState.filteredFlights);
+    renderGeographicalStats(appState.filteredFlights);
+    renderAirportIntelligence(appState.filteredFlights);
+    renderRouteExplorer(appState.filteredFlights);
+    populateHistoryFilterOptions();
+    applyHistoryFilters();
+    updateGlobe();
+
+    document.querySelectorAll('.year-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.year === year) {
+            btn.classList.add('active');
+        }
+    });
+}
+
+// Year filter buttons
+function createYearFilterButtons() {
+    const years = new Set();
+    appState.allFlights.forEach(f => years.add(f.year));
+
+    const container = document.getElementById('yearFilter');
+    container.innerHTML = '';
+
+    const allBtn = document.createElement('button');
+    allBtn.className = 'year-btn active';
+    allBtn.textContent = 'ALL';
+    allBtn.dataset.year = 'all';
+    allBtn.addEventListener('click', () => setSelectedYear('all'));
+    container.appendChild(allBtn);
+
+    Array.from(years)
+        .sort((a, b) => a - b)
+        .forEach(year => {
+            const btn = document.createElement('button');
+            btn.className = 'year-btn';
+            btn.textContent = year;
+            btn.dataset.year = year;
+            btn.addEventListener('click', () => setSelectedYear(year));
+            container.appendChild(btn);
+        });
+}
+
+// Globe rendering
+function updateGlobe() {
+    if (!appState.globe) return;
+
+    const points = [];
+    const routes = [];
+    const flightCounts = {};
+
+    appState.filteredFlights.forEach((f, idx) => {
+        const fromAirport = AIRPORT_DATA[f.from];
+        const toAirport = AIRPORT_DATA[f.to];
+
+        if (fromAirport) {
+            flightCounts[f.from] = (flightCounts[f.from] || 0) + 1;
+        }
+        if (toAirport) {
+            flightCounts[f.to] = (flightCounts[f.to] || 0) + 1;
+        }
+
+        if (fromAirport && toAirport) {
+            routes.push({
+                startLat: fromAirport.lat,
+                startLng: fromAirport.lng,
+                endLat: toAirport.lat,
+                endLng: toAirport.lng,
+                index: idx
+            });
+        }
+    });
+
+    // Add all airports as points
+    Object.keys(flightCounts).forEach(code => {
+        const airport = AIRPORT_DATA[code];
+        if (airport) {
+            points.push({
+                lat: airport.lat,
+                lng: airport.lng,
+                count: flightCounts[code]
+            });
+        }
+    });
+
+    const labelByKey = {};
+    Object.keys(AIRPORT_DATA).forEach(code => {
+        const ap = AIRPORT_DATA[code];
+        labelByKey[ap.lat + ',' + ap.lng] = { code, city: ap.city };
+    });
+
+    try {
+        if (appState.globe) {
+            appState.globe
+                .pointsData(points)
+                .pointColor(() => '#00d4ff')
+                .pointSize((d) => Math.min(1.5, 0.4 + (d.count * 0.15)))
+                .arcsData(routes)
+                .arcColor(() => 'rgba(0, 212, 255, 0.7)')
+                .arcStrokeWidth(1.2)
+                .arcDashInitialGap(0)
+                .arcDashGap(0)
+                .labelsData(points.map(p => {
+                    const meta = labelByKey[p.lat + ',' + p.lng] || { code: '', city: '' };
+                    return { code: meta.code, city: meta.city, lat: p.lat, lng: p.lng, count: p.count };
+                }));
+        }
+    } catch (e) {
+        console.error('Globe update error:', e);
+    }
+}
+
+function renderGlobeCanvasFallback() {
+    const container = document.getElementById('globeContainer');
+    if (!container || container.style.display === 'none') return;
+
+    const canvas = container.querySelector('canvas');
+    if (!canvas) {
+        container.innerHTML = `
+            <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #0a2342 0%, #1a4d7a 50%, #0a2342 100%);
+                        display: flex; align-items: center; justify-content: center; border-radius: 12px; position: relative;">
+                <div style="text-align: center; color: rgba(0, 212, 255, 0.6);">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🌍</div>
+                    <div style="font-size: 1.1rem; font-weight: 600;">Flight Routes Map</div>
+                    <div style="font-size: 0.9rem; margin-top: 0.5rem;">
+                        ${appState.filteredFlights.length} flights • ${new Set(appState.filteredFlights.map(f => f.from)).size + new Set(appState.filteredFlights.map(f => f.to)).size} airports
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+}
+
+function initGlobe() {
+    const container = document.getElementById('globe');
+    if (!container) return;
+
+    if (typeof Globe === 'undefined') {
+        console.warn('Globe.gl not available, using fallback');
+        document.getElementById('globeContainer').style.background = 'linear-gradient(135deg, #0a2342 0%, #1a4d7a 50%, #0a2342 100%)';
+        return;
+    }
+
+    try {
+        appState.globe = Globe()(container)
+            .globeImageUrl('https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-night.jpg')
+            .backgroundColor('rgba(0, 0, 0, 0)')
+            .atmosphereColor('#00d4ff')
+            .atmosphereAltitude(0.15)
+            .labelText(d => `${d.code} · ${d.city}`)
+            .labelSize(1.2)
+            .labelDotRadius(d => Math.max(0.5, Math.min(1.2, d.count * 0.15)))
+            .labelColor(() => '#00d4ff')
+            .labelResolution(2)
+            .labelAltitude(0.01);
+
+        // Load country boundaries
+        fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+            .then(r => r.json())
+            .then(topo => {
+                if (!appState.globe) return;
+                const arcs = topo.arcs;
+                const transform = topo.transform;
+                const invScale = [1 / (transform.scale[0] || 1), 1 / (transform.scale[1] || 1)];
+                const translate = transform.translate;
+                const countries = topo.objects.countries.geometries || [];
+                const decoded = countries.map(geom => {
+                    const coords = [];
+                    (geom.arcs || []).forEach(arcIndex => {
+                        let arc = arcs[arcIndex < 0 ? ~arcIndex : arcIndex];
+                        if (arcIndex < 0) arc = arc.slice().reverse();
+                        let x = 0, y = 0;
+                        arc.forEach(([dx, dy]) => {
+                            x += dx; y += dy;
+                            coords.push([x * invScale[0] - translate[0], y * invScale[1] - translate[1]]);
+                        });
+                    });
+                    return coords;
+                }).filter(c => c.length > 3);
+
+                appState.globe
+                    .polygonsData(decoded.map(c => ({ type: 'Polygon', coordinates: [c] })))
+                    .polygonCapColor(() => 'rgba(0, 212, 255, 0.02)')
+                    .polygonSideColor(() => 'rgba(0, 212, 255, 0.01)')
+                    .polygonStrokeColor(() => 'rgba(0, 212, 255, 0.25)')
+                    .polygonAltitude(0.001);
+            })
+            .catch(e => console.warn('Could not load country boundaries:', e));
+
+        // Auto-rotate globe
+        setTimeout(() => {
+            if (appState.globe && appState.globe.controls) {
+                const controls = appState.globe.controls();
+                if (controls) {
+                    controls.autoRotate = true;
+                    controls.autoRotateSpeed = 2;
+                }
+            }
+        }, 500);
+
+        // Prevent globe from capturing scroll events
+        const canvas = container.querySelector('canvas');
+        if (canvas) {
+            canvas.addEventListener('wheel', (e) => {
+                if (e.ctrlKey || e.metaKey) {
+                    e.preventDefault();
+                } else {
+                    e.stopPropagation();
+                }
+            }, { passive: false });
+        }
+
+        // Initial update with slight delay
+        setTimeout(() => updateGlobe(), 300);
+    } catch (e) {
+        console.warn('Globe init error:', e);
+        renderGlobeCanvasFallback();
+    }
+}
+
+// Handle scroll-based globe sizing
+window.addEventListener('scroll', () => {
+    const globeContainer = document.getElementById('globeContainer');
+    if (!globeContainer) return;
+
+    const rect = globeContainer.getBoundingClientRect();
+    const scrollProgress = Math.max(0, 1 - (rect.bottom / window.innerHeight));
+
+    // Scale globe down as user scrolls past it
+    const scale = Math.max(0.3, 1 - (scrollProgress * 0.7));
+    globeContainer.style.transform = `scale(${scale})`;
+    globeContainer.style.opacity = Math.max(0.3, 1 - (scrollProgress * 0.7));
+});
+
+// Replay functionality
+let replayState = {
+    globe: null,
+    flight: null,
+    progress: 0,
+    playing: false,
+    speed: 1,
+    interval: null,
+};
+
+function openReplay(from, to, flightIndex) {
+    // If flightIndex is provided, use it directly (from table rows)
+    let flight = null;
+    if (flightIndex !== undefined && flightIndex !== null) {
+        flight = appState.filteredFlights[flightIndex];
+        // Verify it matches the route
+        if (flight && (flight.from !== from || flight.to !== to)) {
+            flight = null;
+        }
+    }
+    // Otherwise find the first matching flight
+    if (!flight) {
+        flight = appState.filteredFlights.find(f => f.from === from && f.to === to);
+    }
+
+    if (!flight) {
+        console.warn('Flight not found:', from, to, flightIndex);
+        return;
+    }
+
+    replayState.flight = flight;
+    replayState.progress = 0;
+    replayState.playing = false;
+    replayState.speed = 1;
+
+    const modal = document.getElementById('replayModal');
+    modal.classList.add('active');
+
+    const fromAirport = AIRPORT_DATA[flight.from];
+    const toAirport = AIRPORT_DATA[flight.to];
+
+    if (!fromAirport || !toAirport) {
+        document.getElementById('replayDetails').innerHTML = '<p style="color: #ff6b6b;">Flight data incomplete</p>';
+        return;
+    }
+
+    const distance = haversineDistance(fromAirport.lat, fromAirport.lng, toAirport.lat, toAirport.lng);
+    const airline = getAirlineName(flight.airline);
+
+    document.getElementById('replayDetails').innerHTML = `
+        <div class="replay-detail">
+            <div class="replay-detail-label">Airline</div>
+            <div class="replay-detail-value">${airline.name} (${flight.airline})</div>
+        </div>
+        <div class="replay-detail">
+            <div class="replay-detail-label">Flight Number</div>
+            <div class="replay-detail-value">${flight.flight}</div>
+        </div>
+        <div class="replay-detail">
+            <div class="replay-detail-label">Route</div>
+            <div class="replay-detail-value">${flight.from} → ${flight.to}</div>
+        </div>
+        <div class="replay-detail">
+            <div class="replay-detail-label">Aircraft</div>
+            <div class="replay-detail-value">${flight.aircraft}</div>
+        </div>
+        <div class="replay-detail">
+            <div class="replay-detail-label">Date</div>
+            <div class="replay-detail-value">${flight.date?.toLocaleDateString()}</div>
+        </div>
+        <div class="replay-detail">
+            <div class="replay-detail-label">Distance</div>
+            <div class="replay-detail-value">${distance} km</div>
+        </div>
+        <div class="replay-detail">
+            <div class="replay-detail-label">Duration</div>
+            <div class="replay-detail-value">${flight.duration}</div>
+        </div>
+    `;
+
+    // Initialize canvas for replay animation (delay one frame so modal layout is computed)
+    document.getElementById('replayScrubber').value = 0;
+    document.getElementById('replayProgress').textContent = '0%';
+    requestAnimationFrame(() => {
+        initReplayCanvas();
+        updateReplayVisualization();
+    });
+}
+
+// Canvas-based replay animation
+function initReplayCanvas() {
+    const canvas = document.getElementById('replayCanvas');
+    const section = canvas.parentElement;
+    const w = section.clientWidth || section.offsetWidth || 800;
+    const h = section.clientHeight || section.offsetHeight || 600;
+    if (w < 10 || h < 10) {
+        // Layout not ready yet, retry
+        requestAnimationFrame(() => { initReplayCanvas(); updateReplayVisualization(); });
+        return;
+    }
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    replayState.canvasW = w;
+    replayState.canvasH = h;
+}
+
+function bezierPoint(t, p0, p1, p2) {
+    const mt = 1 - t;
+    return mt * mt * p0 + 2 * mt * t * p1 + t * t * p2;
+}
+
+function updateReplayVisualization() {
+    if (!replayState.flight) return;
+
+    const flight = replayState.flight;
+    const fromAirport = AIRPORT_DATA[flight.from];
+    const toAirport = AIRPORT_DATA[flight.to];
+
+    if (!fromAirport || !toAirport) return;
+
+    const canvas = document.getElementById('replayCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const w = replayState.canvasW || canvas.width;
+    const h = replayState.canvasH || canvas.height;
+
+    // Clear
+    ctx.clearRect(0, 0, w, h);
+
+    // Background
+    const grad = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w * 0.6);
+    grad.addColorStop(0, '#0f1c2e');
+    grad.addColorStop(1, '#060d18');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
+
+    // Map lat/lng to canvas coordinates with padding
+    const pad = 80;
+    const mapX = (lng) => pad + ((lng + 180) / 360) * (w - 2 * pad);
+    const mapY = (lat) => pad + ((90 - lat) / 180) * (h - 2 * pad);
+
+    // Draw 2D world map coastlines
+    ctx.strokeStyle = 'rgba(0, 212, 255, 0.18)';
+    ctx.lineWidth = 1;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    if (typeof WORLD_COASTLINES !== 'undefined') {
+        WORLD_COASTLINES.forEach(ring => {
+            if (ring.length < 2) return;
+            ctx.beginPath();
+            ctx.moveTo(mapX(ring[0][0]), mapY(ring[0][1]));
+            for (let i = 1; i < ring.length; i++) {
+                ctx.lineTo(mapX(ring[i][0]), mapY(ring[i][1]));
+            }
+            ctx.stroke();
+        });
+    }
+
+    // Subtle grid lines (at 30° intervals)
+    ctx.strokeStyle = 'rgba(0, 212, 255, 0.04)';
+    ctx.lineWidth = 0.5;
+    for (let lng = -180; lng <= 180; lng += 30) {
+        ctx.beginPath(); ctx.moveTo(mapX(lng), pad); ctx.lineTo(mapX(lng), h - pad); ctx.stroke();
+    }
+    for (let lat = -90; lat <= 90; lat += 30) {
+        ctx.beginPath(); ctx.moveTo(pad, mapY(lat)); ctx.lineTo(w - pad, mapY(lat)); ctx.stroke();
+    }
+
+    const x1 = mapX(fromAirport.lng), y1 = mapY(fromAirport.lat);
+    const x2 = mapX(toAirport.lng), y2 = mapY(toAirport.lat);
+
+    // Bezier control point (perpendicular arc)
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    const dx = x2 - x1, dy = y2 - y1;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const offset = Math.max(40, dist * 0.35);
+    const cx = mx - (dy / dist) * offset;
+    const cy = my + (dx / dist) * offset;
+
+    // Draw full route path (dim)
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.quadraticCurveTo(cx, cy, x2, y2);
+    ctx.strokeStyle = 'rgba(0, 212, 255, 0.15)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([8, 6]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Draw traveled portion (bright)
+    const progress = replayState.progress / 100;
+    if (progress > 0) {
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        const steps = 120;
+        const maxStep = Math.max(1, Math.floor(progress * steps));
+        for (let i = 1; i <= maxStep; i++) {
+            const t = i / steps;
+            ctx.lineTo(bezierPoint(t, x1, cx, x2), bezierPoint(t, y1, cy, y2));
+        }
+        ctx.strokeStyle = '#00d4ff';
+        ctx.lineWidth = 3;
+        ctx.shadowColor = 'rgba(0, 212, 255, 0.6)';
+        ctx.shadowBlur = 12;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+    }
+
+    // Draw airport markers
+    [{ x: x1, y: y1, code: flight.from, city: fromAirport.city },
+     { x: x2, y: y2, code: flight.to, city: toAirport.city }].forEach(ap => {
+        // Outer glow
+        const glow = ctx.createRadialGradient(ap.x, ap.y, 0, ap.x, ap.y, 18);
+        glow.addColorStop(0, 'rgba(0, 212, 255, 0.25)');
+        glow.addColorStop(1, 'rgba(0, 212, 255, 0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(ap.x, ap.y, 18, 0, Math.PI * 2);
+        ctx.fill();
+        // Dot
+        ctx.beginPath();
+        ctx.arc(ap.x, ap.y, 6, 0, Math.PI * 2);
+        ctx.fillStyle = '#00d4ff';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(ap.x, ap.y, 3, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
+        // Label
+        ctx.font = 'bold 16px "Space Grotesk", sans-serif';
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'center';
+        ctx.fillText(ap.code, ap.x, ap.y - 22);
+        ctx.font = '11px Inter, sans-serif';
+        ctx.fillStyle = 'rgba(255,255,255,0.5)';
+        ctx.fillText(ap.city || '', ap.x, ap.y - 8);
+    });
+
+    // Draw aircraft
+    if (progress > 0 && progress < 1) {
+        const t = progress;
+        const ax = bezierPoint(t, x1, cx, x2);
+        const ay = bezierPoint(t, y1, cy, y2);
+
+        // Direction tangent
+        const dt = 0.005;
+        const t2 = Math.min(1, t + dt);
+        const bx = bezierPoint(t2, x1, cx, x2);
+        const by = bezierPoint(t2, y1, cy, y2);
+        const angle = Math.atan2(by - ay, bx - ax);
+
+        // Aircraft glow
+        const aglow = ctx.createRadialGradient(ax, ay, 0, ax, ay, 30);
+        aglow.addColorStop(0, 'rgba(0, 212, 255, 0.35)');
+        aglow.addColorStop(1, 'rgba(0, 212, 255, 0)');
+        ctx.fillStyle = aglow;
+        ctx.beginPath();
+        ctx.arc(ax, ay, 30, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Aircraft shape (triangle pointing in direction of travel)
+        ctx.save();
+        ctx.translate(ax, ay);
+        ctx.rotate(angle);
+        ctx.beginPath();
+        ctx.moveTo(16, 0);
+        ctx.lineTo(-10, -9);
+        ctx.lineTo(-5, 0);
+        ctx.lineTo(-10, 9);
+        ctx.closePath();
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowColor = 'rgba(0, 212, 255, 0.8)';
+        ctx.shadowBlur = 16;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = '#00d4ff';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    // Progress label
+    ctx.font = '13px Inter, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.textAlign = 'left';
+    ctx.fillText(Math.round(replayState.progress) + '%', 16, h - 16);
+
+    // Update progress display
+    document.getElementById('replayProgress').textContent = Math.round(replayState.progress) + '%';
+}
+
+function playReplay() {
+    replayState.playing = true;
+    document.getElementById('replayPlay').style.display = 'none';
+    document.getElementById('replayPause').style.display = 'inline-block';
+
+    replayState.interval = setInterval(() => {
+        replayState.progress += 2 * replayState.speed;
+        if (replayState.progress >= 100) {
+            replayState.progress = 100;
+            pauseReplay();
+        }
+
+        document.getElementById('replayScrubber').value = replayState.progress;
+        document.getElementById('replayProgress').textContent = Math.round(replayState.progress) + '%';
+        updateReplayVisualization();
+    }, 50);
+}
+
+function pauseReplay() {
+    replayState.playing = false;
+    clearInterval(replayState.interval);
+    document.getElementById('replayPlay').style.display = 'inline-block';
+    document.getElementById('replayPause').style.display = 'none';
+}
+
+function restartReplay() {
+    pauseReplay();
+    replayState.progress = 0;
+    document.getElementById('replayScrubber').value = 0;
+    document.getElementById('replayProgress').textContent = '0%';
+    updateReplayVisualization();
+}
+
+// Aircraft database with manufacturing years
+const AIRCRAFT_DATA = {
+    'Airbus A320': { manufacturer: 'Airbus', year: 1987, capacity: 150 },
+    'Airbus A321': { manufacturer: 'Airbus', year: 1993, capacity: 185 },
+    'Airbus A319': { manufacturer: 'Airbus', year: 1995, capacity: 124 },
+    'Airbus A320neo': { manufacturer: 'Airbus', year: 2015, capacity: 150 },
+    'Airbus A321neo': { manufacturer: 'Airbus', year: 2017, capacity: 185 },
+    'Airbus A350-900': { manufacturer: 'Airbus', year: 2015, capacity: 315 },
+    'Airbus A350-1000': { manufacturer: 'Airbus', year: 2018, capacity: 366 },
+    'Airbus A380-800': { manufacturer: 'Airbus', year: 2007, capacity: 555 },
+    'Boeing 737-800': { manufacturer: 'Boeing', year: 1997, capacity: 162 },
+    'Boeing 737-900ER': { manufacturer: 'Boeing', year: 2007, capacity: 178 },
+    'Boeing 737 MAX 8': { manufacturer: 'Boeing', year: 2017, capacity: 162 },
+    'Boeing 737-700': { manufacturer: 'Boeing', year: 1997, capacity: 137 },
+    'Boeing 787-9': { manufacturer: 'Boeing', year: 2013, capacity: 242 },
+    'Boeing 787-8': { manufacturer: 'Boeing', year: 2011, capacity: 242 },
+    'Boeing 787-10': { manufacturer: 'Boeing', year: 2018, capacity: 330 },
+    'Boeing 777-200 LR': { manufacturer: 'Boeing', year: 2004, capacity: 300 },
+    'Boeing 777-200 ER': { manufacturer: 'Boeing', year: 1997, capacity: 300 },
+    'Boeing 777-300 ER': { manufacturer: 'Boeing', year: 2004, capacity: 365 },
+    'Boeing 777-300': { manufacturer: 'Boeing', year: 1998, capacity: 300 },
+    'ATR 72': { manufacturer: 'ATR', year: 1988, capacity: 72 },
+    'ATR 42 / ATR 72': { manufacturer: 'ATR', year: 1988, capacity: 72 },
+    'DHC-8 Dash 8': { manufacturer: 'De Havilland', year: 1983, capacity: 50 },
+    'DHC-8-400 Dash 8Q': { manufacturer: 'De Havilland', year: 2000, capacity: 76 },
+    'Bombardier Q400': { manufacturer: 'Bombardier', year: 2000, capacity: 76 },
+};
+
+function getAircraftAge(aircraftType) {
+    const aircraft = AIRCRAFT_DATA[aircraftType];
+    if (!aircraft) return null;
+    const currentYear = 2026;
+    return currentYear - aircraft.year;
+}
+
+function getAircraftStats(flights) {
+    const aircraftFlown = {};
+    let totalAge = 0;
+    let ageCount = 0;
+
+    flights.forEach(f => {
+        const type = f.aircraft;
+        if (!type) return;
+        if (!aircraftFlown[type]) {
+            aircraftFlown[type] = 0;
+        }
+        aircraftFlown[type]++;
+
+        const age = getAircraftAge(type);
+        if (age !== null) {
+            totalAge += age;
+            ageCount++;
+        }
+    });
+
+    const avgAge = ageCount > 0 ? Math.round(totalAge / ageCount) : 0;
+
+    const entries = Object.entries(aircraftFlown);
+    const knownYear = e => AIRCRAFT_DATA[e[0]]?.year || 0;
+
+    let newestAircraft = null;
+    let oldestAircraft = null;
+    if (entries.length > 0) {
+        newestAircraft = entries.reduce((a, b) => knownYear(a) > knownYear(b) ? a : b)[0];
+        oldestAircraft = entries.reduce((a, b) => knownYear(a) < knownYear(b) ? a : b)[0];
+    }
+
+    return {
+        aircraftFlown,
+        averageAge: avgAge,
+        newestAircraft,
+        oldestAircraft,
+        uniqueAircraft: entries.length,
+    };
+}
+
+
+const agentResponses = {
+    'most flown route': (s) => 'Your most flown route is ' + s.mostFlownRoute + ' with ' + s.mostFlownRouteCount + ' flights.',
+    'most visited': (s) => s.mostVisitedAirport + ' is your most visited airport with ' + s.mostVisitedAirportCount + ' visits.',
+    'airport': (s, f) => {
+        const airports = new Set();
+        f.forEach(fl => { airports.add(fl.from); airports.add(fl.to); });
+        return 'You have visited ' + airports.size + ' airports. Your most visited is ' + s.mostVisitedAirport + ' (' + s.mostVisitedAirportCount + ' visits).';
+    },
+    'airline': (s) => 'Your most flown airline is ' + s.mostFlownAirline + ' with ' + s.mostFlownAirlineCount + ' flights.',
+    'country': (s, f) => {
+        const countries = new Set();
+        f.forEach(fl => {
+            if (AIRPORT_DATA[fl.from]) countries.add(AIRPORT_DATA[fl.from].countryCode);
+            if (AIRPORT_DATA[fl.to]) countries.add(AIRPORT_DATA[fl.to].countryCode);
+        });
+        return 'You have visited ' + countries.size + ' countries across your flights.';
+    },
+    'longest': (s) => s.longestFlight ? 'Your longest flight was ' + s.longestFlight.from + ' → ' + s.longestFlight.to + ' at ' + s.longestFlight.distance + ' km.' : 'No flight data available.',
+    'domestic': (s) => s.domesticFlights + ' domestic flights, ' + s.internationalFlights + ' international flights.',
+    'international': (s) => {
+        const total = s.internationalFlights + s.domesticFlights;
+        const pct = total > 0 ? ((s.internationalFlights / total) * 100).toFixed(0) : '0';
+        return s.internationalFlights + ' international flights (' + pct + '%).';
+    },
+    'busiest': (s) => 'Your busiest month is ' + s.busiestMonth + ' with ' + s.busiestMonthCount + ' flights.',
+    'how many': (s, f) => 'You have ' + f.length + ' flights in the current view.',
+    'flight': (s, f) => 'You have ' + f.length + ' flights. Most flown airline: ' + s.mostFlownAirline + '. Most visited: ' + s.mostVisitedAirport + '.',
+    'stats': (s, f) => {
+        const totalDist = f.reduce((sum, fl) => sum + (fl.distance || 0), 0);
+        return f.length + ' flights, ' + totalDist.toLocaleString() + ' km total distance, ' + s.internationalFlights + ' international, ' + s.domesticFlights + ' domestic.';
+    },
+    'distance': (s, f) => {
+        const totalDist = f.reduce((sum, fl) => sum + (fl.distance || 0), 0);
+        return 'Total distance: ' + totalDist.toLocaleString() + ' km across ' + f.length + ' flights.';
+    },
+};
+
+function askAgent() {
+    const input = document.getElementById('agentInput');
+    const query = input.value.toLowerCase().trim();
+    if (!query) return;
+
+    const messagesContainer = document.getElementById('agentMessages');
+
+    const userMsg = document.createElement('div');
+    userMsg.className = 'agent-message agent-user';
+    userMsg.textContent = query;
+    messagesContainer.appendChild(userMsg);
+
+    input.value = '';
+
+    const story = calculateAviationStory(appState.filteredFlights);
+    let response = 'I can help with questions about your flight history. Ask me about last flights, delays, statistics, routes, airlines, countries, or aircraft!';
+
+    for (const [key, responder] of Object.entries(agentResponses)) {
+        if (query.includes(key)) {
+            response = responder(story, appState.filteredFlights);
+            break;
+        }
+    }
+
+    setTimeout(() => {
+        const agentMsg = document.createElement('div');
+        agentMsg.className = 'agent-message agent-response';
+        agentMsg.textContent = response;
+        messagesContainer.appendChild(agentMsg);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }, 300);
+}
+
+// File upload
+document.getElementById('uploadBtn').addEventListener('click', () => {
+    document.getElementById('csvUpload').click();
+});
+
+document.getElementById('csvUpload').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        const csv = event.target.result;
+        const flights = parseCSV(csv);
+        appState.allFlights = normalizeFlights(flights);
+        appState.filteredFlights = appState.allFlights;
+
+        createYearFilterButtons();
+        setSelectedYear('all');
+
+        document.getElementById('uploadBtn').textContent = '✓ Loaded';
+        setTimeout(() => {
+            document.getElementById('uploadBtn').textContent = '📁 Load Flighty CSV';
+        }, 2000);
+    };
+    reader.readAsText(file);
+});
+
+// Event listeners
+document.getElementById('replayClose').addEventListener('click', () => {
+    pauseReplay();
+    document.getElementById('replayModal').classList.remove('active');
+});
+
+document.getElementById('replayPlay').addEventListener('click', playReplay);
+document.getElementById('replayPause').addEventListener('click', pauseReplay);
+document.getElementById('replayRestart').addEventListener('click', restartReplay);
+
+document.querySelectorAll('.speed-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        replayState.speed = parseFloat(e.target.dataset.speed);
+    });
+});
+
+document.getElementById('replayScrubber').addEventListener('input', (e) => {
+    replayState.progress = parseFloat(e.target.value);
+    document.getElementById('replayProgress').textContent = Math.round(replayState.progress) + '%';
+    updateReplayVisualization();
+});
+
+document.getElementById('agentSend').addEventListener('click', askAgent);
+document.getElementById('agentInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') askAgent();
+});
+
+// Flight history search & filter controls
+document.getElementById('searchInput').addEventListener('input', (e) => {
+    historyQuery = e.target.value;
+    applyHistoryFilters();
+});
+
+document.getElementById('airlineFilter').addEventListener('change', (e) => {
+    historyAirline = e.target.value;
+    applyHistoryFilters();
+});
+
+document.getElementById('airportFilter').addEventListener('change', (e) => {
+    historyAirport = e.target.value;
+    applyHistoryFilters();
+});
+
+document.getElementById('cabinFilter').addEventListener('change', (e) => {
+    historyCabin = e.target.value;
+    applyHistoryFilters();
+});
+
+document.getElementById('agentToggle').addEventListener('click', () => {
+    const body = document.getElementById('agentBody');
+    body.classList.toggle('collapsed');
+    appState.agentCollapsed = !appState.agentCollapsed;
+    document.getElementById('agentToggle').textContent = appState.agentCollapsed ? '+' : '−';
+});
+
+// Auto-load CSV data from file
+function autoLoadFlights() {
+    try {
+        // Remap lowercase JSON keys to PascalCase CSV keys that normalizeFlights expects
+        const csvFlights = EMBEDDED_FLIGHTS.map(f => ({
+            'Date': f.date || '',
+            'Airline': f.airline || '',
+            'Flight': f.flight || '',
+            'From': f.from || '',
+            'To': f.to || '',
+            'Aircraft Type Name': f.aircraft || '',
+            'Cabin Class': f.cabin || '',
+            'Take off (Actual)': f.takeoff || '',
+            'Landing (Actual)': f.landing || '',
+        }));
+        appState.allFlights = normalizeFlights(csvFlights);
+        appState.filteredFlights = appState.allFlights;
+        createYearFilterButtons();
+        setSelectedYear('all');
+        console.log('✓ Loaded ' + appState.allFlights.length + ' flights');
+    } catch (e) {
+        console.error('Failed to load embedded flights:', e);
+    }
+}
+
+// Initialize on page load
+window.addEventListener('load', () => {
+    initGlobe();
+    autoLoadFlights();
+});
+
+</script>
+</body>
+</html>

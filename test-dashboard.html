@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Dashboard Test</title>
+    <style>
+        body { font-family: monospace; margin: 20px; background: #1a1a1a; color: #00d4ff; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #00d4ff; }
+        .pass { color: #00ff00; }
+        .fail { color: #ff0000; }
+        .info { color: #00d4ff; }
+        code { background: #0a0a0a; padding: 5px; display: block; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Flight Dashboard - Functional Test Report</h1>
+    <div id="results"></div>
+    <script>
+        const results = [];
+        
+        // Test 1: Check globe route rendering (no arcDashInitialGap with index)
+        function testGlobeRoutes() {
+            const appJS = fetch('app.js').then(r => r.text()).then(text => {
+                const hasOldPattern = text.includes('arcDashInitialGap((d) => d.index * 100)');
+                const hasNewPattern = text.includes('arcDashInitialGap(0)');
+                const hasArcDashGap = text.includes('arcDashGap(0)');
+                
+                return {
+                    name: '✈️ Globe Route Lines Fix',
+                    pass: !hasOldPattern && hasNewPattern && hasArcDashGap,
+                    details: [
+                        `Old pattern (arcDashInitialGap with index): ${hasOldPattern ? '❌ FOUND' : '✓ REMOVED'}`,
+                        `New pattern (arcDashInitialGap(0)): ${hasNewPattern ? '✓ FOUND' : '❌ MISSING'}`,
+                        `Arc dash gap fix: ${hasArcDashGap ? '✓ FOUND' : '❌ MISSING'}`
+                    ]
+                };
+            });
+            return appJS;
+        }
+        
+        // Test 2: Check replay globe route rendering
+        function testReplayRoutes() {
+            return fetch('app.js').then(r => r.text()).then(text => {
+                const replaySection = text.substring(text.indexOf('function updateReplayVisualization'), text.indexOf('function updateReplayVisualization') + 2000);
+                const hasArcDashInitial = replaySection.includes('arcDashInitialGap(0)');
+                const hasStrokeWidth = replaySection.includes('arcStrokeWidth(2.5)');
+                const hasNoOldGap = !replaySection.includes('arcDashInitialGap((d)');
+                
+                return {
+                    name: '📍 Replay Route Line Fix',
+                    pass: hasArcDashInitial && hasStrokeWidth && hasNoOldGap,
+                    details: [
+                        `Replay arc dash gap: ${hasArcDashInitial ? '✓ FOUND' : '❌ MISSING'}`,
+                        `Replay stroke width (2.5): ${hasStrokeWidth ? '✓ FOUND' : '❌ MISSING'}`,
+                        `Old index-based gap removed: ${hasNoOldGap ? '✓ YES' : '❌ NO'}`
+                    ]
+                };
+            });
+        }
+        
+        // Test 3: Check flag icons spread fix
+        function testFlagSpread() {
+            return fetch('styles.css').then(r => r.text()).then(text => {
+                const countryCardSection = text.substring(text.indexOf('.country-card {'), text.indexOf('.country-card {') + 500);
+                const hasJustifyBetween = countryCardSection.includes('justify-content: space-between');
+                const hasFlexDisplay = countryCardSection.includes('display: flex');
+                
+                return {
+                    name: '🚩 Flag Icons Spread Fix',
+                    pass: hasJustifyBetween && hasFlexDisplay,
+                    details: [
+                        `Flex display: ${hasFlexDisplay ? '✓ FOUND' : '❌ MISSING'}`,
+                        `justify-content: space-between: ${hasJustifyBetween ? '✓ FOUND' : '❌ MISSING'}`
+                    ]
+                };
+            });
+        }
+        
+        // Run all tests
+        Promise.all([testGlobeRoutes(), testReplayRoutes(), testFlagSpread()]).then(tests => {
+            const resultsDiv = document.getElementById('results');
+            let allPass = true;
+            
+            tests.forEach(test => {
+                allPass = allPass && test.pass;
+                const section = document.createElement('div');
+                section.className = 'test-section';
+                
+                const statusClass = test.pass ? 'pass' : 'fail';
+                const statusText = test.pass ? '✓ PASS' : '✗ FAIL';
+                
+                section.innerHTML = `
+                    <div class="${statusClass}"><strong>${statusText}</strong> - ${test.name}</div>
+                    <div class="info" style="margin-top: 10px;">
+                        ${test.details.map(d => `<div>${d}</div>`).join('')}
+                    </div>
+                `;
+                resultsDiv.appendChild(section);
+            });
+            
+            const summary = document.createElement('div');
+            summary.className = `test-section ${allPass ? 'pass' : 'fail'}`;
+            summary.innerHTML = `
+                <strong>${allPass ? '✓ ALL TESTS PASSED' : '✗ SOME TESTS FAILED'}</strong>
+                <br/>Tests: ${tests.length} | Pass: ${tests.filter(t => t.pass).length} | Fail: ${tests.filter(t => !t.pass).length}
+            `;
+            resultsDiv.insertBefore(summary, resultsDiv.firstChild);
+        }).catch(err => {
+            document.getElementById('results').innerHTML = `<div class="fail">Test Error: ${err.message}</div>`;
+        });
+    </script>
+</body>
+</html>

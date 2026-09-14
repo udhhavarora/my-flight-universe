@@ -1,0 +1,421 @@
+<title>My Flight Universe</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --bg-dark: #0a0e12;
+    --bg-card: rgba(15, 23, 33, 0.8);
+    --accent-cyan: #00d4ff;
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --text-muted: rgba(255, 255, 255, 0.5);
+    --border-color: rgba(0, 212, 255, 0.2);
+}
+
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+        --bg-dark: #ffffff;
+        --bg-card: rgba(240, 240, 240, 0.9);
+        --accent-cyan: #0088cc;
+        --text-primary: #1a1a1a;
+        --text-secondary: rgba(0, 0, 0, 0.6);
+        --text-muted: rgba(0, 0, 0, 0.45);
+        --border-color: rgba(0, 0, 0, 0.15);
+    }
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #0a0e12 0%, #151b24 50%, #0a0e12 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+}
+
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 3rem;
+    background: rgba(10, 14, 18, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+.nav-right {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.date-range { color: var(--accent-cyan); }
+
+.main-content {
+    padding: 2rem 3rem;
+    max-width: 1800px;
+    margin: 0 auto;
+}
+
+.hero-section {
+    text-align: center;
+    padding: 3rem 0 2rem;
+}
+
+.hero-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.universe-glow {
+    color: var(--accent-cyan);
+    text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-bottom: 3rem;
+}
+
+.globe-container {
+    width: 100%;
+    height: 600px;
+    margin: 2rem auto;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(74, 144, 226, 0.08));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.globe-placeholder {
+    text-align: center;
+    color: rgba(0, 212, 255, 0.6);
+}
+
+.globe-placeholder-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin: 4rem 0 2rem;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.kpi-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+.kpi-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    margin-bottom: 0.5rem;
+}
+
+.kpi-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.country-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.country-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.country-flag {
+    font-size: 3rem;
+    flex-shrink: 0;
+}
+
+.country-info {
+    flex: 1;
+}
+
+.country-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.country-stat {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.airline-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.airline-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.airline-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.airline-flights {
+    color: var(--accent-cyan);
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.airline-progress {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.airline-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-cyan), #4a90e2);
+}
+
+@media (max-width: 768px) {
+    .top-nav { padding: 1rem 1.5rem; flex-direction: column; gap: 1rem; }
+    .main-content { padding: 1rem 1.5rem; }
+    .hero-title { font-size: 2.5rem; }
+    .globe-container { height: 400px; }
+    .kpi-grid, .country-grid, .airline-grid { grid-template-columns: 1fr; }
+}
+</style>
+
+<div class="top-nav">
+    <div class="nav-logo">MY FLIGHT UNIVERSE</div>
+    <div class="nav-right">
+        <span class="date-range" id="dateRange">2024</span>
+        <span>FLIGHTY EXPORT</span>
+    </div>
+</div>
+
+<main class="main-content">
+    <section class="hero-section">
+        <h1 class="hero-title">My Flight <span class="universe-glow">Universe</span></h1>
+        <p class="hero-subtitle">A visual journal of the skies you've crossed.</p>
+        <div class="globe-container">
+            <div class="globe-placeholder">
+                <div class="globe-placeholder-icon">🌍</div>
+                <div style="font-size: 1.1rem; font-weight: 600;">Flight Routes Map</div>
+                <div style="font-size: 0.9rem; margin-top: 0.5rem;" id="globeStats"></div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">FLIGHT TELEMETRY</h2>
+        <div class="kpi-grid" id="kpiGrid"></div>
+    </section>
+
+    <section>
+        <h2 class="section-title">GEOGRAPHICAL STATS</h2>
+        <div class="country-grid" id="countryGrid"></div>
+    </section>
+
+    <section>
+        <h2 class="section-title">AIRLINE UNIVERSE</h2>
+        <div class="airline-grid" id="airlineGrid"></div>
+    </section>
+</main>
+
+<script>
+const AIRPORT_DATA = {
+    'DEL': { city: 'New Delhi', country: 'India', flag: '🇮🇳' },
+    'BOM': { city: 'Mumbai', country: 'India', flag: '🇮🇳' },
+    'BLR': { city: 'Bangalore', country: 'India', flag: '🇮🇳' },
+    'HYD': { city: 'Hyderabad', country: 'India', flag: '🇮🇳' },
+    'COK': { city: 'Kochi', country: 'India', flag: '🇮🇳' },
+    'MAA': { city: 'Chennai', country: 'India', flag: '🇮🇳' },
+    'DXB': { city: 'Dubai', country: 'UAE', flag: '🇦🇪' },
+    'SIN': { city: 'Singapore', country: 'Singapore', flag: '🇸🇬' },
+    'BKK': { city: 'Bangkok', country: 'Thailand', flag: '🇹🇭' },
+    'KUL': { city: 'Kuala Lumpur', country: 'Malaysia', flag: '🇲🇾' },
+    'AMS': { city: 'Amsterdam', country: 'Netherlands', flag: '🇳🇱' },
+    'LHR': { city: 'London', country: 'UK', flag: '🇬🇧' },
+    'CDG': { city: 'Paris', country: 'France', flag: '🇫🇷' },
+    'LAX': { city: 'Los Angeles', country: 'USA', flag: '🇺🇸' },
+    'SFO': { city: 'San Francisco', country: 'USA', flag: '🇺🇸' },
+    'ORD': { city: 'Chicago', country: 'USA', flag: '🇺🇸' },
+    'JFK': { city: 'New York', country: 'USA', flag: '🇺🇸' }
+};
+
+const AIRLINE_DATA = {
+    'IGO': { name: 'IndiGo', count: 4 },
+    'AIC': { name: 'Air India', count: 4 },
+    'VTI': { name: 'Vistara', count: 3 },
+    'UAE': { name: 'Emirates', count: 1 },
+    'TGW': { name: 'Tigerair', count: 1 },
+    'BKP': { name: 'Bangkok Airways', count: 1 },
+    'KLM': { name: 'KLM', count: 1 },
+    'BAW': { name: 'British Airways', count: 2 },
+    'RYR': { name: 'Ryanair', count: 1 },
+    'AAL': { name: 'American Airlines', count: 2 },
+    'SWA': { name: 'Southwest', count: 1 },
+    'FFT': { name: 'Frontier', count: 1 }
+};
+
+const flights = [
+    { from: 'DEL', to: 'BOM', airline: 'IGO', distance: 900 },
+    { from: 'BOM', to: 'BLR', airline: 'AIC', distance: 680 },
+    { from: 'BLR', to: 'HYD', airline: 'IGO', distance: 520 },
+    { from: 'HYD', to: 'DEL', airline: 'VTI', distance: 820 },
+    { from: 'DEL', to: 'DXB', airline: 'AIC', distance: 1800 },
+    { from: 'DXB', to: 'SIN', airline: 'UAE', distance: 2200 },
+    { from: 'SIN', to: 'BKK', airline: 'TGW', distance: 1300 },
+    { from: 'BKK', to: 'KUL', airline: 'BKP', distance: 900 },
+    { from: 'KUL', to: 'AMS', airline: 'KLM', distance: 9000 },
+    { from: 'AMS', to: 'LHR', airline: 'BAW', distance: 350 },
+    { from: 'LHR', to: 'CDG', airline: 'RYR', distance: 380 },
+    { from: 'CDG', to: 'LAX', airline: 'AAL', distance: 8900 },
+    { from: 'LAX', to: 'SFO', airline: 'SWA', distance: 560 },
+    { from: 'SFO', to: 'ORD', airline: 'FFT', distance: 1250 },
+    { from: 'ORD', to: 'JFK', airline: 'AAL', distance: 1450 },
+    { from: 'JFK', to: 'DEL', airline: 'AIC', distance: 8000 },
+    { from: 'DEL', to: 'BOM', airline: 'IGO', distance: 900 },
+    { from: 'BOM', to: 'COK', airline: 'VTI', distance: 850 },
+    { from: 'COK', to: 'MAA', airline: 'AIC', distance: 680 },
+    { from: 'DEL', to: 'BLR', airline: 'IGO', distance: 1250 }
+];
+
+function renderDashboard() {
+    const countries = new Map();
+    const airports = new Set();
+    let totalDistance = 0;
+    let totalFlights = flights.length;
+
+    flights.forEach(f => {
+        airports.add(f.from);
+        airports.add(f.to);
+        totalDistance += f.distance;
+
+        const fromCountry = AIRPORT_DATA[f.from].country;
+        const toCountry = AIRPORT_DATA[f.to].country;
+        countries.set(fromCountry, (countries.get(fromCountry) || 0) + 1);
+        countries.set(toCountry, (countries.get(toCountry) || 0) + 1);
+    });
+
+    // Update KPIs
+    const kpiData = [
+        { label: 'Total Flights', value: totalFlights },
+        { label: 'Total Distance', value: totalDistance.toLocaleString() + ' km' },
+        { label: 'Airports Visited', value: airports.size },
+        { label: 'Countries', value: countries.size },
+        { label: 'Airlines', value: Object.keys(AIRLINE_DATA).length },
+        { label: 'Avg Distance', value: Math.round(totalDistance / totalFlights) + ' km' },
+        { label: 'Longest Flight', value: Math.max(...flights.map(f => f.distance)) + ' km' },
+        { label: 'Recent Year', value: '2024' }
+    ];
+
+    document.getElementById('kpiGrid').innerHTML = kpiData.map(kpi => `
+        <div class="kpi-card">
+            <div class="kpi-value">${kpi.value}</div>
+            <div class="kpi-label">${kpi.label}</div>
+        </div>
+    `).join('');
+
+    // Update globe stats
+    document.getElementById('globeStats').textContent = `${totalFlights} flights • ${airports.size} airports`;
+
+    // Update countries
+    const sortedCountries = Array.from(countries.entries())
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 6);
+
+    document.getElementById('countryGrid').innerHTML = sortedCountries.map(([country, count]) => {
+        const flag = Array.from(AIRPORT_DATA.values()).find(a => a.country === country)?.flag || '🌍';
+        return `
+            <div class="country-card">
+                <div class="country-flag">${flag}</div>
+                <div class="country-info">
+                    <div class="country-name">${country}</div>
+                    <div class="country-stat">${count} flights</div>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    // Update airlines
+    const maxFlights = Math.max(...Object.values(AIRLINE_DATA).map(a => a.count));
+    document.getElementById('airlineGrid').innerHTML = Object.entries(AIRLINE_DATA)
+        .sort((a, b) => b[1].count - a[1].count)
+        .slice(0, 6)
+        .map(([code, data]) => {
+            const percentage = (data.count / maxFlights) * 100;
+            return `
+                <div class="airline-card">
+                    <div class="airline-name">${data.name}</div>
+                    <div class="airline-flights">${data.count} flights</div>
+                    <div class="airline-progress">
+                        <div class="airline-progress-bar" style="width: ${percentage}%"></div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+}
+
+renderDashboard();
+</script>

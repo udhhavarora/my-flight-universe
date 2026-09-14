@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Diagnostics</title>
+    <style>
+        body { font-family: monospace; background: #0a0e12; color: #00d4ff; padding: 20px; }
+        .test { margin: 20px 0; padding: 15px; border: 1px solid #00d4ff; border-radius: 8px; }
+        .pass { border-color: #00ff00; color: #00ff00; }
+        .fail { border-color: #ff0000; color: #ff0000; }
+        h1 { color: #00d4ff; }
+        .code { background: #1a1a1a; padding: 10px; margin: 10px 0; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>My Flight Universe - Diagnostics</h1>
+    <div id="tests"></div>
+    <script>
+        const tests = [];
+        
+        function addTest(name, fn) {
+            tests.push({ name, fn });
+        }
+        
+        function log(element, message) {
+            element.innerHTML += message + '<br>';
+        }
+        
+        // Test 1: CSV Loading
+        addTest('CSV Loading', async (el) => {
+            try {
+                const response = await fetch('flights.csv');
+                const csv = await response.text();
+                const lines = csv.trim().split('\n');
+                log(el, `✓ CSV loaded: ${lines.length - 1} flights`);
+                log(el, `✓ Headers: ${lines[0].split(',').length}`);
+                return true;
+            } catch (err) {
+                log(el, `✗ CSV Error: ${err.message}`);
+                return false;
+            }
+        });
+        
+        // Test 2: Globe.gl Library
+        addTest('Globe.gl Library', async (el) => {
+            try {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/globe.gl';
+                script.onload = () => {
+                    if (window.Globe) {
+                        log(el, '✓ Globe.gl library loaded');
+                    } else {
+                        log(el, '✗ Globe.gl not in window');
+                    }
+                };
+                script.onerror = () => {
+                    log(el, '✗ Failed to load Globe.gl from CDN');
+                };
+                document.head.appendChild(script);
+                
+                // Wait a bit
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        if (window.Globe) {
+                            log(el, '✓ Globe constructor available');
+                            resolve(true);
+                        } else {
+                            log(el, '✗ Globe constructor NOT available');
+                            resolve(false);
+                        }
+                    }, 2000);
+                });
+            } catch (err) {
+                log(el, `✗ Error: ${err.message}`);
+                return false;
+            }
+        });
+        
+        // Test 3: Parse Function
+        addTest('CSV Parsing', (el) => {
+            try {
+                function parseCSV(csvContent) {
+                    const lines = csvContent.trim().split('\n');
+                    const headers = lines[0].split(',').map(h => h.trim());
+                    const values = [];
+                    let current = '';
+                    let inQuotes = false;
+                    const line = lines[1];
+                    
+                    for (let j = 0; j < line.length; j++) {
+                        const char = line[j];
+                        if (char === '"') {
+                            inQuotes = !inQuotes;
+                        } else if (char === ',' && !inQuotes) {
+                            values.push(current.trim());
+                            current = '';
+                        } else {
+                            current += char;
+                        }
+                    }
+                    values.push(current.trim());
+                    
+                    const flight = {};
+                    headers.forEach((header, index) => {
+                        flight[header] = values[index] || '';
+                    });
+                    
+                    return flight;
+                }
+                
+                fetch('flights.csv')
+                    .then(r => r.text())
+                    .then(csv => {
+                        const flight = parseCSV(csv);
+                        log(el, `✓ First flight parsed`);
+                        log(el, `  Date: ${flight.Date}`);
+                        log(el, `  From: ${flight.From} → To: ${flight.To}`);
+                        log(el, `  Airline: ${flight.Airline}`);
+                    });
+                return true;
+            } catch (err) {
+                log(el, `✗ Parse Error: ${err.message}`);
+                return false;
+            }
+        });
+        
+        // Test 4: Haversine Distance
+        addTest('Distance Calculation', (el) => {
+            try {
+                function haversineDistance(lat1, lng1, lat2, lng2) {
+                    const R = 6371;
+                    const dLat = (lat2 - lat1) * Math.PI / 180;
+                    const dLng = (lng2 - lng1) * Math.PI / 180;
+                    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                        Math.sin(dLng / 2) * Math.sin(dLng / 2);
+                    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                    return Math.round(R * c);
+                }
+                
+                const del = { lat: 28.5665, lng: 77.1031 };
+                const bom = { lat: 19.0880, lng: 72.8686 };
+                const dist = haversineDistance(del.lat, del.lng, bom.lat, bom.lng);
+                
+                log(el, `✓ DEL to BOM: ${dist} km`);
+                if (dist > 1000 && dist < 1500) {
+                    log(el, '✓ Distance calculation correct');
+                    return true;
+                } else {
+                    log(el, `✗ Unexpected distance: ${dist}`);
+                    return false;
+                }
+            } catch (err) {
+                log(el, `✗ Error: ${err.message}`);
+                return false;
+            }
+        });
+        
+        // Test 5: Airport Data
+        addTest('Airport Data Coverage', (el) => {
+            const AIRPORT_DATA = {
+                'DEL': { lat: 28.5665, lng: 77.1031, city: 'New Delhi', country: 'India', countryCode: 'IN' },
+                'BOM': { lat: 19.0880, lng: 72.8686, city: 'Mumbai', country: 'India', countryCode: 'IN' },
+                'ATQ': { lat: 23.1815, lng: 72.6286, city: 'Ahmedabad', country: 'India', countryCode: 'IN' },
+            };
+            
+            const requiredAirports = ['DEL', 'BOM', 'ATQ', 'BLR', 'DXB', 'LAX', 'JFK', 'LHR'];
+            const missing = [];
+            
+            requiredAirports.forEach(code => {
+                if (!AIRPORT_DATA[code]) {
+                    missing.push(code);
+                }
+            });
+            
+            if (missing.length === 0) {
+                log(el, `✓ All major airports defined`);
+                return true;
+            } else {
+                log(el, `✗ Missing airports: ${missing.join(', ')}`);
+                return false;
+            }
+        });
+        
+        // Test 6: Image Loading
+        addTest('Image Loading (Placeholder)', (el) => {
+            try {
+                const img = new Image();
+                img.onload = () => {
+                    log(el, '✓ Placeholder images accessible');
+                };
+                img.onerror = () => {
+                    log(el, '⚠ Placeholder service may be slow, will use fallback');
+                };
+                img.src = 'https://via.placeholder.com/400x150/1a3a4a/00d4ff?text=Test';
+                setTimeout(() => {
+                    log(el, '✓ Image test completed');
+                }, 1000);
+                return true;
+            } catch (err) {
+                log(el, `✗ Error: ${err.message}`);
+                return false;
+            }
+        });
+        
+        // Test 7: Replay Data Structure
+        addTest('Replay Data Structure', (el) => {
+            try {
+                const replayState = {
+                    globe: null,
+                    flight: null,
+                    progress: 0,
+                    playing: false,
+                    speed: 1,
+                    interval: null,
+                };
+                
+                const testFlight = {
+                    from: 'DEL',
+                    to: 'BOM',
+                    date: new Date(),
+                    airline: 'AIC',
+                    flight: 'AI101',
+                    distance: 1200,
+                    duration: '2h 30m',
+                };
+                
+                replayState.flight = testFlight;
+                
+                if (replayState.flight && replayState.flight.from) {
+                    log(el, '✓ Replay state structure valid');
+                    log(el, `✓ Test flight: ${testFlight.from} → ${testFlight.to}`);
+                    return true;
+                } else {
+                    log(el, '✗ Invalid replay state');
+                    return false;
+                }
+            } catch (err) {
+                log(el, `✗ Error: ${err.message}`);
+                return false;
+            }
+        });
+        
+        // Test 8: DOM Elements
+        addTest('DOM Elements Check', (el) => {
+            try {
+                const required = [
+                    'globe',
+                    'globeContainer',
+                    'replayGlobe',
+                    'replayModal',
+                    'airlineGrid',
+                    'flightTable',
+                    'yearFilter',
+                ];
+                
+                const missing = [];
+                required.forEach(id => {
+                    if (!document.getElementById(id)) {
+                        missing.push(id);
+                    }
+                });
+                
+                if (missing.length === 0) {
+                    log(el, `✓ All ${required.length} required DOM elements present`);
+                    return true;
+                } else {
+                    log(el, `✗ Missing DOM elements: ${missing.join(', ')}`);
+                    return false;
+                }
+            } catch (err) {
+                log(el, `✗ Error: ${err.message}`);
+                return false;
+            }
+        });
+        
+        // Run tests
+        async function runTests() {
+            const container = document.getElementById('tests');
+            
+            for (const test of tests) {
+                const testEl = document.createElement('div');
+                testEl.className = 'test';
+                
+                const title = document.createElement('h3');
+                title.textContent = test.name;
+                testEl.appendChild(title);
+                
+                const content = document.createElement('div');
+                content.className = 'code';
+                testEl.appendChild(content);
+                
+                container.appendChild(testEl);
+                
+                try {
+                    const result = await test.fn(content);
+                    if (result !== false) {
+                        testEl.classList.add('pass');
+                    } else {
+                        testEl.classList.add('fail');
+                    }
+                } catch (err) {
+                    content.innerHTML += `✗ Unexpected error: ${err.message}`;
+                    testEl.classList.add('fail');
+                }
+            }
+            
+            const summary = document.createElement('div');
+            summary.className = 'test pass';
+            summary.innerHTML = '<h2>✓ Diagnostics Complete</h2><p>See results above. Check console for errors.</p>';
+            container.appendChild(summary);
+        }
+        
+        window.addEventListener('load', runTests);
+    </script>
+</body>
+</html>

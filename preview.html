@@ -1,0 +1,246 @@
+<title>Flight Dashboard Preview</title>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+    --bg-dark: #0a0e12;
+    --accent-cyan: #00d4ff;
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --border-color: rgba(0, 212, 255, 0.2);
+}
+
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+        --bg-dark: #ffffff;
+        --accent-cyan: #0088cc;
+        --text-primary: #1a1a1a;
+        --text-secondary: rgba(0, 0, 0, 0.6);
+        --border-color: rgba(0, 0, 0, 0.15);
+    }
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, var(--bg-dark) 0%, #151b24 50%, var(--bg-dark) 100%);
+    color: var(--text-primary);
+    padding: 2rem;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+h1 {
+    font-family: 'Space Grotesk', -apple-system, sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.preview-card {
+    background: rgba(15, 23, 33, 0.8);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+}
+
+.preview-card h3 {
+    color: var(--accent-cyan);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.preview-card p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.status-badge {
+    display: inline-block;
+    background: rgba(0, 255, 0, 0.15);
+    color: #00ff00;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.feature-list {
+    list-style: none;
+    margin-top: 1rem;
+}
+
+.feature-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+.feature-list li::before {
+    content: "✓";
+    color: var(--accent-cyan);
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.demo-section {
+    background: rgba(15, 23, 33, 0.8);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-top: 2rem;
+}
+
+.demo-title {
+    color: var(--accent-cyan);
+    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.demo-content {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 1.5rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+}
+
+.code-line {
+    font-family: 'Courier New', monospace;
+    color: var(--accent-cyan);
+    margin: 0.5rem 0;
+    padding-left: 1rem;
+}
+
+.action-button {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent-cyan), #4a90e2);
+    color: #0a0e12;
+    padding: 1rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    margin-top: 1.5rem;
+    transition: transform 0.2s ease;
+}
+
+.action-button:hover {
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    .preview-grid {
+        grid-template-columns: 1fr;
+    }
+
+    body {
+        padding: 1rem;
+    }
+}
+</style>
+
+<div class="container">
+    <header>
+        <h1>✈️ Flight Dashboard</h1>
+        <p class="subtitle">Interactive flight history visualization with globe routes</p>
+        <span class="status-badge">✓ All fixes applied and verified</span>
+    </header>
+
+    <div class="preview-grid">
+        <div class="preview-card">
+            <h3>🌍 Globe Visualization</h3>
+            <p>Interactive 3D globe showing all your flight routes with proper source→destination lines.</p>
+            <ul class="feature-list">
+                <li>Live flight route display</li>
+                <li>Airport markers with flight counts</li>
+                <li>Auto-rotating globe view</li>
+                <li>No more vertical line artifacts</li>
+            </ul>
+        </div>
+
+        <div class="preview-card">
+            <h3>📍 Flight Replay</h3>
+            <p>Visualize individual flights with animated aircraft movement along the route.</p>
+            <ul class="feature-list">
+                <li>Smooth route line rendering</li>
+                <li>Aircraft position tracking</li>
+                <li>Playback controls (play/pause/restart)</li>
+                <li>Speed adjustment (0.5x - 4x)</li>
+            </ul>
+        </div>
+
+        <div class="preview-card">
+            <h3>🌐 Global Statistics</h3>
+            <p>Comprehensive flight telemetry and geographical insights.</p>
+            <ul class="feature-list">
+                <li>Country-by-country breakdown</li>
+                <li>Properly spaced flag icons</li>
+                <li>Flight statistics and analytics</li>
+                <li>Airline and aircraft data</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <div class="demo-title">🔧 Fixes Applied</div>
+        <div class="demo-content">
+            <div><strong>Fix 1: Globe Route Lines</strong></div>
+            <div class="code-line">arcDashInitialGap(0) + arcDashGap(0)</div>
+            <p style="margin-top: 0.5rem; margin-bottom: 1.5rem;">Removes vertical line artifacts and renders clean source→destination routes on the main globe.</p>
+
+            <div><strong>Fix 2: Replay Route Line</strong></div>
+            <div class="code-line">arcStrokeWidth(2.5) with arcDashInitialGap(0)</div>
+            <p style="margin-top: 0.5rem; margin-bottom: 1.5rem;">Ensures the replay section displays a visible, properly rendered route line during flight visualization.</p>
+
+            <div><strong>Fix 3: Flag Icon Spacing</strong></div>
+            <div class="code-line">justify-content: space-between on .country-card</div>
+            <p style="margin-top: 0.5rem;">Spreads country flag icons and information across the card for better visual balance.</p>
+        </div>
+    </div>
+
+    <div class="demo-section" style="text-align: center; margin-top: 2rem;">
+        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Ready to view the full dashboard?</p>
+        <a href="/index.html" class="action-button">Open Flight Dashboard →</a>
+    </div>
+</div>

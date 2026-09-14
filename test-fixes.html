@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Dashboard - Functional Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0e12 0%, #151b24 100%);
+            color: #00d4ff;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .test-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .test-card {
+            background: rgba(15, 23, 33, 0.8);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .test-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .test-status {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .test-status.pass {
+            background: #00ff00;
+            color: #000;
+        }
+
+        .test-status.fail {
+            background: #ff0000;
+            color: #fff;
+        }
+
+        .test-status.pending {
+            background: #ffaa00;
+            color: #000;
+        }
+
+        .test-details {
+            display: grid;
+            gap: 0.75rem;
+            margin-left: 2rem;
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .detail-icon {
+            width: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .summary-card {
+            background: rgba(0, 212, 255, 0.1);
+            border: 2px solid rgba(0, 212, 255, 0.5);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 2rem;
+        }
+
+        .summary-card.all-pass {
+            background: rgba(0, 255, 0, 0.1);
+            border-color: rgba(0, 255, 0, 0.5);
+            color: #00ff00;
+        }
+
+        .summary-card.has-fail {
+            background: rgba(255, 0, 0, 0.1);
+            border-color: rgba(255, 0, 0, 0.5);
+            color: #ff6b6b;
+        }
+
+        .code-snippet {
+            background: rgba(0, 0, 0, 0.5);
+            border-left: 3px solid #00d4ff;
+            padding: 0.75rem;
+            margin: 0.75rem 0 0 0;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            color: #00ff88;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✈️ Flight Dashboard - Functional Test Report</h1>
+
+        <div class="test-grid" id="testResults">
+            <!-- Tests will be inserted here -->
+        </div>
+
+        <div class="summary-card" id="summary">Loading tests...</div>
+    </div>
+
+    <script>
+        const results = [];
+
+        function addTest(name, icon, pass, details) {
+            results.push({ name, icon, pass, details });
+        }
+
+        function createTestCard(test) {
+            const card = document.createElement('div');
+            card.className = 'test-card';
+
+            const statusClass = test.pass ? 'pass' : 'fail';
+            const statusSymbol = test.pass ? '✓' : '✗';
+
+            const detailsHTML = test.details.map(detail => `
+                <div class="detail-row">
+                    <div class="detail-icon">${detail.pass ? '✓' : '✗'}</div>
+                    <div>${detail.text}</div>
+                </div>
+            `).join('');
+
+            card.innerHTML = `
+                <div class="test-header">
+                    <div class="test-status ${statusClass}">${statusSymbol}</div>
+                    <div>${test.icon} ${test.name}</div>
+                </div>
+                <div class="test-details">
+                    ${detailsHTML}
+                </div>
+            `;
+
+            return card;
+        }
+
+        // Test 1: Globe Route Lines Fix
+        function testGlobeRoutes() {
+            const appJS = fetch('app.js').then(r => r.text()).then(text => {
+                const hasOldPattern = text.includes('arcDashInitialGap((d) => d.index * 100)');
+                const hasNewPattern = text.includes('arcDashInitialGap(0)');
+                const hasArcDashGap = text.includes('arcDashGap(0)');
+                const pass = !hasOldPattern && hasNewPattern && hasArcDashGap;
+
+                addTest(
+                    'Globe Route Lines Fix',
+                    '🌍',
+                    pass,
+                    [
+                        { pass: !hasOldPattern, text: 'Old pattern (arcDashInitialGap with index) removed' },
+                        { pass: hasNewPattern, text: 'New pattern arcDashInitialGap(0) applied' },
+                        { pass: hasArcDashGap, text: 'Arc dash gap set to 0 (no vertical lines)' }
+                    ]
+                );
+            });
+            return appJS;
+        }
+
+        // Test 2: Replay Globe Route Line
+        function testReplayRoutes() {
+            return fetch('app.js').then(r => r.text()).then(text => {
+                const replayStart = text.indexOf('function updateReplayVisualization()');
+                const replayEnd = replayStart + 2500;
+                const replaySection = text.substring(replayStart, replayEnd);
+
+                const hasArcDashInitial = replaySection.includes('arcDashInitialGap(0)');
+                const hasStrokeWidth = replaySection.includes('arcStrokeWidth(2.5)');
+                const hasNoOldGap = !replaySection.includes('arcDashInitialGap((d)');
+                const pass = hasArcDashInitial && hasStrokeWidth && hasNoOldGap;
+
+                addTest(
+                    'Replay Route Line Fix',
+                    '📍',
+                    pass,
+                    [
+                        { pass: hasArcDashInitial, text: 'Replay arc dash gap initialized to 0' },
+                        { pass: hasStrokeWidth, text: 'Replay stroke width increased to 2.5' },
+                        { pass: hasNoOldGap, text: 'Old index-based gap pattern removed' }
+                    ]
+                );
+            });
+        }
+
+        // Test 3: Flag Icons Spread Fix
+        function testFlagSpread() {
+            return fetch('styles.css').then(r => r.text()).then(text => {
+                const countryCardStart = text.indexOf('.country-card {');
+                const countryCardEnd = countryCardStart + 500;
+                const countryCardSection = text.substring(countryCardStart, countryCardEnd);
+
+                const hasJustifyBetween = countryCardSection.includes('justify-content: space-between');
+                const hasFlexDisplay = countryCardSection.includes('display: flex');
+                const pass = hasJustifyBetween && hasFlexDisplay;
+
+                addTest(
+                    'Flag Icons Spread Fix',
+                    '🚩',
+                    pass,
+                    [
+                        { pass: hasFlexDisplay, text: 'Flex display layout active' },
+                        { pass: hasJustifyBetween, text: 'Space-between justification applied' }
+                    ]
+                );
+            });
+        }
+
+        // Run all tests
+        Promise.all([testGlobeRoutes(), testReplayRoutes(), testFlagSpread()]).then(() => {
+            const testResults = document.getElementById('testResults');
+            testResults.innerHTML = '';
+
+            results.forEach(test => {
+                testResults.appendChild(createTestCard(test));
+            });
+
+            const allPass = results.every(t => t.pass);
+            const summary = document.getElementById('summary');
+            const passCount = results.filter(t => t.pass).length;
+
+            if (allPass) {
+                summary.className = 'summary-card all-pass';
+                summary.innerHTML = `✓ ALL TESTS PASSED<br/><span style="font-size: 0.9rem; font-weight: normal;">${passCount}/${results.length} fixes verified</span>`;
+            } else {
+                summary.className = 'summary-card has-fail';
+                summary.innerHTML = `✗ ${results.length - passCount} TEST(S) FAILED<br/><span style="font-size: 0.9rem; font-weight: normal;">${passCount}/${results.length} fixes verified</span>`;
+            }
+        }).catch(err => {
+            document.getElementById('testResults').innerHTML = `<div class="test-card" style="color: #ff6b6b; border-color: #ff6b6b;"><strong>Error running tests:</strong> ${err.message}</div>`;
+            document.getElementById('summary').innerHTML = 'Test execution failed';
+            document.getElementById('summary').className = 'summary-card has-fail';
+        });
+    </script>
+</body>
+</html>

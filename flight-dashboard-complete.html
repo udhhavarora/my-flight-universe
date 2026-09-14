@@ -1,0 +1,389 @@
+<title>My Flight Universe</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --bg-dark: #0a0e12;
+    --bg-card: rgba(15, 23, 33, 0.8);
+    --accent-cyan: #00d4ff;
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --text-muted: rgba(255, 255, 255, 0.5);
+    --border-color: rgba(0, 212, 255, 0.2);
+}
+
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+        --bg-dark: #ffffff;
+        --bg-card: rgba(240, 240, 240, 0.9);
+        --accent-cyan: #0088cc;
+        --text-primary: #1a1a1a;
+        --text-secondary: rgba(0, 0, 0, 0.6);
+        --text-muted: rgba(0, 0, 0, 0.45);
+        --border-color: rgba(0, 0, 0, 0.15);
+    }
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #0a0e12 0%, #151b24 50%, #0a0e12 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+}
+
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 3rem;
+    background: rgba(10, 14, 18, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+.nav-right {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.date-range { color: var(--accent-cyan); }
+
+.main-content {
+    padding: 2rem 3rem;
+    max-width: 1800px;
+    margin: 0 auto;
+}
+
+.hero-section {
+    text-align: center;
+    padding: 3rem 0 2rem;
+}
+
+.hero-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.universe-glow {
+    color: var(--accent-cyan);
+    text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-bottom: 3rem;
+}
+
+.globe-container {
+    width: 100%;
+    height: 600px;
+    margin: 2rem auto;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(74, 144, 226, 0.08));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.globe-placeholder {
+    text-align: center;
+    color: rgba(0, 212, 255, 0.6);
+}
+
+.globe-placeholder-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin: 4rem 0 2rem;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.kpi-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+.kpi-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    margin-bottom: 0.5rem;
+}
+
+.kpi-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.country-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.country-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.country-flag {
+    font-size: 3rem;
+    flex-shrink: 0;
+}
+
+.country-info {
+    flex: 1;
+}
+
+.country-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.country-stat {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.airline-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.airline-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.airline-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.airline-flights {
+    color: var(--accent-cyan);
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.airline-progress {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.airline-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-cyan), #4a90e2);
+}
+
+@media (max-width: 768px) {
+    .top-nav { padding: 1rem 1.5rem; flex-direction: column; gap: 1rem; }
+    .main-content { padding: 1rem 1.5rem; }
+    .hero-title { font-size: 2.5rem; }
+    .globe-container { height: 400px; }
+    .kpi-grid, .country-grid, .airline-grid { grid-template-columns: 1fr; }
+}
+</style>
+
+<div class="top-nav">
+    <div class="nav-logo">MY FLIGHT UNIVERSE</div>
+    <div class="nav-right">
+        <span class="date-range" id="dateRange">2023</span>
+        <span>FLIGHTY EXPORT</span>
+    </div>
+</div>
+
+<main class="main-content">
+    <section class="hero-section">
+        <h1 class="hero-title">My Flight <span class="universe-glow">Universe</span></h1>
+        <p class="hero-subtitle">A visual journal of the skies you've crossed.</p>
+        <div class="globe-container">
+            <div class="globe-placeholder">
+                <div class="globe-placeholder-icon">🌍</div>
+                <div style="font-size: 1.1rem; font-weight: 600;">Flight Routes Map</div>
+                <div style="font-size: 0.9rem; margin-top: 0.5rem;" id="globeStats"></div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">FLIGHT TELEMETRY</h2>
+        <div class="kpi-grid" id="kpiGrid"></div>
+    </section>
+
+    <section>
+        <h2 class="section-title">GEOGRAPHICAL STATS</h2>
+        <div class="country-grid" id="countryGrid"></div>
+    </section>
+
+    <section>
+        <h2 class="section-title">AIRLINE UNIVERSE</h2>
+        <div class="airline-grid" id="airlineGrid"></div>
+    </section>
+</main>
+
+<script>
+const flights224 = [{"Date":"2023-01-01","Airline":"EZY","Flight":"EZY831","From":"BOM","To":"AUH","Aircraft":"Boeing 737 MAX 8","Duration":"14h 18m","Distance":6105,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-01-02","Airline":"SWA","Flight":"SWA899","From":"IXC","To":"COK","Aircraft":"Airbus A320","Duration":"2h 20m","Distance":945,"Cabin":"Business","Status":"Completed"},{"Date":"2023-01-04","Airline":"UAE","Flight":"UAE325","From":"ZRH","To":"SFO","Aircraft":"Boeing 737-800","Duration":"5h 46m","Distance":1665,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-01-05","Airline":"QTR","Flight":"QTR771","From":"DPS","To":"MAD","Aircraft":"Bombardier Q400","Duration":"5h 3m","Distance":2822,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-01-07","Airline":"ETH","Flight":"ETH934","From":"SHA","To":"LAX","Aircraft":"Airbus A320","Duration":"8h 35m","Distance":3807,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-01-09","Airline":"VTI","Flight":"VTI527","From":"ORD","To":"HND","Aircraft":"Airbus A320neo","Duration":"8h 18m","Distance":3368,"Cabin":"First","Status":"Completed"},{"Date":"2023-01-10","Airline":"BAW","Flight":"BAW115","From":"IXC","To":"DFW","Aircraft":"Airbus A321neo","Duration":"3h 10m","Distance":1458,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-01-12","Airline":"AFR","Flight":"AFR706","From":"FCO","To":"HYD","Aircraft":"Airbus A319","Duration":"19h 38m","Distance":9761,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-01-14","Airline":"GOW","Flight":"GOW401","From":"HND","To":"FCO","Aircraft":"Airbus A319","Duration":"6h 27m","Distance":2912,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-01-15","Airline":"EZY","Flight":"EZY621","From":"JED","To":"DOH","Aircraft":"Airbus A320neo","Duration":"13h 57m","Distance":5785,"Cabin":"First","Status":"Completed"},{"Date":"2023-01-17","Airline":"RYR","Flight":"RYR246","From":"MIA","To":"VIE","Aircraft":"Airbus A321neo","Duration":"13h 20m","Distance":6596,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-01-18","Airline":"EZY","Flight":"EZY994","From":"VIE","To":"MAD","Aircraft":"Bombardier Q400","Duration":"8h 30m","Distance":3249,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-01-20","Airline":"AXB","Flight":"AXB460","From":"LHR","To":"IXC","Aircraft":"Boeing 787-9","Duration":"12h 34m","Distance":6374,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-01-22","Airline":"AXB","Flight":"AXB224","From":"MXP","To":"LAS","Aircraft":"Airbus A321neo","Duration":"20h 48m","Distance":9042,"Cabin":"Business","Status":"Completed"},{"Date":"2023-01-23","Airline":"GOW","Flight":"GOW743","From":"LHR","To":"PNQ","Aircraft":"Airbus A319","Duration":"13h 16m","Distance":6699,"Cabin":"First","Status":"Completed"},{"Date":"2023-01-25","Airline":"RYR","Flight":"RYR408","From":"HYD","To":"JAI","Aircraft":"Airbus A321","Duration":"10h 22m","Distance":4068,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-01-27","Airline":"VTI","Flight":"VTI630","From":"PNQ","To":"MAA","Aircraft":"Boeing 787-8","Duration":"18h 7m","Distance":8159,"Cabin":"Business","Status":"Completed"},{"Date":"2023-01-28","Airline":"AXB","Flight":"AXB924","From":"SHA","To":"SEA","Aircraft":"Bombardier Q400","Duration":"12h 11m","Distance":6379,"Cabin":"Business","Status":"Completed"},{"Date":"2023-01-30","Airline":"LUX","Flight":"LUX185","From":"IXC","To":"JED","Aircraft":"Airbus A319","Duration":"13h 53m","Distance":6583,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-01-31","Airline":"SWA","Flight":"SWA788","From":"JFK","To":"FRA","Aircraft":"Bombardier Q400","Duration":"10h 46m","Distance":5438,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-02-02","Airline":"AFR","Flight":"AFR578","From":"LAS","To":"AMS","Aircraft":"Boeing 787-8","Duration":"5h 23m","Distance":2913,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-02-04","Airline":"KLM","Flight":"KLM712","From":"AUH","To":"LHR","Aircraft":"Bombardier Q400","Duration":"19h 14m","Distance":8675,"Cabin":"Business","Status":"Completed"},{"Date":"2023-02-05","Airline":"SWA","Flight":"SWA535","From":"FCO","To":"DPS","Aircraft":"Boeing 787-8","Duration":"18h 13m","Distance":9309,"Cabin":"First","Status":"Completed"},{"Date":"2023-02-07","Airline":"KLM","Flight":"KLM867","From":"FRA","To":"MAD","Aircraft":"Airbus A320neo","Duration":"21h 19m","Distance":9826,"Cabin":"Business","Status":"Completed"},{"Date":"2023-02-09","Airline":"SEJ","Flight":"SEJ745","From":"DEL","To":"BOM","Aircraft":"Airbus A320","Duration":"2h 15m","Distance":900,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-02-10","Airline":"IGO","Flight":"IGO123","From":"BOM","To":"BLR","Aircraft":"Airbus A321","Duration":"1h 45m","Distance":680,"Cabin":"Business","Status":"Completed"},{"Date":"2023-02-12","Airline":"AIC","Flight":"AIC456","From":"BLR","To":"HYD","Aircraft":"Airbus A320neo","Duration":"1h 30m","Distance":520,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-02-14","Airline":"VTI","Flight":"VTI101","From":"HYD","To":"DEL","Aircraft":"Boeing 737-800","Duration":"2h 00m","Distance":820,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-02-16","Airline":"AIC","Flight":"AIC202","From":"DEL","To":"DXB","Aircraft":"Boeing 777-200 LR","Duration":"3h 15m","Distance":1800,"Cabin":"Business","Status":"Completed"},{"Date":"2023-02-18","Airline":"UAE","Flight":"UAE303","From":"DXB","To":"SIN","Aircraft":"Boeing 787-9","Duration":"3h 45m","Distance":2200,"Cabin":"Business","Status":"Completed"},{"Date":"2023-02-20","Airline":"TGW","Flight":"TGW404","From":"SIN","To":"BKK","Aircraft":"Airbus A320","Duration":"2h 30m","Distance":1300,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-02-22","Airline":"BKP","Flight":"BKP505","From":"BKK","To":"KUL","Aircraft":"Boeing 737 MAX 8","Duration":"1h 45m","Distance":900,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-02-24","Airline":"KLM","Flight":"KLM606","From":"KUL","To":"AMS","Aircraft":"Boeing 777-300","Duration":"12h 00m","Distance":9000,"Cabin":"Business","Status":"Completed"},{"Date":"2023-02-26","Airline":"BAW","Flight":"BAW707","From":"AMS","To":"LHR","Aircraft":"Airbus A320","Duration":"1h 15m","Distance":350,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-02-28","Airline":"RYR","Flight":"RYR808","From":"LHR","To":"CDG","Aircraft":"Airbus A320","Duration":"1h 20m","Distance":380,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-03-02","Airline":"AAL","Flight":"AAL909","From":"CDG","To":"LAX","Aircraft":"Boeing 787-8","Duration":"10h 30m","Distance":8900,"Cabin":"Business","Status":"Completed"},{"Date":"2023-03-04","Airline":"SWA","Flight":"SWA101","From":"LAX","To":"SFO","Aircraft":"Boeing 737-800","Duration":"1h 00m","Distance":560,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-03-06","Airline":"FFT","Flight":"FFT202","From":"SFO","To":"DEN","Aircraft":"Airbus A319","Duration":"2h 15m","Distance":1250,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-03-08","Airline":"AAL","Flight":"AAL303","From":"DEN","To":"ORD","Aircraft":"Boeing 737-800","Duration":"2h 30m","Distance":1200,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-03-10","Airline":"BAW","Flight":"BAW404","From":"ORD","To":"JFK","Aircraft":"Airbus A320","Duration":"2h 45m","Distance":1450,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-03-12","Airline":"AIC","Flight":"AIC505","From":"JFK","To":"DEL","Aircraft":"Boeing 777-200 LR","Duration":"14h 00m","Distance":8000,"Cabin":"Business","Status":"Completed"},{"Date":"2023-03-14","Airline":"IGO","Flight":"IGO606","From":"DEL","To":"BOM","Aircraft":"Airbus A320","Duration":"2h 15m","Distance":900,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-03-16","Airline":"VTI","Flight":"VTI707","From":"BOM","To":"COK","Aircraft":"Airbus A321","Duration":"2h 30m","Distance":850,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-03-18","Airline":"AIC","Flight":"AIC808","From":"COK","To":"MAA","Aircraft":"Airbus A320neo","Duration":"1h 45m","Distance":680,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-03-20","Airline":"IGO","Flight":"IGO909","From":"MAA","To":"BLR","Aircraft":"Airbus A320","Duration":"1h 30m","Distance":650,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-03-22","Airline":"SEJ","Flight":"SEJ010","From":"BLR","To":"HYD","Aircraft":"Boeing 737-800","Duration":"1h 15m","Distance":600,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-03-24","Airline":"GOW","Flight":"GOW111","From":"HYD","To":"DEL","Aircraft":"Airbus A319","Duration":"1h 50m","Distance":680,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-03-26","Airline":"VTI","Flight":"VTI212","From":"DEL","To":"PNQ","Aircraft":"Airbus A320neo","Duration":"2h 00m","Distance":850,"Cabin":"Business","Status":"Completed"},{"Date":"2023-03-28","Airline":"AIC","Flight":"AIC313","From":"PNQ","To":"BOM","Aircraft":"Boeing 737-800","Duration":"1h 45m","Distance":780,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-03-30","Airline":"IGO","Flight":"IGO414","From":"BOM","To":"CCU","Aircraft":"Airbus A320","Duration":"2h 15m","Distance":950,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-04-01","Airline":"SEJ","Flight":"SEJ515","From":"CCU","To":"HYD","Aircraft":"Boeing 737-800","Duration":"2h 30m","Distance":1050,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-04-03","Airline":"VTI","Flight":"VTI616","From":"HYD","To":"JAI","Aircraft":"Airbus A321","Duration":"1h 45m","Distance":620,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-04-05","Airline":"GOW","Flight":"GOW717","From":"JAI","To":"DEL","Aircraft":"Airbus A320neo","Duration":"2h 00m","Distance":700,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-04-07","Airline":"AIC","Flight":"AIC818","From":"DEL","To":"IXC","Aircraft":"Boeing 737-800","Duration":"1h 30m","Distance":480,"Cabin":"Business","Status":"Completed"},{"Date":"2023-04-09","Airline":"IGO","Flight":"IGO919","From":"IXC","To":"BOM","Aircraft":"Airbus A320","Duration":"3h 15m","Distance":1420,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-04-11","Airline":"SEJ","Flight":"SEJ020","From":"BOM","To":"DPS","Aircraft":"Boeing 737-800","Duration":"3h 45m","Distance":1780,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-04-13","Airline":"VTI","Flight":"VTI121","From":"DPS","To":"SIN","Aircraft":"Airbus A320neo","Duration":"2h 00m","Distance":980,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-04-15","Airline":"TGW","Flight":"TGW222","From":"SIN","To":"BKK","Aircraft":"Boeing 737-800","Duration":"2h 15m","Distance":1100,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-04-17","Airline":"AIC","Flight":"AIC323","From":"BKK","To":"KUL","Aircraft":"Airbus A321","Duration":"1h 50m","Distance":920,"Cabin":"Business","Status":"Completed"},{"Date":"2023-04-19","Airline":"KLM","Flight":"KLM424","From":"KUL","To":"AMS","Aircraft":"Boeing 777-200 LR","Duration":"11h 30m","Distance":8700,"Cabin":"Business","Status":"Completed"},{"Date":"2023-04-21","Airline":"BAW","Flight":"BAW525","From":"AMS","To":"CDG","Aircraft":"Airbus A320","Duration":"1h 15m","Distance":420,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-04-23","Airline":"AFR","Flight":"AFR626","From":"CDG","To":"LHR","Aircraft":"Airbus A319","Duration":"1h 15m","Distance":380,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-04-25","Airline":"RYR","Flight":"RYR727","From":"LHR","To":"FRA","Aircraft":"Boeing 737-800","Duration":"1h 30m","Distance":450,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-04-27","Airline":"DLH","Flight":"DLH828","From":"FRA","To":"ZRH","Aircraft":"Airbus A320neo","Duration":"1h 00m","Distance":340,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-04-29","Airline":"SWI","Flight":"SWI929","From":"ZRH","To":"VIE","Aircraft":"Airbus A320","Duration":"1h 30m","Distance":580,"Cabin":"Business","Status":"Completed"},{"Date":"2023-05-01","Airline":"AAL","Flight":"AAL030","From":"VIE","To":"LAX","Aircraft":"Boeing 787-9","Duration":"11h 00m","Distance":8500,"Cabin":"Business","Status":"Completed"},{"Date":"2023-05-03","Airline":"SWA","Flight":"SWA131","From":"LAX","To":"JFK","Aircraft":"Boeing 737-800","Duration":"5h 15m","Distance":2450,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-05-05","Airline":"AAL","Flight":"AAL232","From":"JFK","To":"LHR","Aircraft":"Boeing 787-8","Duration":"7h 00m","Distance":3460,"Cabin":"Business","Status":"Completed"},{"Date":"2023-05-07","Airline":"BAW","Flight":"BAW333","From":"LHR","To":"MAD","Aircraft":"Airbus A321","Duration":"2h 15m","Distance":1100,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-05-09","Airline":"IBE","Flight":"IBE434","From":"MAD","To":"BCN","Aircraft":"Airbus A320","Duration":"2h 00m","Distance":620,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-05-11","Airline":"VLG","Flight":"VLG535","From":"BCN","To":"FCO","Aircraft":"Boeing 737-800","Duration":"2h 30m","Distance":1180,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-05-13","Airline":"AZA","Flight":"AZA636","From":"FCO","To":"ATH","Aircraft":"Airbus A320neo","Duration":"2h 15m","Distance":960,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-05-15","Airline":"OA","Flight":"OA737","From":"ATH","To":"IST","Aircraft":"Boeing 737-800","Duration":"1h 30m","Distance":620,"Cabin":"Business","Status":"Completed"},{"Date":"2023-05-17","Airline":"TK","Flight":"TK838","From":"IST","To":"DOH","Aircraft":"Airbus A321","Duration":"3h 45m","Distance":1850,"Cabin":"Business","Status":"Completed"},{"Date":"2023-05-19","Airline":"QTR","Flight":"QTR939","From":"DOH","To":"BKK","Aircraft":"Boeing 787-9","Duration":"5h 30m","Distance":3100,"Cabin":"Business","Status":"Completed"},{"Date":"2023-05-21","Airline":"TGW","Flight":"TGW040","From":"BKK","To":"HKT","Aircraft":"Airbus A320","Duration":"1h 30m","Distance":820,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-05-23","Airline":"BKP","Flight":"BKP141","From":"HKT","To":"SIN","Aircraft":"Boeing 737-800","Duration":"2h 00m","Distance":950,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-05-25","Airline":"VTI","Flight":"VTI242","From":"SIN","To":"DEL","Aircraft":"Airbus A320neo","Duration":"5h 15m","Distance":2700,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-05-27","Airline":"AIC","Flight":"AIC343","From":"DEL","To":"BOM","Aircraft":"Boeing 777-200 LR","Duration":"2h 15m","Distance":900,"Cabin":"Business","Status":"Completed"},{"Date":"2023-05-29","Airline":"IGO","Flight":"IGO444","From":"BOM","To":"GOI","Aircraft":"Airbus A320","Duration":"1h 00m","Distance":450,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-05-31","Airline":"SEJ","Flight":"SEJ545","From":"GOI","To":"BLR","Aircraft":"Boeing 737-800","Duration":"1h 45m","Distance":780,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-06-02","Airline":"GOW","Flight":"GOW646","From":"BLR","To":"CCU","Aircraft":"Airbus A321","Duration":"2h 30m","Distance":1180,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-06-04","Airline":"VTI","Flight":"VTI747","From":"CCU","To":"DEL","Aircraft":"Airbus A320neo","Duration":"2h 45m","Distance":1200,"Cabin":"Business","Status":"Completed"},{"Date":"2023-06-06","Airline":"AIC","Flight":"AIC848","From":"DEL","To":"HYD","Aircraft":"Boeing 737-800","Duration":"2h 00m","Distance":820,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-06-08","Airline":"IGO","Flight":"IGO949","From":"HYD","To":"MAA","Aircraft":"Airbus A320","Duration":"1h 15m","Distance":580,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-06-10","Airline":"SEJ","Flight":"SEJ050","From":"MAA","To":"COK","Aircraft":"Boeing 737-800","Duration":"1h 30m","Distance":680,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-06-12","Airline":"VTI","Flight":"VTI151","From":"COK","To":"BOM","Aircraft":"Airbus A321","Duration":"2h 15m","Distance":1050,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-06-14","Airline":"GOW","Flight":"GOW252","From":"BOM","To":"PNQ","Aircraft":"Airbus A320neo","Duration":"1h 45m","Distance":780,"Cabin":"Business","Status":"Completed"},{"Date":"2023-06-16","Airline":"AIC","Flight":"AIC353","From":"PNQ","To":"BLR","Aircraft":"Boeing 737-800","Duration":"2h 00m","Distance":950,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-06-18","Airline":"IGO","Flight":"IGO454","From":"BLR","To":"HYD","Aircraft":"Airbus A320","Duration":"1h 30m","Distance":520,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-06-20","Airline":"SEJ","Flight":"SEJ555","From":"HYD","To":"JAI","Aircraft":"Boeing 737-800","Duration":"2h 15m","Distance":900,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-06-22","Airline":"VTI","Flight":"VTI656","From":"JAI","To":"DEL","Aircraft":"Airbus A321","Duration":"2h 30m","Distance":1100,"Cabin":"Business","Status":"Completed"},{"Date":"2023-06-24","Airline":"AIC","Flight":"AIC757","From":"DEL","To":"IXC","Aircraft":"Airbus A320neo","Duration":"1h 30m","Distance":480,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-06-26","Airline":"IGO","Flight":"IGO858","From":"IXC","To":"BOM","Aircraft":"Boeing 737-800","Duration":"3h 15m","Distance":1420,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-06-28","Airline":"GOW","Flight":"GOW959","From":"BOM","To":"DXB","Aircraft":"Airbus A320","Duration":"3h 45m","Distance":1800,"Cabin":"Business","Status":"Completed"},{"Date":"2023-06-30","Airline":"UAE","Flight":"UAE060","From":"DXB","To":"SIN","Aircraft":"Boeing 787-9","Duration":"3h 30m","Distance":2000,"Cabin":"Business","Status":"Completed"},{"Date":"2023-07-02","Airline":"SQ","Flight":"SQ161","From":"SIN","To":"SYD","Aircraft":"Boeing 777-300","Duration":"6h 30m","Distance":3850,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-07-04","Airline":"QF","Flight":"QF262","From":"SYD","To":"MEL","Aircraft":"Boeing 737-800","Duration":"1h 15m","Distance":710,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-07-06","Airline":"JQ","Flight":"JQ363","From":"MEL","To":"BNE","Aircraft":"Airbus A320","Duration":"2h 45m","Distance":1350,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-07-08","Airline":"QF","Flight":"QF464","From":"BNE","To":"PER","Aircraft":"Boeing 787-8","Duration":"5h 00m","Distance":3290,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-07-10","Airline":"SQ","Flight":"SQ565","From":"PER","To":"SIN","Aircraft":"Boeing 777-200","Duration":"4h 45m","Distance":2850,"Cabin":"Business","Status":"Completed"},{"Date":"2023-07-12","Airline":"3K","Flight":"3K666","From":"SIN","To":"HKG","Aircraft":"Airbus A330","Duration":"3h 30m","Distance":2260,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-07-14","Airline":"BA","Flight":"BA767","From":"HKG","To":"SFO","Aircraft":"Boeing 747-8","Duration":"15h 00m","Distance":7340,"Cabin":"Business","Status":"Completed"},{"Date":"2023-07-16","Airline":"VS","Flight":"VS868","From":"SFO","To":"LAX","Aircraft":"Boeing 787-9","Duration":"1h 00m","Distance":560,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-07-18","Airline":"AA","Flight":"AA969","From":"LAX","To":"DEN","Aircraft":"Boeing 737-800","Duration":"2h 00m","Distance":1020,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-07-20","Airline":"UA","Flight":"UA070","From":"DEN","To":"ORD","Aircraft":"Boeing 787-8","Duration":"2h 15m","Distance":1200,"Cabin":"Business","Status":"Completed"},{"Date":"2023-07-22","Airline":"AA","Flight":"AA171","From":"ORD","To":"JFK","Aircraft":"Boeing 737-800","Duration":"2h 45m","Distance":1450,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-07-24","Airline":"BA","Flight":"BA272","From":"JFK","To":"LHR","Aircraft":"Boeing 787-9","Duration":"7h 15m","Distance":3460,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-07-26","Airline":"BA","Flight":"BA373","From":"LHR","To":"CDG","Aircraft":"Airbus A380","Duration":"1h 15m","Distance":380,"Cabin":"Business","Status":"Completed"},{"Date":"2023-07-28","Airline":"AF","Flight":"AF474","From":"CDG","To":"AMS","Aircraft":"Boeing 777-300","Duration":"1h 15m","Distance":420,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-07-30","Airline":"KL","Flight":"KL575","From":"AMS","To":"IST","Aircraft":"Boeing 737-800","Duration":"3h 00m","Distance":1720,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-08-01","Airline":"TK","Flight":"TK676","From":"IST","To":"DEL","Aircraft":"Airbus A330","Duration":"5h 15m","Distance":2650,"Cabin":"Business","Status":"Completed"},{"Date":"2023-08-03","Airline":"AI","Flight":"AI777","From":"DEL","To":"BOM","Aircraft":"Boeing 777-200","Duration":"2h 15m","Distance":900,"Cabin":"Business","Status":"Completed"},{"Date":"2023-08-05","Airline":"6E","Flight":"6E878","From":"BOM","To":"BLR","Aircraft":"Airbus A320neo","Duration":"1h 45m","Distance":680,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-08-07","Airline":"SG","Flight":"SG979","From":"BLR","To":"HYD","Aircraft":"Boeing 737-800","Duration":"1h 30m","Distance":520,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-08-09","Airline":"AI","Flight":"AI080","From":"HYD","To":"CCU","Aircraft":"Airbus A321","Duration":"2h 30m","Distance":1150,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-08-11","Airline":"6E","Flight":"6E181","From":"CCU","To":"DEL","Aircraft":"Airbus A320","Duration":"2h 45m","Distance":1200,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-08-13","Airline":"SG","Flight":"SG282","From":"DEL","To":"PNQ","Aircraft":"Boeing 737-800","Duration":"2h 00m","Distance":850,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-08-15","Airline":"AI","Flight":"AI383","From":"PNQ","To":"BOM","Aircraft":"Airbus A320neo","Duration":"1h 45m","Distance":780,"Cabin":"Business","Status":"Completed"},{"Date":"2023-08-17","Airline":"6E","Flight":"6E484","From":"BOM","To":"COK","Aircraft":"Airbus A320","Duration":"2h 15m","Distance":1050,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-08-19","Airline":"SG","Flight":"SG585","From":"COK","To":"MAA","Aircraft":"Boeing 737-800","Duration":"1h 30m","Distance":680,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-08-21","Airline":"AI","Flight":"AI686","From":"MAA","To":"BLR","Aircraft":"Airbus A321","Duration":"1h 30m","Distance":650,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-08-23","Airline":"6E","Flight":"6E787","From":"BLR","To":"HYD","Aircraft":"Airbus A320neo","Duration":"1h 15m","Distance":520,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-08-25","Airline":"SG","Flight":"SG888","From":"HYD","To":"JAI","Aircraft":"Boeing 737-800","Duration":"2h 15m","Distance":900,"Cabin":"Business","Status":"Completed"},{"Date":"2023-08-27","Airline":"AI","Flight":"AI989","From":"JAI","To":"DEL","Aircraft":"Airbus A320","Duration":"2h 30m","Distance":1100,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-08-29","Airline":"6E","Flight":"6E090","From":"DEL","To":"DXB","Aircraft":"Boeing 737-800","Duration":"3h 15m","Distance":1800,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-08-31","Airline":"EK","Flight":"EK191","From":"DXB","To":"SIN","Aircraft":"Boeing 777-300","Duration":"3h 45m","Distance":2200,"Cabin":"Business","Status":"Completed"},{"Date":"2023-09-02","Airline":"SQ","Flight":"SQ292","From":"SIN","To":"KUL","Aircraft":"Boeing 737-800","Duration":"1h 15m","Distance":400,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-09-04","Airline":"MH","Flight":"MH393","From":"KUL","To":"BKK","Aircraft":"Airbus A330","Duration":"1h 45m","Distance":900,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-09-06","Airline":"TG","Flight":"TG494","From":"BKK","To":"HKT","Aircraft":"Airbus A320","Duration":"1h 30m","Distance":820,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-09-08","Airline":"SQ","Flight":"SQ595","From":"HKT","To":"SIN","Aircraft":"Boeing 777-200","Duration":"2h 00m","Distance":950,"Cabin":"Business","Status":"Completed"},{"Date":"2023-09-10","Airline":"3K","Flight":"3K696","From":"SIN","To":"DPS","Aircraft":"Airbus A320neo","Duration":"2h 15m","Distance":1100,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-09-12","Airline":"GA","Flight":"GA797","From":"DPS","To":"CGK","Aircraft":"Boeing 737-800","Duration":"2h 00m","Distance":900,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-09-14","Airline":"SQ","Flight":"SQ898","From":"CGK","To":"SIN","Aircraft":"Airbus A330","Duration":"2h 30m","Distance":1300,"Cabin":"Business","Status":"Completed"},{"Date":"2023-09-16","Airline":"SQ","Flight":"SQ999","From":"SIN","To":"HKG","Aircraft":"Boeing 777-300","Duration":"3h 30m","Distance":2260,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-09-18","Airline":"CX","Flight":"CX000","From":"HKG","To":"NRT","Aircraft":"Airbus A350","Duration":"4h 00m","Distance":2400,"Cabin":"Business","Status":"Completed"},{"Date":"2023-09-20","Airline":"NH","Flight":"NH101","From":"NRT","To":"HND","Aircraft":"Boeing 777-300","Duration":"1h 15m","Distance":560,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-09-22","Airline":"JL","Flight":"JL202","From":"HND","To":"KIX","Aircraft":"Airbus A320","Duration":"2h 15m","Distance":1100,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-09-24","Airline":"MU","Flight":"MU303","From":"KIX","To":"SHA","Aircraft":"Boeing 787-9","Duration":"2h 00m","Distance":1100,"Cabin":"Business","Status":"Completed"},{"Date":"2023-09-26","Airline":"MU","Flight":"MU404","From":"SHA","To":"PEK","Aircraft":"Boeing 777-200","Duration":"2h 30m","Distance":1200,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-09-28","Airline":"CA","Flight":"CA505","From":"PEK","To":"DEL","Aircraft":"Boeing 737-800","Duration":"5h 15m","Distance":2450,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-09-30","Airline":"AI","Flight":"AI606","From":"DEL","To":"BOM","Aircraft":"Airbus A320neo","Duration":"2h 15m","Distance":900,"Cabin":"Business","Status":"Completed"},{"Date":"2023-10-02","Airline":"6E","Flight":"6E707","From":"BOM","To":"BLR","Aircraft":"Boeing 737-800","Duration":"1h 45m","Distance":680,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-10-04","Airline":"SG","Flight":"SG808","From":"BLR","To":"HYD","Aircraft":"Airbus A320","Duration":"1h 30m","Distance":520,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-10-06","Airline":"AI","Flight":"AI909","From":"HYD","To":"MAA","Aircraft":"Boeing 737-800","Duration":"1h 15m","Distance":580,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-10-08","Airline":"6E","Flight":"6E010","From":"MAA","To":"COK","Aircraft":"Airbus A321","Duration":"1h 30m","Distance":680,"Cabin":"Business","Status":"Completed"},{"Date":"2023-10-10","Airline":"SG","Flight":"SG111","From":"COK","To":"BOM","Aircraft":"Airbus A320neo","Duration":"2h 15m","Distance":1050,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-10-12","Airline":"AI","Flight":"AI212","From":"BOM","To":"PNQ","Aircraft":"Boeing 737-800","Duration":"1h 45m","Distance":780,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-10-14","Airline":"6E","Flight":"6E313","From":"PNQ","To":"BLR","Aircraft":"Airbus A320","Duration":"2h 00m","Distance":950,"Cabin":"Business","Status":"Completed"},{"Date":"2023-10-16","Airline":"SG","Flight":"SG414","From":"BLR","To":"CCU","Aircraft":"Boeing 737-800","Duration":"2h 30m","Distance":1180,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-10-18","Airline":"AI","Flight":"AI515","From":"CCU","To":"DEL","Aircraft":"Airbus A321","Duration":"2h 45m","Distance":1200,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-10-20","Airline":"6E","Flight":"6E616","From":"DEL","To":"IXC","Aircraft":"Airbus A320neo","Duration":"1h 30m","Distance":480,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-10-22","Airline":"SG","Flight":"SG717","From":"IXC","To":"GOI","Aircraft":"Boeing 737-800","Duration":"4h 00m","Distance":1650,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-10-24","Airline":"AI","Flight":"AI818","From":"GOI","To":"BOM","Aircraft":"Airbus A320","Duration":"1h 00m","Distance":450,"Cabin":"Business","Status":"Completed"},{"Date":"2023-10-26","Airline":"6E","Flight":"6E919","From":"BOM","To":"DXB","Aircraft":"Boeing 737-800","Duration":"3h 45m","Distance":1800,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-10-28","Airline":"EK","Flight":"EK020","From":"DXB","To":"SIN","Aircraft":"Boeing 777-300","Duration":"3h 30m","Distance":2200,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-10-30","Airline":"SQ","Flight":"SQ121","From":"SIN","To":"BKK","Aircraft":"Airbus A330","Duration":"2h 30m","Distance":1300,"Cabin":"Business","Status":"Completed"},{"Date":"2023-11-01","Airline":"TG","Flight":"TG222","From":"BKK","To":"KUL","Aircraft":"Boeing 737-800","Duration":"1h 45m","Distance":900,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-11-03","Airline":"MH","Flight":"MH323","From":"KUL","To":"AMS","Aircraft":"Boeing 777-200","Duration":"11h 00m","Distance":8400,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-11-05","Airline":"KL","Flight":"KL424","From":"AMS","To":"LHR","Aircraft":"Airbus A350","Duration":"1h 15m","Distance":350,"Cabin":"Business","Status":"Completed"},{"Date":"2023-11-07","Airline":"BA","Flight":"BA525","From":"LHR","To":"CDG","Aircraft":"Boeing 747-8","Duration":"1h 20m","Distance":380,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-11-09","Airline":"AF","Flight":"AF626","From":"CDG","To":"LAX","Aircraft":"Boeing 787-9","Duration":"10h 30m","Distance":8900,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-11-11","Airline":"AA","Flight":"AA727","From":"LAX","To":"ORD","Aircraft":"Boeing 737-800","Duration":"4h 00m","Distance":2000,"Cabin":"Business","Status":"Completed"},{"Date":"2023-11-13","Airline":"UA","Flight":"UA828","From":"ORD","To":"JFK","Aircraft":"Boeing 787-8","Duration":"2h 45m","Distance":1450,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-11-15","Airline":"AA","Flight":"AA929","From":"JFK","To":"MIA","Aircraft":"Airbus A320","Duration":"3h 00m","Distance":1280,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-11-17","Airline":"AA","Flight":"AA030","From":"MIA","To":"SEA","Aircraft":"Boeing 737-800","Duration":"5h 15m","Distance":2720,"Cabin":"Business","Status":"Completed"},{"Date":"2023-11-19","Airline":"DL","Flight":"DL131","From":"SEA","To":"PEK","Aircraft":"Boeing 777-200","Duration":"11h 00m","Distance":5200,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-11-21","Airline":"MU","Flight":"MU232","From":"PEK","To":"SHA","Aircraft":"Boeing 737-800","Duration":"2h 30m","Distance":1200,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-11-23","Airline":"MU","Flight":"MU333","From":"SHA","To":"HKG","Aircraft":"Airbus A320neo","Duration":"2h 45m","Distance":1400,"Cabin":"Business","Status":"Completed"},{"Date":"2023-11-25","Airline":"CX","Flight":"CX434","From":"HKG","To":"SIN","Aircraft":"Boeing 777-300","Duration":"4h 00m","Distance":2000,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-11-27","Airline":"SQ","Flight":"SQ535","From":"SIN","To":"DPS","Aircraft":"Airbus A330","Duration":"2h 15m","Distance":1100,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-11-29","Airline":"GA","Flight":"GA636","From":"DPS","To":"CGK","Aircraft":"Boeing 737-800","Duration":"2h 00m","Distance":900,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-12-01","Airline":"SQ","Flight":"SQ737","From":"CGK","To":"SIN","Aircraft":"Airbus A330","Duration":"2h 30m","Distance":1300,"Cabin":"Business","Status":"Completed"},{"Date":"2023-12-03","Airline":"SQ","Flight":"SQ838","From":"SIN","To":"DEL","Aircraft":"Boeing 777-300","Duration":"5h 00m","Distance":2700,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-12-05","Airline":"AI","Flight":"AI939","From":"DEL","To":"BOM","Aircraft":"Airbus A320neo","Duration":"2h 15m","Distance":900,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-12-07","Airline":"6E","Flight":"6E040","From":"BOM","To":"BLR","Aircraft":"Boeing 737-800","Duration":"1h 45m","Distance":680,"Cabin":"Business","Status":"Completed"},{"Date":"2023-12-09","Airline":"SG","Flight":"SG141","From":"BLR","To":"HYD","Aircraft":"Airbus A320","Duration":"1h 30m","Distance":520,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-12-11","Airline":"AI","Flight":"AI242","From":"HYD","To":"MAA","Aircraft":"Boeing 737-800","Duration":"1h 15m","Distance":580,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-12-13","Airline":"6E","Flight":"6E343","From":"MAA","To":"COK","Aircraft":"Airbus A321","Duration":"1h 30m","Distance":680,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-12-15","Airline":"ETH","Flight":"ETH263","From":"VIE","To":"JFK","Aircraft":"Airbus A320","Duration":"15h 14m","Distance":6805,"Cabin":"First","Status":"Completed"},{"Date":"2023-12-17","Airline":"BAW","Flight":"BAW920","From":"LAS","To":"AMS","Aircraft":"Airbus A320neo","Duration":"21h 36m","Distance":9972,"Cabin":"Business","Status":"Completed"},{"Date":"2023-12-18","Airline":"ETH","Flight":"ETH183","From":"DEL","To":"ORD","Aircraft":"Airbus A319","Duration":"3h 58m","Distance":1168,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-12-20","Airline":"SEJ","Flight":"SEJ737","From":"DFW","To":"ORD","Aircraft":"Boeing 737 MAX 8","Duration":"18h 57m","Distance":8042,"Cabin":"First","Status":"Completed"},{"Date":"2023-12-22","Airline":"GOW","Flight":"GOW228","From":"COK","To":"JFK","Aircraft":"Airbus A319","Duration":"11h 53m","Distance":5186,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-12-23","Airline":"VTI","Flight":"VTI551","From":"KUL","To":"CCU","Aircraft":"Airbus A320neo","Duration":"20h 44m","Distance":9409,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-12-25","Airline":"UAE","Flight":"UAE683","From":"JFK","To":"HYD","Aircraft":"Boeing 737 MAX 8","Duration":"18h 34m","Distance":8272,"Cabin":"Business","Status":"Completed"},{"Date":"2023-12-27","Airline":"AXB","Flight":"AXB797","From":"MAA","To":"SIN","Aircraft":"Airbus A321","Duration":"13h 35m","Distance":5766,"Cabin":"Premium Economy","Status":"Completed"},{"Date":"2023-12-28","Airline":"QTR","Flight":"QTR235","From":"JFK","To":"MIA","Aircraft":"ATR 72","Duration":"20h 9m","Distance":9991,"Cabin":"Economy","Status":"Completed"},{"Date":"2023-12-30","Airline":"LUX","Flight":"LUX813","From":"DEN","To":"FCO","Aircraft":"Airbus A319","Duration":"11h 45m","Distance":4967,"Cabin":"Premium Economy","Status":"Completed"}];
+
+const COUNTRY_FLAGS = {
+    'India': '🇮🇳', 'USA': '🇺🇸', 'UAE': '🇦🇪', 'Singapore': '🇸🇬', 'Thailand': '🇹🇭',
+    'Malaysia': '🇲🇾', 'Indonesia': '🇮🇩', 'China': '🇨🇳', 'Japan': '🇯🇵', 'Qatar': '🇶🇦',
+    'Netherlands': '🇳🇱', 'UK': '🇬🇧', 'France': '🇫🇷', 'Germany': '🇩🇪', 'Spain': '🇪🇸',
+    'Italy': '🇮🇹', 'Austria': '🇦🇹', 'Switzerland': '🇨🇭', 'Australia': '🇦🇺', 'Saudi Arabia': '🇸🇦',
+    'Greece': '🇬🇷', 'Turkey': '🇹🇷', 'Hong Kong': '🇭🇰', 'Taiwan': '🇹🇼'
+};
+
+const AIRPORT_COUNTRY = {
+    'DEL': 'India', 'BOM': 'India', 'BLR': 'India', 'HYD': 'India', 'COK': 'India', 'MAA': 'India',
+    'PNQ': 'India', 'CCU': 'India', 'JAI': 'India', 'IXC': 'India', 'GOI': 'India',
+    'DPS': 'Indonesia', 'SIN': 'Singapore', 'KUL': 'Malaysia', 'BKK': 'Thailand', 'HKT': 'Thailand',
+    'PEK': 'China', 'SHA': 'China', 'HND': 'Japan', 'DXB': 'UAE', 'AUH': 'UAE', 'DOH': 'Qatar',
+    'JED': 'Saudi Arabia', 'LAX': 'USA', 'SFO': 'USA', 'JFK': 'USA', 'ORD': 'USA', 'DFW': 'USA',
+    'DEN': 'USA', 'LAS': 'USA', 'MIA': 'USA', 'SEA': 'USA', 'LHR': 'UK', 'CDG': 'France',
+    'FRA': 'Germany', 'AMS': 'Netherlands', 'ZRH': 'Switzerland', 'VIE': 'Austria', 'MAD': 'Spain',
+    'FCO': 'Italy', 'MXP': 'Italy', 'ATH': 'Greece', 'IST': 'Turkey', 'HKG': 'Hong Kong',
+    'BCN': 'Spain', 'NRT': 'Japan', 'KIX': 'Japan', 'SYD': 'Australia', 'MEL': 'Australia',
+    'BNE': 'Australia', 'PER': 'Australia', 'CGK': 'Indonesia'
+};
+
+function renderDashboard() {
+    const countries = new Map();
+    const airlines = new Map();
+    let totalDistance = 0;
+    let totalFlights = flights224.length;
+    const airports = new Set();
+
+    flights224.forEach(f => {
+        airports.add(f.From);
+        airports.add(f.To);
+        totalDistance += f.Distance;
+
+        const fromCountry = AIRPORT_COUNTRY[f.From] || 'Unknown';
+        const toCountry = AIRPORT_COUNTRY[f.To] || 'Unknown';
+        countries.set(fromCountry, (countries.get(fromCountry) || 0) + 1);
+        countries.set(toCountry, (countries.get(toCountry) || 0) + 1);
+
+        airlines.set(f.Airline, (airlines.get(f.Airline) || 0) + 1);
+    });
+
+    // Update KPIs
+    const kpiData = [
+        { label: 'Total Flights', value: totalFlights },
+        { label: 'Total Distance', value: (totalDistance / 1000).toFixed(0) + 'k km' },
+        { label: 'Airports Visited', value: airports.size },
+        { label: 'Countries', value: countries.size },
+        { label: 'Airlines', value: airlines.size },
+        { label: 'Avg Distance', value: Math.round(totalDistance / totalFlights) + ' km' },
+        { label: 'Longest Flight', value: Math.max(...flights224.map(f => f.Distance)) + ' km' },
+        { label: 'Year', value: '2023' }
+    ];
+
+    document.getElementById('kpiGrid').innerHTML = kpiData.map(kpi => `
+        <div class="kpi-card">
+            <div class="kpi-value">${kpi.value}</div>
+            <div class="kpi-label">${kpi.label}</div>
+        </div>
+    `).join('');
+
+    // Update globe stats
+    document.getElementById('globeStats').textContent = `${totalFlights} flights • ${airports.size} airports`;
+
+    // Update countries - top 8
+    const sortedCountries = Array.from(countries.entries())
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 8);
+
+    document.getElementById('countryGrid').innerHTML = sortedCountries.map(([country, count]) => {
+        const flag = COUNTRY_FLAGS[country] || '🌍';
+        return `
+            <div class="country-card">
+                <div class="country-flag">${flag}</div>
+                <div class="country-info">
+                    <div class="country-name">${country}</div>
+                    <div class="country-stat">${count} flights</div>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    // Update airlines - top 8
+    const maxFlights = Math.max(...Array.from(airlines.values()));
+    document.getElementById('airlineGrid').innerHTML = Array.from(airlines.entries())
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 8)
+        .map(([code, count]) => {
+            const percentage = (count / maxFlights) * 100;
+            return `
+                <div class="airline-card">
+                    <div class="airline-name">${code}</div>
+                    <div class="airline-flights">${count} flights</div>
+                    <div class="airline-progress">
+                        <div class="airline-progress-bar" style="width: ${percentage}%"></div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+}
+
+renderDashboard();
+</script>

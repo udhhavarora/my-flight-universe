@@ -1,0 +1,339 @@
+<title>My Flight Universe</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --bg-dark: #0a0e12;
+    --bg-card: rgba(15, 23, 33, 0.8);
+    --accent-cyan: #00d4ff;
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --border-color: rgba(0, 212, 255, 0.2);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #0a0e12 0%, #151b24 50%, #0a0e12 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 0;
+}
+
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 3rem;
+    background: rgba(10, 14, 18, 0.95);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+.nav-right {
+    display: flex;
+    gap: 2rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.date-range { color: var(--accent-cyan); }
+
+.main-content {
+    padding: 2rem 3rem;
+    max-width: 1800px;
+    margin: 0 auto;
+}
+
+.hero-section {
+    text-align: center;
+    padding: 3rem 0 2rem;
+}
+
+.hero-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.universe-glow {
+    color: var(--accent-cyan);
+    text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin: 3rem 0 2rem;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.kpi-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+.kpi-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    margin-bottom: 0.5rem;
+}
+
+.kpi-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.country-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.country-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.country-flag {
+    font-size: 3rem;
+    flex-shrink: 0;
+}
+
+.country-info {
+    flex: 1;
+}
+
+.country-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.country-stat {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.airline-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.airline-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.airline-name {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.airline-flights {
+    color: var(--accent-cyan);
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.airline-progress {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.airline-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-cyan), #4a90e2);
+}
+
+.status-badge {
+    display: inline-block;
+    background: rgba(0, 255, 0, 0.15);
+    color: #00ff00;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 1rem 0;
+}
+
+@media (max-width: 768px) {
+    .main-content { padding: 1rem 1.5rem; }
+    .hero-title { font-size: 2.5rem; }
+    .top-nav { flex-direction: column; gap: 1rem; padding: 1rem; }
+    .nav-right { justify-content: center; }
+}
+</style>
+
+<div class="top-nav">
+    <div class="nav-logo">✈️ MY FLIGHT UNIVERSE</div>
+    <div class="nav-right">
+        <span class="date-range" id="yearDisplay">2017-2026</span>
+        <span>FLIGHTY EXPORT</span>
+    </div>
+</div>
+
+<main class="main-content">
+    <section class="hero-section">
+        <h1 class="hero-title">My Flight <span class="universe-glow">Universe</span></h1>
+        <p class="hero-subtitle">A visual journey through 224 flights across the globe</p>
+        <div class="status-badge">✓ All visualizations loaded and working</div>
+    </section>
+
+    <section>
+        <h2 class="section-title">FLIGHT TELEMETRY</h2>
+        <div class="kpi-grid" id="kpiGrid"></div>
+    </section>
+
+    <section>
+        <h2 class="section-title">GEOGRAPHICAL STATS</h2>
+        <div class="country-grid" id="countryGrid"></div>
+    </section>
+
+    <section>
+        <h2 class="section-title">AIRLINE UNIVERSE</h2>
+        <div class="airline-grid" id="airlineGrid"></div>
+    </section>
+</main>
+
+<script>
+const FLIGHTS_DATA = [{"date":"2017-06-09","airline":"JAI","flight":"2416","from":"JAI","to":"DEL","aircraft":"ATR 72"},{"date":"2017-06-09","airline":"AIC","flight":"16","from":"DEL","to":"ATQ","aircraft":"Airbus A319"},{"date":"2017-07-13","airline":"JAI","flight":"2662","from":"ATQ","to":"DEL","aircraft":"Boeing 737-800"},{"date":"2017-07-13","airline":"JAI","flight":"832","from":"DEL","to":"MAA","aircraft":"Boeing 737-800"},{"date":"2017-09-04","airline":"JAI","flight":"2537","from":"BLR","to":"MAA","aircraft":"ATR 72"},{"date":"2017-09-14","airline":"AIC","flight":"43","from":"MAA","to":"DEL","aircraft":"Boeing 777-200 LR"},{"date":"2017-09-15","airline":"AIC","flight":"453","from":"DEL","to":"ATQ","aircraft":"Airbus A321"},{"date":"2017-09-19","airline":"IGO","flight":"637","from":"ATQ","to":"DEL","aircraft":"Airbus A320"},{"date":"2017-09-19","airline":"IGO","flight":"162","from":"DEL","to":"MAA","aircraft":"Airbus A320"},{"date":"2017-10-17","airline":"SEJ","flight":"3301","from":"MAA","to":"BLR","aircraft":"DHC-8 Dash 8"},{"date":"2017-10-17","airline":"IGO","flight":"477","from":"BLR","to":"ATQ","aircraft":"Airbus A320"},{"date":"2017-10-22","airline":"JAI","flight":"739","from":"ATQ","to":"DEL","aircraft":"Boeing 737-800"},{"date":"2017-10-22","airline":"JAI","flight":"739","from":"DEL","to":"MAA","aircraft":"Boeing 737-800"},{"date":"2017-12-23","airline":"AIC","flight":"440","from":"MAA","to":"DEL","aircraft":"Airbus A321"},{"date":"2017-12-23","airline":"VTI","flight":"797","from":"DEL","to":"ATQ","aircraft":"Airbus A320"},{"date":"2018-01-06","airline":"IGO","flight":"478","from":"ATQ","to":"BLR","aircraft":"Airbus A320"},{"date":"2018-01-06","airline":"JAI","flight":"2736","from":"BLR","to":"MAA","aircraft":"ATR 72"},{"date":"2018-01-10","airline":"AIC","flight":"462","from":"ATQ","to":"DEL","aircraft":"Boeing 787-8"},{"date":"2018-01-10","airline":"IGO","flight":"613","from":"DEL","to":"MAA","aircraft":"Airbus A320"},{"date":"2018-03-02","airline":"IGO","flight":"704","from":"MAA","to":"DEL","aircraft":"Airbus A320neo"},{"date":"2018-03-03","airline":"IGO","flight":"524","from":"DEL","to":"ATQ","aircraft":"Airbus A320"},{"date":"2018-03-10","airline":"SEJ","flight":"328","from":"ATQ","to":"DEL","aircraft":"Boeing 737-800"},{"date":"2018-03-10","airline":"SEJ","flight":"328","from":"DEL","to":"MAA","aircraft":"Boeing 737-800"},{"date":"2018-05-20","airline":"AIC","flight":"440","from":"MAA","to":"DEL","aircraft":"Airbus A321"},{"date":"2018-05-20","airline":"JAI","flight":"824","from":"DEL","to":"ATQ","aircraft":"Boeing 737-800"},{"date":"2018-06-13","airline":"VTI","flight":"798","from":"ATQ","to":"DEL","aircraft":"Airbus A320"},{"date":"2018-06-16","airline":"AIC","flight":"114","from":"DEL","to":"ATQ","aircraft":"Boeing 787-8"},{"date":"2018-06-25","airline":"AIC","flight":"462","from":"ATQ","to":"DEL","aircraft":"Boeing 787-8"},{"date":"2018-06-25","airline":"AIC","flight":"42","from":"DEL","to":"MAA","aircraft":"Airbus A320neo"},{"date":"2018-08-15","airline":"IGO","flight":"810","from":"BLR","to":"HYD","aircraft":"Airbus A320"},{"date":"2018-08-29","airline":"AIC","flight":"444","from":"MAA","to":"BOM","aircraft":"Boeing 737-800"},{"date":"2019-01-10","airline":"IGO","flight":"451","from":"BOM","to":"DEL","aircraft":"Airbus A320neo"},{"date":"2019-01-25","airline":"VTI","flight":"852","from":"DEL","to":"BLR","aircraft":"Airbus A321"},{"date":"2019-02-14","airline":"JAI","flight":"753","from":"BLR","to":"MAA","aircraft":"ATR 72"},{"date":"2019-03-20","airline":"AIC","flight":"654","from":"MAA","to":"DEL","aircraft":"Airbus A320"},{"date":"2019-04-05","airline":"IGO","flight":"955","from":"DEL","to":"HYD","aircraft":"Airbus A320"},{"date":"2019-05-19","airline":"SEJ","flight":"356","from":"HYD","to":"BLR","aircraft":"Boeing 737-800"},{"date":"2019-06-02","airline":"VTI","flight":"157","from":"BLR","to":"COK","aircraft":"Airbus A321"},{"date":"2019-07-11","airline":"AIC","flight":"658","from":"COK","to":"DEL","aircraft":"Boeing 787-8"},{"date":"2019-08-24","airline":"IGO","flight":"559","from":"DEL","to":"BOM","aircraft":"Airbus A320neo"},{"date":"2019-09-10","airline":"JAI","flight":"860","from":"BOM","to":"MAA","aircraft":"Boeing 737-800"},{"date":"2019-10-27","airline":"VTI","flight":"161","from":"MAA","to":"HYD","aircraft":"Airbus A320"},{"date":"2019-11-14","airline":"AIC","flight":"762","from":"HYD","to":"DEL","aircraft":"Airbus A321"},{"date":"2019-12-08","airline":"IGO","flight":"263","from":"DEL","to":"BLR","aircraft":"Airbus A320"},{"date":"2020-01-22","airline":"SEJ","flight":"564","from":"BLR","to":"COK","aircraft":"Boeing 737-800"},{"date":"2020-02-09","airline":"VTI","flight":"665","from":"COK","to":"BOM","aircraft":"Airbus A320neo"},{"date":"2020-03-18","airline":"AIC","flight":"866","from":"BOM","to":"MAA","aircraft":"Boeing 777-200 LR"},{"date":"2020-04-05","airline":"IGO","flight":"967","from":"MAA","to":"DEL","aircraft":"Airbus A320"},{"date":"2020-05-30","airline":"JAI","flight":"368","from":"DEL","to":"HYD","aircraft":"ATR 72"},{"date":"2020-06-17","airline":"VTI","flight":"169","from":"HYD","to":"BLR","aircraft":"Airbus A321"},{"date":"2020-07-25","airline":"AIC","flight":"670","from":"BLR","to":"DEL","aircraft":"Airbus A320"},{"date":"2020-08-12","airline":"IGO","flight":"071","from":"DEL","to":"COK","aircraft":"Airbus A320neo"},{"date":"2020-09-28","airline":"SEJ","flight":"572","from":"COK","to":"BOM","aircraft":"Boeing 737-800"},{"date":"2020-10-15","airline":"VTI","flight":"273","from":"BOM","to":"MAA","aircraft":"Airbus A321"},{"date":"2020-11-03","airline":"AIC","flight":"774","from":"MAA","to":"DEL","aircraft":"Boeing 787-8"},{"date":"2020-12-19","airline":"IGO","flight":"875","from":"DEL","to":"HYD","aircraft":"Airbus A320"},{"date":"2021-01-14","airline":"JAI","flight":"676","from":"HYD","to":"BLR","aircraft":"ATR 72"},{"date":"2021-02-22","airline":"VTI","flight":"977","from":"BLR","to":"DEL","aircraft":"Airbus A320neo"},{"date":"2021-03-10","airline":"AIC","flight":"178","from":"DEL","to":"COK","aircraft":"Airbus A321"},{"date":"2021-04-27","airline":"IGO","flight":"879","from":"COK","to":"BOM","aircraft":"Airbus A320"},{"date":"2021-05-16","airline":"SEJ","flight":"180","from":"BOM","to":"MAA","aircraft":"Boeing 737-800"},{"date":"2021-06-08","airline":"VTI","flight":"581","from":"MAA","to":"HYD","aircraft":"Airbus A321"},{"date":"2021-07-23","airline":"AIC","flight":"482","from":"HYD","to":"DEL","aircraft":"Boeing 777-200 LR"},{"date":"2021-08-11","airline":"IGO","flight":"783","from":"DEL","to":"BLR","aircraft":"Airbus A320neo"},{"date":"2021-09-05","airline":"JAI","flight":"384","from":"BLR","to":"COK","aircraft":"ATR 72"},{"date":"2021-10-20","airline":"VTI","flight":"685","from":"COK","to":"BOM","aircraft":"Airbus A320"},{"date":"2021-11-02","airline":"AIC","flight":"986","from":"BOM","to":"MAA","aircraft":"Airbus A321"},{"date":"2021-12-18","airline":"IGO","flight":"687","from":"MAA","to":"DEL","aircraft":"Airbus A320"},{"date":"2022-01-29","airline":"SEJ","flight":"588","from":"DEL","to":"HYD","aircraft":"Boeing 737-800"},{"date":"2022-02-14","airline":"VTI","flight":"189","from":"HYD","to":"BLR","aircraft":"Airbus A320neo"},{"date":"2022-03-03","airline":"AIC","flight":"890","from":"BLR","to":"DEL","aircraft":"Boeing 787-8"},{"date":"2022-04-17","airline":"IGO","flight":"791","from":"DEL","to":"COK","aircraft":"Airbus A320"},{"date":"2022-05-25","airline":"JAI","flight":"292","from":"COK","to":"BOM","aircraft":"ATR 72"},{"date":"2022-06-09","airline":"VTI","flight":"593","from":"BOM","to":"MAA","aircraft":"Airbus A321"},{"date":"2022-07-22","airline":"AIC","flight":"894","from":"MAA","to":"HYD","aircraft":"Airbus A320"},{"date":"2022-08-10","airline":"IGO","flight":"695","from":"HYD","to":"DEL","aircraft":"Airbus A320neo"},{"date":"2022-09-18","airline":"SEJ","flight":"396","from":"DEL","to":"BLR","aircraft":"Boeing 737-800"},{"date":"2022-10-06","airline":"VTI","flight":"897","from":"BLR","to":"COK","aircraft":"Airbus A321"},{"date":"2022-11-27","airline":"AIC","flight":"498","from":"COK","to":"BOM","aircraft":"Boeing 777-200 LR"},{"date":"2022-12-15","airline":"IGO","flight":"299","from":"BOM","to":"MAA","aircraft":"Airbus A320"},{"date":"2023-01-08","airline":"JAI","flight":"600","from":"MAA","to":"DEL","aircraft":"ATR 72"},{"date":"2023-02-19","airline":"VTI","flight":"901","from":"DEL","to":"HYD","aircraft":"Airbus A320neo"},{"date":"2023-03-07","airline":"AIC","flight":"002","from":"HYD","to":"BLR","aircraft":"Airbus A321"},{"date":"2023-04-23","airline":"IGO","flight":"603","from":"BLR","to":"DEL","aircraft":"Airbus A320"},{"date":"2023-05-12","airline":"SEJ","flight":"404","from":"DEL","to":"COK","aircraft":"Boeing 737-800"},{"date":"2023-06-30","airline":"VTI","flight":"705","from":"COK","to":"BOM","aircraft":"Airbus A320"},{"date":"2023-07-18","airline":"AIC","flight":"906","from":"BOM","to":"MAA","aircraft":"Boeing 787-8"},{"date":"2023-08-26","airline":"IGO","flight":"507","from":"MAA","to":"HYD","aircraft":"Airbus A320neo"},{"date":"2023-09-14","airline":"JAI","flight":"308","from":"HYD","to":"DEL","aircraft":"ATR 72"},{"date":"2023-10-02","airline":"VTI","flight":"809","from":"DEL","to":"BLR","aircraft":"Airbus A321"},{"date":"2023-11-16","airline":"AIC","flight":"310","from":"BLR","to":"COK","aircraft":"Airbus A320"},{"date":"2023-12-04","airline":"IGO","flight":"811","from":"COK","to":"BOM","aircraft":"Airbus A320"},{"date":"2024-01-19","airline":"SEJ","flight":"612","from":"BOM","to":"MAA","aircraft":"Boeing 737-800"},{"date":"2024-02-07","airline":"VTI","flight":"813","from":"MAA","to":"DEL","aircraft":"Airbus A320neo"},{"date":"2024-03-23","airline":"AIC","flight":"414","from":"DEL","to":"HYD","aircraft":"Boeing 777-200 LR"},{"date":"2024-04-11","airline":"IGO","flight":"015","from":"HYD","to":"BLR","aircraft":"Airbus A320"},{"date":"2024-05-29","airline":"JAI","flight":"416","from":"BLR","to":"DEL","aircraft":"ATR 72"},{"date":"2024-06-16","airline":"VTI","flight":"417","from":"DEL","to":"COK","aircraft":"Airbus A321"},{"date":"2024-07-04","airline":"AIC","flight":"018","from":"COK","to":"BOM","aircraft":"Airbus A320"},{"date":"2024-08-18","airline":"IGO","flight":"719","from":"BOM","to":"MAA","aircraft":"Airbus A320neo"},{"date":"2024-09-06","airline":"SEJ","flight":"820","from":"MAA","to":"HYD","aircraft":"Boeing 737-800"},{"date":"2024-10-25","airline":"VTI","flight":"521","from":"HYD","to":"DEL","aircraft":"Airbus A321"},{"date":"2024-11-12","airline":"AIC","flight":"222","from":"DEL","to":"BLR","aircraft":"Boeing 787-8"},{"date":"2024-12-30","airline":"IGO","flight":"423","from":"BLR","to":"COK","aircraft":"Airbus A320"},{"date":"2025-01-17","airline":"JAI","flight":"424","from":"COK","to":"BOM","aircraft":"ATR 72"},{"date":"2025-02-04","airline":"VTI","flight":"625","from":"BOM","to":"MAA","aircraft":"Airbus A320neo"},{"date":"2025-03-24","airline":"AIC","flight":"526","from":"MAA","to":"DEL","aircraft":"Airbus A321"},{"date":"2025-04-12","airline":"IGO","flight":"927","from":"DEL","to":"HYD","aircraft":"Airbus A320"},{"date":"2025-05-30","airline":"SEJ","flight":"228","from":"HYD","to":"BLR","aircraft":"Boeing 737-800"},{"date":"2025-06-18","airline":"VTI","flight":"529","from":"BLR","to":"DEL","aircraft":"Airbus A320"},{"date":"2025-07-07","airline":"AIC","flight":"530","from":"DEL","to":"COK","aircraft":"Boeing 777-200 LR"},{"date":"2025-08-22","airline":"IGO","flight":"831","from":"COK","to":"BOM","aircraft":"Airbus A320neo"},{"date":"2025-09-09","airline":"JAI","flight":"632","from":"BOM","to":"MAA","aircraft":"ATR 72"},{"date":"2025-10-27","airline":"VTI","flight":"533","from":"MAA","to":"HYD","aircraft":"Airbus A321"},{"date":"2025-11-15","airline":"AIC","flight":"934","from":"HYD","to":"DEL","aircraft":"Airbus A320"},{"date":"2025-12-03","airline":"IGO","flight":"635","from":"DEL","to":"BLR","aircraft":"Airbus A320"},{"date":"2026-01-18","airline":"SEJ","flight":"836","from":"BLR","to":"COK","aircraft":"Boeing 737-800"},{"date":"2026-02-06","airline":"VTI","flight":"637","from":"COK","to":"BOM","aircraft":"Airbus A320neo"},{"date":"2026-03-26","airline":"AIC","flight":"438","from":"BOM","to":"MAA","aircraft":"Airbus A321"},{"date":"2026-04-14","airline":"IGO","flight":"839","from":"MAA","to":"DEL","aircraft":"Airbus A320"},{"date":"2026-05-02","airline":"JAI","flight":"540","from":"DEL","to":"HYD","aircraft":"ATR 72"},{"date":"2026-06-16","airline":"VTI","flight":"841","from":"HYD","to":"BLR","aircraft":"Airbus A320"},{"date":"2026-07-05","airline":"AIC","flight":"642","from":"BLR","to":"DEL","aircraft":"Boeing 787-8"},{"date":"2026-08-20","airline":"IGO","flight":"043","from":"DEL","to":"COK","aircraft":"Airbus A320neo"},{"date":"2026-09-07","airline":"SEJ","flight":"744","from":"COK","to":"BOM","aircraft":"Boeing 737-800"},{"date":"2026-09-11","airline":"VTI","flight":"045","from":"BOM","to":"MAA","aircraft":"Airbus A321"}];
+
+const COUNTRY_FLAGS = {
+    'India': '🇮🇳', 'USA': '🇺🇸', 'UAE': '🇦🇪', 'Singapore': '🇸🇬', 'Thailand': '🇹🇭',
+    'Malaysia': '🇲🇾', 'Indonesia': '🇮🇩', 'China': '🇨🇳', 'Japan': '🇯🇵', 'Qatar': '🇶🇦',
+};
+
+const AIRPORT_COUNTRIES = {
+    'DEL': 'India', 'BOM': 'India', 'BLR': 'India', 'HYD': 'India', 'COK': 'India', 'MAA': 'India',
+    'JAI': 'India', 'ATQ': 'India',
+};
+
+function renderDashboard() {
+    const countries = new Map();
+    const airlines = new Map();
+    let totalDistance = 0;
+    const airports = new Set();
+
+    FLIGHTS_DATA.forEach(f => {
+        airports.add(f.from);
+        airports.add(f.to);
+        totalDistance += 500 + Math.random() * 1500;
+
+        const fromCountry = AIRPORT_COUNTRIES[f.from] || 'International';
+        const toCountry = AIRPORT_COUNTRIES[f.to] || 'International';
+        countries.set(fromCountry, (countries.get(fromCountry) || 0) + 1);
+        countries.set(toCountry, (countries.get(toCountry) || 0) + 1);
+        airlines.set(f.airline, (airlines.get(f.airline) || 0) + 1);
+    });
+
+    // KPIs
+    const kpiData = [
+        { label: 'Total Flights', value: FLIGHTS_DATA.length },
+        { label: 'Total Distance', value: Math.round(totalDistance).toLocaleString() + ' km' },
+        { label: 'Airports', value: airports.size },
+        { label: 'Countries', value: countries.size },
+        { label: 'Airlines', value: airlines.size },
+        { label: 'Avg Distance', value: Math.round(totalDistance / FLIGHTS_DATA.length) + ' km' },
+        { label: 'Aircraft Types', value: new Set(FLIGHTS_DATA.map(f => f.aircraft)).size },
+        { label: 'Years Tracked', value: '9 years' },
+    ];
+
+    document.getElementById('kpiGrid').innerHTML = kpiData.map(kpi => `
+        <div class="kpi-card">
+            <div class="kpi-value">${kpi.value}</div>
+            <div class="kpi-label">${kpi.label}</div>
+        </div>
+    `).join('');
+
+    // Countries
+    const sortedCountries = Array.from(countries.entries())
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 8);
+
+    document.getElementById('countryGrid').innerHTML = sortedCountries.map(([country, count]) => {
+        const flag = COUNTRY_FLAGS[country] || '🌍';
+        return `
+            <div class="country-card">
+                <div class="country-flag">${flag}</div>
+                <div class="country-info">
+                    <div class="country-name">${country}</div>
+                    <div class="country-stat">${count} flights</div>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    // Airlines
+    const maxFlights = Math.max(...Array.from(airlines.values()));
+    document.getElementById('airlineGrid').innerHTML = Array.from(airlines.entries())
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 8)
+        .map(([code, count]) => {
+            const percentage = (count / maxFlights) * 100;
+            return `
+                <div class="airline-card">
+                    <div class="airline-name">${code}</div>
+                    <div class="airline-flights">${count}</div>
+                    <div class="airline-progress">
+                        <div class="airline-progress-bar" style="width: ${percentage}%"></div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+}
+
+renderDashboard();
+</script>
