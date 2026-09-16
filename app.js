@@ -486,7 +486,7 @@ function renderAirlineUniverse(flights) {
     const container = document.getElementById('airlineGrid');
     container.innerHTML = '';
 
-    // Airline wing logo mapping (using Kiwi.com CDN high-res 128px logos)
+    // Airline wing / tail fin logo mapping
     const airlineLogos = {
         'AAL': 'https://images.kiwi.com/airlines/128/AAL.png',
         'AIC': 'https://images.kiwi.com/airlines/128/AIC.png',
@@ -528,7 +528,7 @@ function renderAirlineUniverse(flights) {
         el.className = 'airline-card';
         el.dataset.airline = code;
 
-        const logoUrl = airlineLogos[code];
+        const logoUrl = airlineLogos[code] || `https://images.kiwi.com/airlines/128/${code}.png`;
         const logoHtml = logoUrl
             ? `<img src="${logoUrl}" alt="${airline.name} logo" class="airline-wing-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="airline-flag-fallback">${flag}</div>`
             : `<div class="airline-flag-fallback">${flag}</div>`;
