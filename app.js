@@ -486,7 +486,7 @@ function renderAirlineUniverse(flights) {
     const container = document.getElementById('airlineGrid');
     container.innerHTML = '';
 
-    // Airline wing logo mapping (using Kiwi.com CDN high-res 128px logos)
+    // Airline wing / tail fin logo mapping
     const airlineLogos = {
         'AAL': 'https://images.kiwi.com/airlines/128/AAL.png',
         'AIC': 'https://images.kiwi.com/airlines/128/AIC.png',
