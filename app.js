@@ -1342,66 +1342,101 @@ function renderReplayCanvas(flight, fromAirport, toAirport, progress) {
     // Clear
     ctx.clearRect(0, 0, w, h);
 
-    // Background
-    const grad = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w * 0.6);
-    grad.addColorStop(0, '#0f1c2e');
-    grad.addColorStop(1, '#060d18');
+    // Ocean background - Flightradar24 dark map style
+    const grad = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w * 0.75);
+    grad.addColorStop(0, '#0a1526');
+    grad.addColorStop(1, '#050b14');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, w, h);
 
-    // Map lat/lng to canvas coordinates with padding
-    const pad = 80;
-    const mapX = (lng) => pad + ((lng + 180) / 360) * (w - 2 * pad);
-    const mapY = (lat) => pad + ((90 - lat) / 180) * (h - 2 * pad);
+    // Calculate dynamic bounding box and projection to auto-fit and center route
+    let minLng = Math.min(fromAirport.lng, toAirport.lng);
+    let maxLng = Math.max(fromAirport.lng, toAirport.lng);
+    let minLat = Math.min(fromAirport.lat, toAirport.lat);
+    let maxLat = Math.max(fromAirport.lat, toAirport.lat);
 
-    // Draw 2D world map (use real polygons from world-atlas if loaded, else fallback)
-    const coastlines = WORLD_POLYGONS && WORLD_POLYGONS.length > 0 ? WORLD_POLYGONS : WORLD_COASTLINES_FALLBACK;
-    ctx.strokeStyle = 'rgba(0, 212, 255, 0.18)';
+    // Handle dateline crossing if necessary
+    if (Math.abs(fromAirport.lng - toAirport.lng) > 180) {
+        minLng = -180;
+        maxLng = 180;
+    }
+
+    // Add padding to lat/lng bounds (minimum span so short routes don't over-zoom)
+    const lngSpan = Math.max(35, (maxLng - minLng) * 1.5);
+    const latSpan = Math.max(25, (maxLat - minLat) * 1.5);
+    const centerLng = (minLng + maxLng) / 2;
+    const centerLat = (minLat + maxLat) / 2;
+
+    const mapMinLng = centerLng - lngSpan / 2;
+    const mapMaxLng = centerLng + lngSpan / 2;
+    const mapMinLat = Math.max(-85, centerLat - latSpan / 2);
+    const mapMaxLat = Math.min(85, centerLat + latSpan / 2);
+
+    const pad = 50;
+    const mapX = (lng) => pad + ((lng - mapMinLng) / (mapMaxLng - mapMinLng)) * (w - 2 * pad);
+    const mapY = (lat) => h - pad - ((lat - mapMinLat) / (mapMaxLat - mapMinLat)) * (h - 2 * pad);
+
+    // Subtle grid lines (Latitude & Longitude)
+    ctx.strokeStyle = 'rgba(0, 212, 255, 0.05)';
     ctx.lineWidth = 1;
+    for (let lng = Math.floor(mapMinLng / 10) * 10; lng <= mapMaxLng; lng += 10) {
+        const x = mapX(lng);
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, h);
+        ctx.stroke();
+    }
+    for (let lat = Math.floor(mapMinLat / 10) * 10; lat <= mapMaxLat; lat += 10) {
+        const y = mapY(lat);
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+    }
+
+    // Draw 2D world landmasses (solid filled polygons with country borders)
+    const polygons = WORLD_POLYGONS && WORLD_POLYGONS.length > 0 ? WORLD_POLYGONS : WORLD_COASTLINES_FALLBACK;
+
+    // Land fill
+    ctx.fillStyle = 'rgba(15, 30, 48, 0.95)';
+    ctx.strokeStyle = 'rgba(0, 212, 255, 0.25)';
+    ctx.lineWidth = 1.2;
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
-    coastlines.forEach(ring => {
-        if (ring.length < 2) return;
+
+    polygons.forEach(ring => {
+        if (!ring || ring.length < 2) return;
         ctx.beginPath();
         ctx.moveTo(mapX(ring[0][0]), mapY(ring[0][1]));
         for (let i = 1; i < ring.length; i++) {
             ctx.lineTo(mapX(ring[i][0]), mapY(ring[i][1]));
         }
+        ctx.fill();
         ctx.stroke();
     });
-
-    // Subtle grid lines
-    ctx.strokeStyle = 'rgba(0, 212, 255, 0.04)';
-    ctx.lineWidth = 0.5;
-    for (let lng = -180; lng <= 180; lng += 30) {
-        ctx.beginPath(); ctx.moveTo(mapX(lng), pad); ctx.lineTo(mapX(lng), h - pad); ctx.stroke();
-    }
-    for (let lat = -90; lat <= 90; lat += 30) {
-        ctx.beginPath(); ctx.moveTo(pad, mapY(lat)); ctx.lineTo(w - pad, mapY(lat)); ctx.stroke();
-    }
 
     const x1 = mapX(fromAirport.lng), y1 = mapY(fromAirport.lat);
     const x2 = mapX(toAirport.lng), y2 = mapY(toAirport.lat);
 
-    // Bezier control point (perpendicular arc)
+    // Quadratic Bezier arc control point for great-circle appearance
     const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
     const dx = x2 - x1, dy = y2 - y1;
     const dist = Math.sqrt(dx * dx + dy * dy);
-    const offset = Math.max(40, dist * 0.35);
-    const cx = mx - (dy / dist) * offset;
-    const cy = my + (dx / dist) * offset;
+    const offset = Math.max(30, dist * 0.25);
+    const cx = mx - (dy / (dist || 1)) * offset;
+    const cy = my + (dx / (dist || 1)) * offset;
 
-    // Draw full route path (dim)
+    // Draw full flight path (dashed, semi-transparent cyan)
     ctx.beginPath();
     ctx.moveTo(x1, y1);
     ctx.quadraticCurveTo(cx, cy, x2, y2);
-    ctx.strokeStyle = 'rgba(0, 212, 255, 0.15)';
-    ctx.lineWidth = 2;
-    ctx.setLineDash([8, 6]);
+    ctx.strokeStyle = 'rgba(0, 212, 255, 0.25)';
+    ctx.lineWidth = 2.5;
+    ctx.setLineDash([6, 6]);
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // Draw traveled portion (bright)
+    // Draw traveled path (solid electric cyan glow)
     if (progress > 0) {
         ctx.beginPath();
         ctx.moveTo(x1, y1);
@@ -1412,91 +1447,147 @@ function renderReplayCanvas(flight, fromAirport, toAirport, progress) {
             ctx.lineTo(bezierPoint(t, x1, cx, x2), bezierPoint(t, y1, cy, y2));
         }
         ctx.strokeStyle = '#00d4ff';
-        ctx.lineWidth = 3;
-        ctx.shadowColor = 'rgba(0, 212, 255, 0.6)';
+        ctx.lineWidth = 3.5;
+        ctx.shadowColor = 'rgba(0, 212, 255, 0.8)';
         ctx.shadowBlur = 12;
         ctx.stroke();
         ctx.shadowBlur = 0;
     }
 
-    // Draw airport markers
-    [{ x: x1, y: y1, code: flight.from, city: fromAirport.city },
-     { x: x2, y: y2, code: flight.to, city: toAirport.city }].forEach(ap => {
-        // Outer glow
-        const glow = ctx.createRadialGradient(ap.x, ap.y, 0, ap.x, ap.y, 18);
-        glow.addColorStop(0, 'rgba(0, 212, 255, 0.25)');
+    // Draw Airport markers (Origin & Destination)
+    [{ x: x1, y: y1, code: flight.from, city: fromAirport.city, labelPos: -24 },
+     { x: x2, y: y2, code: flight.to, city: toAirport.city, labelPos: 28 }].forEach(ap => {
+        // Outer pulsing ring
+        const glow = ctx.createRadialGradient(ap.x, ap.y, 0, ap.x, ap.y, 22);
+        glow.addColorStop(0, 'rgba(0, 212, 255, 0.4)');
         glow.addColorStop(1, 'rgba(0, 212, 255, 0)');
         ctx.fillStyle = glow;
         ctx.beginPath();
-        ctx.arc(ap.x, ap.y, 18, 0, Math.PI * 2);
+        ctx.arc(ap.x, ap.y, 22, 0, Math.PI * 2);
         ctx.fill();
-        // Dot
+
+        // Airport circle marker
         ctx.beginPath();
-        ctx.arc(ap.x, ap.y, 6, 0, Math.PI * 2);
+        ctx.arc(ap.x, ap.y, 7, 0, Math.PI * 2);
         ctx.fillStyle = '#00d4ff';
+        ctx.shadowColor = '#00d4ff';
+        ctx.shadowBlur = 10;
         ctx.fill();
+        ctx.shadowBlur = 0;
+
         ctx.beginPath();
         ctx.arc(ap.x, ap.y, 3, 0, Math.PI * 2);
         ctx.fillStyle = '#ffffff';
         ctx.fill();
-        // Label
-        ctx.font = 'bold 16px "Space Grotesk", sans-serif';
+
+        // Airport Code and City Box
+        ctx.font = 'bold 14px "Space Grotesk", sans-serif';
+        const codeWidth = ctx.measureText(ap.code).width;
+
+        ctx.fillStyle = 'rgba(10, 21, 38, 0.85)';
+        ctx.strokeStyle = 'rgba(0, 212, 255, 0.4)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.roundRect(ap.x - codeWidth / 2 - 8, ap.y + ap.labelPos - 14, codeWidth + 16, 20, 4);
+        ctx.fill();
+        ctx.stroke();
+
         ctx.fillStyle = '#ffffff';
         ctx.textAlign = 'center';
-        ctx.fillText(ap.code, ap.x, ap.y - 22);
-        ctx.font = '11px Inter, sans-serif';
-        ctx.fillStyle = 'rgba(255,255,255,0.5)';
-        ctx.fillText(ap.city || '', ap.x, ap.y - 8);
+        ctx.fillText(ap.code, ap.x, ap.y + ap.labelPos);
     });
 
-    // Draw aircraft
-    if (progress > 0 && progress < 1) {
-        const t = progress;
-        const ax = bezierPoint(t, x1, cx, x2);
-        const ay = bezierPoint(t, y1, cy, y2);
+    // Draw Flightradar24-style Moving Flight Icon
+    const t = Math.max(0, Math.min(1, progress));
+    const ax = bezierPoint(t, x1, cx, x2);
+    const ay = bezierPoint(t, y1, cy, y2);
 
-        // Direction tangent
-        const dt = 0.005;
-        const t2 = Math.min(1, t + dt);
-        const bx = bezierPoint(t2, x1, cx, x2);
-        const by = bezierPoint(t2, y1, cy, y2);
-        const angle = Math.atan2(by - ay, bx - ax);
+    // Calculate heading/bearing angle from trajectory derivative
+    const dt = 0.005;
+    const t2 = Math.min(1, t + dt);
+    const bx = bezierPoint(t2, x1, cx, x2);
+    const by = bezierPoint(t2, y1, cy, y2);
+    const angle = Math.atan2(by - ay, bx - ax);
 
-        // Aircraft glow
-        const aglow = ctx.createRadialGradient(ax, ay, 0, ax, ay, 30);
-        aglow.addColorStop(0, 'rgba(0, 212, 255, 0.35)');
-        aglow.addColorStop(1, 'rgba(0, 212, 255, 0)');
-        ctx.fillStyle = aglow;
-        ctx.beginPath();
-        ctx.arc(ax, ay, 30, 0, Math.PI * 2);
-        ctx.fill();
+    // Aircraft shadow on 2D map
+    ctx.save();
+    ctx.translate(ax + 4, ay + 6);
+    ctx.rotate(angle);
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+    drawFlightradarAirplanePath(ctx, 1.1);
+    ctx.fill();
+    ctx.restore();
 
-        // Aircraft shape (triangle pointing in direction of travel)
-        ctx.save();
-        ctx.translate(ax, ay);
-        ctx.rotate(angle);
-        ctx.beginPath();
-        ctx.moveTo(16, 0);
-        ctx.lineTo(-10, -9);
-        ctx.lineTo(-5, 0);
-        ctx.lineTo(-10, 9);
-        ctx.closePath();
-        ctx.fillStyle = '#ffffff';
-        ctx.shadowColor = 'rgba(0, 212, 255, 0.8)';
-        ctx.shadowBlur = 16;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-        ctx.strokeStyle = '#00d4ff';
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-        ctx.restore();
-    }
+    // Aircraft radar pulse ring
+    const apulse = ctx.createRadialGradient(ax, ay, 0, ax, ay, 32);
+    apulse.addColorStop(0, 'rgba(255, 200, 0, 0.35)');
+    apulse.addColorStop(1, 'rgba(255, 200, 0, 0)');
+    ctx.fillStyle = apulse;
+    ctx.beginPath();
+    ctx.arc(ax, ay, 32, 0, Math.PI * 2);
+    ctx.fill();
 
-    // Progress label
-    ctx.font = '13px Inter, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    // Main Flightradar24 Yellow Flight Icon
+    ctx.save();
+    ctx.translate(ax, ay);
+    ctx.rotate(angle);
+    ctx.fillStyle = '#ffcc00'; // Signature Flightradar24 yellow plane
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 1;
+    ctx.shadowColor = 'rgba(255, 204, 0, 0.8)';
+    ctx.shadowBlur = 12;
+    drawFlightradarAirplanePath(ctx, 1.2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+    ctx.restore();
+
+    // Live flight telemetry label overlay (Flight number + speed/altitude effect)
+    ctx.save();
+    ctx.font = 'bold 11px Inter, sans-serif';
+    const infoText = `${flight.flight || 'FLIGHT'} • ${Math.round(progress * 100)}%`;
+    const infoWidth = ctx.measureText(infoText).width;
+    const labelX = Math.min(w - infoWidth - 20, Math.max(20, ax - infoWidth / 2));
+    const labelY = Math.max(25, ay - 24);
+
+    ctx.fillStyle = 'rgba(5, 11, 20, 0.9)';
+    ctx.strokeStyle = '#ffcc00';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.roundRect(labelX - 6, labelY - 12, infoWidth + 12, 18, 4);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#ffcc00';
     ctx.textAlign = 'left';
-    ctx.fillText(Math.round(replayState.progress) + '%', 16, h - 16);
+    ctx.fillText(infoText, labelX, labelY);
+    ctx.restore();
+}
+
+// Helper function to draw a detailed Flightradar24 airplane vector shape
+function drawFlightradarAirplanePath(ctx, scale = 1) {
+    ctx.beginPath();
+    // Nose
+    ctx.moveTo(14 * scale, 0);
+    // Right fuselage & wing
+    ctx.bezierCurveTo(10 * scale, 2 * scale, 4 * scale, 3 * scale, 2 * scale, 3 * scale);
+    ctx.lineTo(-2 * scale, 14 * scale); // Wingtip right
+    ctx.lineTo(-5 * scale, 14 * scale);
+    ctx.lineTo(-2 * scale, 3.5 * scale);
+    ctx.lineTo(-8 * scale, 4 * scale);
+    ctx.lineTo(-11 * scale, 9 * scale); // Tail wingtip right
+    ctx.lineTo(-13 * scale, 9 * scale);
+    ctx.lineTo(-11 * scale, 0); // Tail end
+    // Left side symmetry
+    ctx.lineTo(-13 * scale, -9 * scale);
+    ctx.lineTo(-11 * scale, -9 * scale);
+    ctx.lineTo(-8 * scale, -4 * scale);
+    ctx.lineTo(-2 * scale, -3.5 * scale);
+    ctx.lineTo(-5 * scale, -14 * scale);
+    ctx.lineTo(-2 * scale, -14 * scale); // Wingtip left
+    ctx.lineTo(2 * scale, -3 * scale);
+    ctx.bezierCurveTo(4 * scale, -3 * scale, 10 * scale, -2 * scale, 14 * scale, 0);
+    ctx.closePath();
 }
 
 function updateReplayVisualization() {
