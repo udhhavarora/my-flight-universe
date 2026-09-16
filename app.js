@@ -218,6 +218,12 @@ function normalizeFlights(flights) {
         const minutes = durationMinutes % 60;
         const duration = durationMinutes > 0 ? `${hours}h ${minutes}m` : '';
 
+        const divertedTo = f['Diverted To'] || '';
+        let status = f['Canceled'] === 'true' ? 'Canceled' : 'Completed';
+        if (divertedTo) {
+            status = `Diverted to ${divertedTo}`;
+        }
+
         return {
             ...f,
             date,
@@ -225,6 +231,8 @@ function normalizeFlights(flights) {
             month,
             from,
             to,
+            divertedTo,
+            tailNumber: f['Tail Number'] || '',
             distance,
             duration,
             durationMinutes,
@@ -232,7 +240,7 @@ function normalizeFlights(flights) {
             flight: f['Flight'] || '',
             aircraft: f['Aircraft Type Name'] || f['Aircraft Type'] || '',
             cabin: f['Cabin Class'] || '',
-            status: f['Canceled'] === 'true' ? 'Canceled' : 'Completed',
+            status,
         };
     });
 }
@@ -478,28 +486,28 @@ function renderAirlineUniverse(flights) {
     const container = document.getElementById('airlineGrid');
     container.innerHTML = '';
 
-    // Airline wing logo mapping (using Kiwi.com CDN which has reliable airline logos)
+    // Airline wing logo mapping (using Kiwi.com CDN high-res 128px logos)
     const airlineLogos = {
-        'AAL': 'https://images.kiwi.com/airlines/64/AAL.png',
-        'AIC': 'https://images.kiwi.com/airlines/64/AIC.png',
-        'AKJ': 'https://images.kiwi.com/airlines/64/AKJ.png',
-        'AXB': 'https://images.kiwi.com/airlines/64/AXB.png',
-        'BAW': 'https://images.kiwi.com/airlines/64/BAW.png',
-        'BKP': 'https://images.kiwi.com/airlines/64/BKP.png',
-        'ETD': 'https://images.kiwi.com/airlines/64/ETD.png',
-        'FFT': 'https://images.kiwi.com/airlines/64/FFT.png',
-        'GOW': 'https://images.kiwi.com/airlines/64/GOW.png',
-        'IAD': 'https://images.kiwi.com/airlines/64/IAD.png',
-        'IGO': 'https://images.kiwi.com/airlines/64/IGO.png',
-        'JAI': 'https://images.kiwi.com/airlines/64/JAI.png',
-        'KLM': 'https://images.kiwi.com/airlines/64/KLM.png',
-        'QTR': 'https://images.kiwi.com/airlines/64/QTR.png',
-        'RYR': 'https://images.kiwi.com/airlines/64/RYR.png',
-        'SEJ': 'https://images.kiwi.com/airlines/64/SEJ.png',
-        'SWA': 'https://images.kiwi.com/airlines/64/SWA.png',
-        'TGW': 'https://images.kiwi.com/airlines/64/TGW.png',
-        'UAE': 'https://images.kiwi.com/airlines/64/UAE.png',
-        'VTI': 'https://images.kiwi.com/airlines/64/VTI.png',
+        'AAL': 'https://images.kiwi.com/airlines/128/AAL.png',
+        'AIC': 'https://images.kiwi.com/airlines/128/AIC.png',
+        'AKJ': 'https://images.kiwi.com/airlines/128/AKJ.png',
+        'AXB': 'https://images.kiwi.com/airlines/128/AXB.png',
+        'BAW': 'https://images.kiwi.com/airlines/128/BAW.png',
+        'BKP': 'https://images.kiwi.com/airlines/128/BKP.png',
+        'ETD': 'https://images.kiwi.com/airlines/128/ETD.png',
+        'FFT': 'https://images.kiwi.com/airlines/128/FFT.png',
+        'GOW': 'https://images.kiwi.com/airlines/128/GOW.png',
+        'IAD': 'https://images.kiwi.com/airlines/128/IAD.png',
+        'IGO': 'https://images.kiwi.com/airlines/128/IGO.png',
+        'JAI': 'https://images.kiwi.com/airlines/128/JAI.png',
+        'KLM': 'https://images.kiwi.com/airlines/128/KLM.png',
+        'QTR': 'https://images.kiwi.com/airlines/128/QTR.png',
+        'RYR': 'https://images.kiwi.com/airlines/128/RYR.png',
+        'SEJ': 'https://images.kiwi.com/airlines/128/SEJ.png',
+        'SWA': 'https://images.kiwi.com/airlines/128/SWA.png',
+        'TGW': 'https://images.kiwi.com/airlines/128/TGW.png',
+        'UAE': 'https://images.kiwi.com/airlines/128/UAE.png',
+        'VTI': 'https://images.kiwi.com/airlines/128/VTI.png',
     };
 
     // Country code mapping
@@ -1491,9 +1499,28 @@ function renderReplayCanvas(flight, fromAirport, toAirport, progress) {
         ctx.shadowBlur = 0;
     }
 
-    // Draw Airport markers (Origin & Destination)
+    // Check if flight was diverted
+    const actualDestinationCode = flight.divertedTo && AIRPORT_DATA[flight.divertedTo] ? flight.divertedTo : flight.to;
+    const isDiverted = Boolean(flight.divertedTo && AIRPORT_DATA[flight.divertedTo]);
+    const destAirport = AIRPORT_DATA[actualDestinationCode];
+    const xDest = mapX(destAirport.lng);
+    const yDest = mapY(destAirport.lat);
+
+    // If diverted, draw dashed line to original planned destination
+    if (isDiverted) {
+        ctx.beginPath();
+        ctx.moveTo(x2, y2);
+        ctx.lineTo(xDest, yDest);
+        ctx.strokeStyle = '#ff3366';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([4, 4]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+    }
+
+    // Draw Airport markers (Origin & Final Arrival Airport)
     [{ x: x1, y: y1, code: flight.from, city: fromAirport.city, labelPos: -24 },
-     { x: x2, y: y2, code: flight.to, city: toAirport.city, labelPos: 28 }].forEach(ap => {
+     { x: xDest, y: yDest, code: actualDestinationCode, city: destAirport.city, labelPos: 28, isDiverted }].forEach(ap => {
         // Outer pulsing ring
         const glow = ctx.createRadialGradient(ap.x, ap.y, 0, ap.x, ap.y, 22);
         glow.addColorStop(0, 'rgba(0, 212, 255, 0.4)');
