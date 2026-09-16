@@ -99,11 +99,11 @@ body {
 
 .globe-container {
     width: 100%;
-    height: 600px;
-    margin: 2rem auto;
+    height: 650px;
+    margin: 1rem auto;
     position: relative;
     border-radius: 12px;
-    overflow: hidden;
+    overflow: visible;
     pointer-events: auto;
     transition: transform 0.1s ease-out, opacity 0.1s ease-out;
     transform-origin: center;
@@ -942,35 +942,37 @@ body {
 /* Flight Agent */
 .flight-agent {
     position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    width: 400px;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 320px;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: 10px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     z-index: 500;
 }
 
 .agent-header {
-    padding: 1rem 1.5rem;
+    padding: 0.75rem 1rem;
     border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
 }
 
 .agent-toggle {
     background: none;
     border: none;
     color: var(--text-primary);
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     cursor: pointer;
 }
 
 .agent-body {
-    max-height: 400px;
+    max-height: 280px;
     display: flex;
     flex-direction: column;
 }
@@ -981,9 +983,9 @@ body {
 
 .agent-messages {
     flex: 1;
-    padding: 1rem;
+    padding: 0.75rem;
     overflow-y: auto;
-    max-height: 300px;
+    max-height: 200px;
 }
 
 .agent-message {
