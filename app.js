@@ -793,11 +793,13 @@ function renderRouteExplorer(flights) {
         });
 }
 
-// Search & filter over the current year-filtered flights
+// Search & filter over the current year-filtered flights with Pagination
 let historyQuery = '';
 let historyAirline = '';
 let historyAirport = '';
 let historyCabin = '';
+let currentPage = 1;
+let pageSize = 25;
 
 function applyHistoryFilters() {
     const candidateFlights = appState.filteredFlights;
@@ -828,10 +830,19 @@ function applyHistoryFilters() {
         }
     });
 
+    const totalCount = matched.length;
+    const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    const startIdx = (currentPage - 1) * pageSize;
+    const pageItems = matched.slice(startIdx, startIdx + pageSize);
+
     const tableBody = document.getElementById('flightTableBody');
     tableBody.innerHTML = '';
 
-    matched.slice(0, 50).forEach((flight, pos) => {
+    pageItems.forEach((flight, pos) => {
+        const globalIdx = rawIndex[startIdx + pos];
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${flight.date?.toLocaleDateString() || '-'}</td>
@@ -844,10 +855,19 @@ function applyHistoryFilters() {
             <td>${flight.distance} km</td>
             <td>${flight.cabin}</td>
             <td>${flight.status}</td>
-            <td><button class="replay-btn-small" onclick="openReplay('${flight.from}', '${flight.to}', ${rawIndex[pos]})">✈</button></td>
+            <td><button class="replay-btn-small" onclick="openReplay('${flight.from}', '${flight.to}', ${globalIdx})">✈</button></td>
         `;
         tableBody.appendChild(row);
     });
+
+    // Update Pagination Controls UI
+    const prevBtn = document.getElementById('prevPageBtn');
+    const nextBtn = document.getElementById('nextPageBtn');
+    const pageInfo = document.getElementById('paginationInfo');
+
+    if (prevBtn) prevBtn.disabled = currentPage <= 1;
+    if (nextBtn) nextBtn.disabled = currentPage >= totalPages;
+    if (pageInfo) pageInfo.textContent = `Page ${currentPage} of ${totalPages} (${totalCount} flights)`;
 
     // Update airline card visual state
     updateAirlineCardFilters();
@@ -1004,14 +1024,18 @@ function updateGlobe() {
         }
     });
 
-    // Add all airports as points
-    Object.keys(flightCounts).forEach(code => {
+    // Color palette for glowing airport dots
+    const colors = ['#00ff88', '#ffcc00', '#ff3366', '#00d4ff', '#a855f7'];
+
+    // Add all airports as glowing points
+    Object.keys(flightCounts).forEach((code, idx) => {
         const airport = AIRPORT_DATA[code];
         if (airport) {
             points.push({
                 lat: airport.lat,
                 lng: airport.lng,
-                count: flightCounts[code]
+                count: flightCounts[code],
+                color: colors[idx % colors.length]
             });
         }
     });
@@ -1026,10 +1050,12 @@ function updateGlobe() {
         if (appState.globe) {
             appState.globe
                 .pointsData(points)
-                .pointColor(() => '#00d4ff')
-                .pointSize((d) => Math.min(1.5, 0.4 + (d.count * 0.15)))
+                .pointColor(d => d.color)
+                .pointSize(d => Math.min(2.0, 0.6 + (d.count * 0.2)))
+                .pointAltitude(0.02)
+                .pointRadius(0.8)
                 .arcsData(routes)
-                .arcColor(() => 'rgba(0, 212, 255, 0.7)')
+                .arcColor(() => 'rgba(0, 212, 255, 0.55)')
                 .arcStrokeWidth(1.2)
                 .arcDashInitialGap(0)
                 .arcDashGap(0)
@@ -1361,20 +1387,31 @@ function renderReplayCanvas(flight, fromAirport, toAirport, progress) {
         maxLng = 180;
     }
 
-    // Add padding to lat/lng bounds (minimum span so short routes don't over-zoom)
-    const lngSpan = Math.max(35, (maxLng - minLng) * 1.5);
-    const latSpan = Math.max(25, (maxLat - minLat) * 1.5);
+    // Calculate span and center for auto-fitting
+    let lngSpan = Math.max(30, (maxLng - minLng) * 1.4);
+    let latSpan = Math.max(20, (maxLat - minLat) * 1.4);
     const centerLng = (minLng + maxLng) / 2;
     const centerLat = (minLat + maxLat) / 2;
 
+    const pad = 50;
+    const availW = w - 2 * pad;
+    const availH = h - 2 * pad;
+
+    // Uniform aspect ratio scaling (equirectangular) to prevent landmass distortion/clustering
+    const scaleX = availW / lngSpan;
+    const scaleY = availH / latSpan;
+    const uniformScale = Math.min(scaleX, scaleY);
+
+    lngSpan = availW / uniformScale;
+    latSpan = availH / uniformScale;
+
     const mapMinLng = centerLng - lngSpan / 2;
     const mapMaxLng = centerLng + lngSpan / 2;
-    const mapMinLat = Math.max(-85, centerLat - latSpan / 2);
-    const mapMaxLat = Math.min(85, centerLat + latSpan / 2);
+    const mapMinLat = centerLat - latSpan / 2;
+    const mapMaxLat = centerLat + latSpan / 2;
 
-    const pad = 50;
-    const mapX = (lng) => pad + ((lng - mapMinLng) / (mapMaxLng - mapMinLng)) * (w - 2 * pad);
-    const mapY = (lat) => h - pad - ((lat - mapMinLat) / (mapMaxLat - mapMinLat)) * (h - 2 * pad);
+    const mapX = (lng) => pad + (lng - mapMinLng) * uniformScale;
+    const mapY = (lat) => h - pad - (lat - mapMinLat) * uniformScale;
 
     // Subtle grid lines (Latitude & Longitude)
     ctx.strokeStyle = 'rgba(0, 212, 255, 0.05)';
@@ -1502,12 +1539,20 @@ function renderReplayCanvas(flight, fromAirport, toAirport, progress) {
     const ax = bezierPoint(t, x1, cx, x2);
     const ay = bezierPoint(t, y1, cy, y2);
 
-    // Calculate heading/bearing angle from trajectory derivative
+    // Calculate heading/bearing angle from trajectory derivative (handle t=1.0 end state)
     const dt = 0.005;
-    const t2 = Math.min(1, t + dt);
-    const bx = bezierPoint(t2, x1, cx, x2);
-    const by = bezierPoint(t2, y1, cy, y2);
-    const angle = Math.atan2(by - ay, bx - ax);
+    let bx, by, angle;
+    if (t >= 0.999) {
+        const t1 = Math.max(0, t - dt);
+        bx = bezierPoint(t1, x1, cx, x2);
+        by = bezierPoint(t1, y1, cy, y2);
+        angle = Math.atan2(ay - by, ax - bx);
+    } else {
+        const t2 = Math.min(1, t + dt);
+        bx = bezierPoint(t2, x1, cx, x2);
+        by = bezierPoint(t2, y1, cy, y2);
+        angle = Math.atan2(by - ay, bx - ax);
+    }
 
     // Aircraft shadow on 2D map
     ctx.save();
@@ -1520,21 +1565,21 @@ function renderReplayCanvas(flight, fromAirport, toAirport, progress) {
 
     // Aircraft radar pulse ring
     const apulse = ctx.createRadialGradient(ax, ay, 0, ax, ay, 32);
-    apulse.addColorStop(0, 'rgba(255, 200, 0, 0.35)');
-    apulse.addColorStop(1, 'rgba(255, 200, 0, 0)');
+    apulse.addColorStop(0, 'rgba(0, 212, 255, 0.35)');
+    apulse.addColorStop(1, 'rgba(0, 212, 255, 0)');
     ctx.fillStyle = apulse;
     ctx.beginPath();
     ctx.arc(ax, ay, 32, 0, Math.PI * 2);
     ctx.fill();
 
-    // Main Flightradar24 Yellow Flight Icon
+    // Main Electric Cyan Flight Icon matching theme
     ctx.save();
     ctx.translate(ax, ay);
     ctx.rotate(angle);
-    ctx.fillStyle = '#ffcc00'; // Signature Flightradar24 yellow plane
-    ctx.strokeStyle = '#000000';
+    ctx.fillStyle = '#00d4ff'; // Electric cyan matching overall dashboard theme
+    ctx.strokeStyle = '#ffffff';
     ctx.lineWidth = 1;
-    ctx.shadowColor = 'rgba(255, 204, 0, 0.8)';
+    ctx.shadowColor = 'rgba(0, 212, 255, 0.8)';
     ctx.shadowBlur = 12;
     drawFlightradarAirplanePath(ctx, 1.2);
     ctx.fill();
@@ -1542,7 +1587,7 @@ function renderReplayCanvas(flight, fromAirport, toAirport, progress) {
     ctx.shadowBlur = 0;
     ctx.restore();
 
-    // Live flight telemetry label overlay (Flight number + speed/altitude effect)
+    // Live flight telemetry label overlay (Flight number + progress)
     ctx.save();
     ctx.font = 'bold 11px Inter, sans-serif';
     const infoText = `${flight.flight || 'FLIGHT'} • ${Math.round(progress * 100)}%`;
@@ -1551,14 +1596,14 @@ function renderReplayCanvas(flight, fromAirport, toAirport, progress) {
     const labelY = Math.max(25, ay - 24);
 
     ctx.fillStyle = 'rgba(5, 11, 20, 0.9)';
-    ctx.strokeStyle = '#ffcc00';
+    ctx.strokeStyle = '#00d4ff';
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.roundRect(labelX - 6, labelY - 12, infoWidth + 12, 18, 4);
     ctx.fill();
     ctx.stroke();
 
-    ctx.fillStyle = '#ffcc00';
+    ctx.fillStyle = '#00d4ff';
     ctx.textAlign = 'left';
     ctx.fillText(infoText, labelX, labelY);
     ctx.restore();
@@ -1867,6 +1912,25 @@ document.getElementById('agentToggle').addEventListener('click', () => {
     body.classList.toggle('collapsed');
     appState.agentCollapsed = !appState.agentCollapsed;
     document.getElementById('agentToggle').textContent = appState.agentCollapsed ? '+' : '−';
+});
+
+// Pagination event listeners
+document.getElementById('prevPageBtn')?.addEventListener('click', () => {
+    if (currentPage > 1) {
+        currentPage--;
+        applyHistoryFilters();
+    }
+});
+
+document.getElementById('nextPageBtn')?.addEventListener('click', () => {
+    currentPage++;
+    applyHistoryFilters();
+});
+
+document.getElementById('pageSizeSelect')?.addEventListener('change', (e) => {
+    pageSize = parseInt(e.target.value) || 25;
+    currentPage = 1;
+    applyHistoryFilters();
 });
 
 // Auto-load CSV data from file

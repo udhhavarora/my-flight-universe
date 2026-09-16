@@ -150,6 +150,17 @@
                         <tbody id="flightTableBody"></tbody>
                     </table>
                 </div>
+                <div class="pagination-controls" id="paginationControls">
+                    <button class="pagination-btn" id="prevPageBtn" disabled>← Prev</button>
+                    <span class="pagination-info" id="paginationInfo">Page 1 of 1</span>
+                    <button class="pagination-btn" id="nextPageBtn" disabled>Next →</button>
+                    <select id="pageSizeSelect" class="pagination-select">
+                        <option value="15">15 per page</option>
+                        <option value="25" selected>25 per page</option>
+                        <option value="50">50 per page</option>
+                        <option value="100">100 per page</option>
+                    </select>
+                </div>
             </section>
         </main>
 
