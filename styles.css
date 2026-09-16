@@ -613,6 +613,63 @@ body {
     box-shadow: 0 8px 24px var(--glow-color);
 }
 
+/* Flight History Pagination */
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding: 0.8rem 1.2rem;
+    background: rgba(15, 23, 34, 0.6);
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    border-radius: 10px;
+}
+
+.pagination-btn {
+    background: rgba(0, 212, 255, 0.1);
+    color: #00d4ff;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    padding: 0.4rem 0.9rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: Inter, sans-serif;
+    font-weight: 500;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background: #00d4ff;
+    color: #0a0e12;
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
+}
+
+.pagination-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.pagination-info {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 500;
+}
+
+.pagination-select {
+    background: rgba(10, 14, 18, 0.8);
+    color: #00d4ff;
+    border: 1px solid rgba(0, 212, 255, 0.25);
+    padding: 0.35rem 0.6rem;
+    border-radius: 6px;
+    font-family: Inter, sans-serif;
+    font-size: 0.85rem;
+    outline: none;
+}
+
 /* Flight History */
 .history-controls {
     display: flex;
