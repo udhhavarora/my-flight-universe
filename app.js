@@ -1055,7 +1055,7 @@ function updateGlobe() {
                 .pointAltitude(0.02)
                 .pointRadius(0.8)
                 .arcsData(routes)
-                .arcColor(() => 'rgba(0, 212, 255, 0.55)')
+                .arcColor(() => ['rgba(0, 212, 255, 0.6)', 'rgba(74, 144, 226, 0.6)'])
                 .arcStrokeWidth(1.2)
                 .arcDashInitialGap(0)
                 .arcDashGap(0)
